@@ -11,9 +11,7 @@ class App extends Component {
   }
 
   callAPI() {
-      // fetch(process.env.REACT_APP_EZNASHDB_API + "testAPI")
-      console.log(process.env.REACT_APP_EZNASHDB_API + "testAPI")
-      fetch("https://eznashdb-api.herokuapp.com/testAPI")
+      fetch(process.env.REACT_APP_EZNASHDB_API + "testAPI")
           .then(res => res.text())
           .then(res => this.setState({ apiResponse: res }));
   }
