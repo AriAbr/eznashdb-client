@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
+import NavBar from './components/NavBar';
 
 class App extends Component {
   constructor(props) {
@@ -11,9 +12,10 @@ class App extends Component {
   }
 
   callAPI() {
-      fetch(process.env.REACT_APP_EZNASHDB_API + "testAPI")
+    fetch(process.env.REACT_APP_EZNASHDB_API + "testAPI")
           .then(res => res.text())
-          .then(res => this.setState({ apiResponse: res }));
+          .then(res => this.setState({ apiResponse: res }))
+          .catch((e) => { this.setState({ apiResponse: "API response not recieved: " + e}) })
   }
 
   componentWillMount() {
@@ -23,6 +25,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <NavBar />
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <p>
