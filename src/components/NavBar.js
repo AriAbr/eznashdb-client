@@ -7,6 +7,10 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import LanguageControls from './LanguageControls';
+import { withLocalize } from "react-localize-redux";
+import { Translate } from "react-localize-redux";
+
 
 const styles = theme => ({
   root: {
@@ -44,15 +48,16 @@ class NavBar extends Component {
 
     return (
       <div className={classes.root}>
-        <AppBar position="static">
+        <AppBar position="fixed" >
           <Toolbar>
             <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" className={classes.title} style={{ textAlign: "left" }}>
-              The Ezrat Nashim Database
+              <Translate id="appTitle" />
             </Typography>
             <Button color="inherit">Login</Button>
+            <LanguageControls />
           </Toolbar>
         </AppBar>
       </div>
@@ -64,4 +69,4 @@ NavBar.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(NavBar);
+export default withStyles(styles)(withLocalize(NavBar));
