@@ -1,5 +1,9 @@
 .language-flag-icon{
   height: 15px;
-  vertical-align: bottom;
+  vertical-align: -2px;
   margin: 0 2px;
+}
+
+.language-controls-div{
+  display: inline-block;
 }

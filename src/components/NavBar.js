@@ -22,6 +22,12 @@ const styles = theme => ({
   menuButtonHeb: {
     marginLeft: theme.spacing(2),
   },
+  navButtonEng: {
+
+  },
+  navButtonHeb: {
+    fontFamily: 'Segoe UI',
+  },
   title: {
     flexGrow: 1,
   },
@@ -48,33 +54,36 @@ class NavBar extends Component {
 
   render() {
     const { classes } = this.props;
+    const logIn = this.props.translate("logIn")
     var directionStyling = {
       direction: 'ltr',
       textAlign: 'left'
     }
-    var iconButtonClassName = classes.menuButtonEng;
+    var menuButtonClassName = classes.menuButtonEng;
+    var navButtonClassName = classes.navButtonEng;
 
     if (this.props.activeLanguage && this.props.activeLanguage.code === "he") {
       directionStyling = {
         direction: 'rtl',
         textAlign: 'right'
       }
-      iconButtonClassName = classes.menuButtonHeb;
+      menuButtonClassName = classes.menuButtonHeb;
+      navButtonClassName = classes.navButtonHeb;
     }
-
 
     return (
       <div className={classes.root}>
         <AppBar position="fixed" style={{direction: directionStyling.direction}}>
           <Toolbar>
-            <IconButton edge="start" className={iconButtonClassName} color="inherit" aria-label="menu">
+            <IconButton edge="start" className={menuButtonClassName} color="inherit" aria-label="menu">
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" className={classes.title} style={{ textAlign: directionStyling.textAlign }}>
               <Translate id="appTitle" />
             </Typography>
-            <Button color="inherit">Login</Button>
             <LanguageControls />
+
+            <Button color="inherit" className={navButtonClassName}>{logIn}</Button>
           </Toolbar>
         </AppBar>
       </div>

@@ -16,11 +16,38 @@ const styles = theme => ({
   title: {
     flexGrow: 1,
   },
-  select: {
-    color: 'inherit',
+  selectEng: {
+    color: 'white',
     fontFamily: 'inherit',
     fontWeight: 500,
   },
+  selectHeb: {
+    color: 'white',
+    fontFamily: 'inherit',
+    fontWeight: 500,
+    MozTransform: 'scaleX(-1)',
+    WebkitTransform: 'scaleX(-1)',
+    OTransform: 'scaleX(-1)',
+    transform: 'scaleX(-1)',
+    msFilter: 'fliph', /*IE*/
+    filter: 'fliph', /*IE*/
+  },
+  selectMenuEng: {
+
+  },
+  selectMenuHeb: {
+    color: 'white',
+    fontFamily: 'inherit',
+    fontWeight: 500,
+    paddingRight: '0px',
+    paddingLeft: '24px',
+    MozTransform: 'scaleX(-1)',
+    WebkitTransform: 'scaleX(-1)',
+    OTransform: 'scaleX(-1)',
+    transform: 'scaleX(-1)',
+    msFilter: 'fliph', /*IE*/
+    filter: 'fliph', /*IE*/
+  }
 });
 
 class LanguageControls extends React.Component<any, any> {
@@ -74,7 +101,6 @@ class LanguageControls extends React.Component<any, any> {
       }).then(xml => {
           return (new window.DOMParser()).parseFromString(xml, "text/xml");
       }).then(xmlDoc => {
-          console.log(xmlDoc)
            countryCode = this.getElementText(xmlDoc , "countryAbbrev");
       });
       return countryCode;
@@ -87,20 +113,28 @@ class LanguageControls extends React.Component<any, any> {
       languageCode = this.props.activeLanguage.code;
     }
 
+    var selectClassName = classes.selectEng;
+    var selectMenuClassName = classes.selectMenuEng;
+    if(this.props.activeLanguage && this.props.activeLanguage.code === "he"){
+      selectClassName = classes.selectHeb;
+      selectMenuClassName = classes.selectMenuHeb;
+    }
+
     return (
-      <div>
-        <header>
-          <FormControl>
-            <Select
-              value={languageCode}
-              onChange={(e, val) => {this.handleLanguageChange(e, val)}}
-              className={classes.select}
-            >
-              <MenuItem value={"en"}><img src="/usa-flag.png" alt="USA flag" className="language-flag-icon" /> EN </MenuItem>
-              <MenuItem value={"he"}><img src="/israel-flag.png" alt="Israel flag" className="language-flag-icon" /> עב </MenuItem>
-            </Select>
-          </FormControl>
-        </header>
+      <div id="language-controls-div">
+        <FormControl className={selectClassName}>
+          <Select
+            value={languageCode}
+            onChange={(e, val) => {this.handleLanguageChange(e, val)}}
+            classes={{
+              select: selectClassName,
+              selectMenu: selectMenuClassName,
+            }}
+          >
+            <MenuItem value={"en"}><img src="/usa-flag.png" alt="USA flag" className="language-flag-icon" /> EN </MenuItem>
+            <MenuItem value={"he"}><img src="/israel-flag.png" alt="Israel flag" className="language-flag-icon" /> עב </MenuItem>
+          </Select>
+        </FormControl>
       </div>
     );
   }
