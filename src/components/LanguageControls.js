@@ -37,17 +37,47 @@ class LanguageControls extends React.Component<any, any> {
         { name: 'Hebrew', code: 'he' },
       ],
       translation: globalTranslations,
-      options: { renderToStaticMarkup}
+      options: { renderToStaticMarkup, defaultLanguage: this.getDefaultLangCode()}
     });
   }
 
-  componentDidMount(){
-    this.props.setActiveLanguage("en");
+  getDefaultLangCode(){
+    var defaultLangCode = "en";
+    if(window.localStorage.ezNashDBLang){
+      defaultLangCode = window.localStorage.ezNashDBLang;
+    } else {
+      if (this.getCountryCode() === "IL"){
+        defaultLangCode = "he";
+      } else {
+        defaultLangCode = "en";
+      }
+    }
+    return defaultLangCode;
   }
 
   handleLanguageChange (e, val) {
     var newLangCode = val.props.value;
-    this.props.setActiveLanguage(newLangCode);
+    if (newLangCode !== this.props.activeLanguage.code) {
+      this.props.setActiveLanguage(newLangCode);
+      localStorage.setItem('ezNashDBLang', newLangCode);
+    }
+  }
+
+  getElementText(response, elementName) {
+    return response.getElementsByTagName(elementName)[0].innerHTML;
+  }
+
+  getCountryCode() {
+      var countryCode = "";
+      fetch('http://api.hostip.info').then(response => {
+           return response.text();
+      }).then(xml => {
+          return (new window.DOMParser()).parseFromString(xml, "text/xml");
+      }).then(xmlDoc => {
+          console.log(xmlDoc)
+           countryCode = this.getElementText(xmlDoc , "countryAbbrev");
+      });
+      return countryCode;
   }
 
   render() {
