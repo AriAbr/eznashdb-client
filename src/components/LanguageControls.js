@@ -97,42 +97,15 @@ class LanguageControls extends React.Component<any, any> {
 
   getCountryCode() {
       var countryCode = "";
-      var ip = "";
-      $.getJSON('https://api.ipify.org?format=jsonp&callback=?', function(data) {
-        var response  = JSON.stringify(data, null, 2);
-        response  = JSON.parse(response);
-        ip = response.ip;
-        console.log(ip)
-      });
 
-      $.getJSON('https://www.geoplugin.net/json.gp?ip=' + ip, function(data) {
-        var response  = JSON.stringify(data, null, 2);
-        response  = JSON.parse(response);
-        console.log(response)
-        countryCode = response.geoplugin_countryCode;
-        console.log("geoplugin_countryCode w/ ipify ip: " + countryCode);
-      });
-
-      $.getJSON('https://www.geoplugin.net/json.gp?jsoncallback=?', function(data) {
-        var response  = JSON.stringify(data, null, 2);
-        response  = JSON.parse(response);
-        console.log(response)
-        countryCode = response.geoplugin_countryCode;
-        console.log("geoplugin_countryCode: " + countryCode);
-      });
-
-      $.getJSON('https://ipapi.co/json/', function(data) {
-        var response  = JSON.stringify(data, null, 2);
-        response  = JSON.parse(response);
-        console.log(response)
+      $.ajax({
+        dataType: "json",
+        url: 'https://ipapi.co/json/',
+        async: false,
+      }).done(response => {
         countryCode = response.country;
-        console.log("ipapi countryCode: " + countryCode);
-      });
-
-      //https://json.geoiplookup.io/api?callback=? - unknown limitations
-      //https://ipapi.co/json/ - 1,000 per day
-      //https://geoip.nekudo.com/api
-
+      })
+      console.log("ipapi countryCode: " + countryCode)
       return countryCode;
   }
 
