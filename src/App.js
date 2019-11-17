@@ -1,13 +1,10 @@
 import React, {Component} from 'react';
-import { renderToStaticMarkup } from "react-dom/server";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import logo from './logo.svg';
 import './App.css';
 import NavBar from './components/NavBar';
 import { LocalizeProvider } from "react-localize-redux";
 import { withLocalize } from "react-localize-redux";
-import { Translate } from "react-localize-redux";
-
 
 class App extends Component {
   constructor(props) {
@@ -24,7 +21,7 @@ class App extends Component {
           .catch((e) => { this.setState({ apiResponse: "API response not recieved: " + e}) })
   }
 
-  componentWillMount() {
+  componentDidMount() {
       this.callAPI();
   }
 

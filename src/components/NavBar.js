@@ -37,19 +37,8 @@ class NavBar extends Component {
   constructor(props) {
       super(props);
       this.state = {
-        apiResponse: ""
+
       };
-  }
-
-  callAPI() {
-    fetch(process.env.REACT_APP_EZNASHDB_API + "testAPI")
-          .then(res => res.text())
-          .then(res => this.setState({ apiResponse: res }))
-          .catch((e) => {this.setState({ apiResponse: "API response not recieved: " + e})});
-  }
-
-  componentWillMount() {
-      this.callAPI();
   }
 
   render() {

@@ -72,8 +72,8 @@ class LanguageControls extends React.Component<any, any> {
   getDefaultLangCode(){
     var defaultLangCode = "en";
     if('window.localStorage.ezNashDBLang'){
-    //   defaultLangCode = window.localStorage.ezNashDBLang;
-    // } else {
+      defaultLangCode = window.localStorage.ezNashDBLang;
+    } else {
       if (this.getCountryCode() === "IL"){
         defaultLangCode = "he";
       } else {
@@ -91,10 +91,6 @@ class LanguageControls extends React.Component<any, any> {
     }
   }
 
-  getElementText(response, elementName) {
-    return response.getElementsByTagName(elementName)[0].innerHTML;
-  }
-
   getCountryCode() {
       var countryCode = "";
 
@@ -105,7 +101,7 @@ class LanguageControls extends React.Component<any, any> {
       }).done(response => {
         countryCode = response.country;
       })
-      console.log("ipapi countryCode: " + countryCode)
+      
       return countryCode;
   }
 
