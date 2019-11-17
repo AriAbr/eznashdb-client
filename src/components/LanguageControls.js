@@ -101,7 +101,7 @@ class LanguageControls extends React.Component<any, any> {
       }).done(response => {
         countryCode = response.country;
       })
-      
+
       return countryCode;
   }
 
@@ -112,9 +112,17 @@ class LanguageControls extends React.Component<any, any> {
       languageCode = this.props.activeLanguage.code;
     }
 
+    var directionStyling = {
+      direction: 'ltr',
+      textAlign: 'left'
+    }
     var selectClassName = classes.selectEng;
     var selectMenuClassName = classes.selectMenuEng;
     if(this.props.activeLanguage && this.props.activeLanguage.code === "he"){
+      directionStyling = {
+        direction: 'rtl',
+        textAlign: 'right'
+      }
       selectClassName = classes.selectHeb;
       selectMenuClassName = classes.selectMenuHeb;
     }
@@ -130,8 +138,12 @@ class LanguageControls extends React.Component<any, any> {
               selectMenu: selectMenuClassName,
             }}
           >
-            <MenuItem value={"en"}><img src="/usa-flag.png" alt="USA flag" className="language-flag-icon" /> EN </MenuItem>
-            <MenuItem value={"he"}><img src="/israel-flag.png" alt="Israel flag" className="language-flag-icon" /> עב </MenuItem>
+            <MenuItem style={{ direction: directionStyling.direction }} value={"en"} >
+              <img src="/usa-flag.png" alt="USA flag" className="language-flag-icon" />&nbsp;EN
+            </MenuItem>
+            <MenuItem style={{ direction: directionStyling.direction }} value={"he"}>
+              <img src="/israel-flag.png"alt="Israel flag" className="language-flag-icon" />&nbsp;עב
+            </MenuItem>
           </Select>
         </FormControl>
       </div>
