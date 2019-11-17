@@ -97,11 +97,28 @@ class LanguageControls extends React.Component<any, any> {
 
   getCountryCode() {
       var countryCode = "";
+      var ip = "";
+      $.getJSON('https://api.ipify.org?format=jsonp&callback=?', function(data) {
+        var response  = JSON.stringify(data, null, 2);
+        response  = JSON.parse(response);
+        ip = response.ip;
+        console.log(ip)
+      });
+
+      $.getJSON('http://www.geoplugin.net/json.gp?ip=' + ip, function(data) {
+        var response  = JSON.stringify(data, null, 2);
+        response  = JSON.parse(response);
+        console.log(response)
+        countryCode = response.geoplugin_countryCode;
+        console.log("geoplugin_countryCode w/ ipify ip: " + countryCode);
+      });
 
       $.getJSON('http://www.geoplugin.net/json.gp?jsoncallback=?', function(data) {
         var response  = JSON.stringify(data, null, 2);
         response  = JSON.parse(response);
+        console.log(response)
         countryCode = response.geoplugin_countryCode;
+        console.log("geoplugin_countryCode: " + countryCode);
       });
 
       return countryCode;
