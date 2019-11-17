@@ -5,6 +5,7 @@ import globalTranslations from '../translations/global.json';
 import { FormControl, Select, MenuItem } from '@material-ui/core';
 import { withStyles } from "@material-ui/core/styles"
 import PropTypes from 'prop-types';
+import $ from 'jquery';
 
 const styles = theme => ({
   root: {
@@ -70,9 +71,9 @@ class LanguageControls extends React.Component<any, any> {
 
   getDefaultLangCode(){
     var defaultLangCode = "en";
-    if(window.localStorage.ezNashDBLang){
-      defaultLangCode = window.localStorage.ezNashDBLang;
-    } else {
+    if('window.localStorage.ezNashDBLang'){
+    //   defaultLangCode = window.localStorage.ezNashDBLang;
+    // } else {
       if (this.getCountryCode() === "IL"){
         defaultLangCode = "he";
       } else {
@@ -96,13 +97,13 @@ class LanguageControls extends React.Component<any, any> {
 
   getCountryCode() {
       var countryCode = "";
-      fetch('http://api.hostip.info').then(response => {
-           return response.text();
-      }).then(xml => {
-          return (new window.DOMParser()).parseFromString(xml, "text/xml");
-      }).then(xmlDoc => {
-           countryCode = this.getElementText(xmlDoc , "countryAbbrev");
+
+      $.getJSON('http://www.geoplugin.net/json.gp?jsoncallback=?', function(data) {
+        var response  = JSON.stringify(data, null, 2);
+        response  = JSON.parse(response);
+        countryCode = response.geoplugin_countryCode;
       });
+
       return countryCode;
   }
 
