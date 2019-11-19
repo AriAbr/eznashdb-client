@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { Link } from 'react-router-dom';
 import { withStyles } from "@material-ui/core/styles"
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
@@ -43,7 +44,9 @@ class NavBar extends Component {
 
   render() {
     const { classes } = this.props;
-    const logIn = this.props.translate("logIn")
+    const logIn = this.props.translate("logIn");
+    const home = this.props.translate("home");
+
     var directionStyling = {
       direction: 'ltr',
       textAlign: 'left'
@@ -71,6 +74,14 @@ class NavBar extends Component {
               <Translate id="appTitle" />
             </Typography>
             <LanguageControls />
+
+
+            <Link to={`/`} className="navbar-link">
+              <Button color="inherit" className={navButtonClassName}>{home}</Button>
+            </Link>
+            <Link to={`/api`} className="navbar-link">
+              <Button color="inherit" className={navButtonClassName}>API</Button>
+            </Link>
 
             <Button color="inherit" className={navButtonClassName}>{logIn}</Button>
           </Toolbar>

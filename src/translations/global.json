@@ -1,4 +1,5 @@
 {
   "appTitle": ["The Ezrat Nashim Database", "מאגר הנתונים עזרת נשים"],
-  "logIn": ["Login", "התחברות"]
+  "logIn": ["Login", "התחברות"],
+  "home": ["Home", "דף הבית"]
 }

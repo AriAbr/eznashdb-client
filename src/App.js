@@ -1,8 +1,11 @@
 import React, {Component} from 'react';
-import { BrowserRouter as Router } from "react-router-dom";
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import './css/App.css';
+import './css/NavBar.css';
+import './css/LanguageControls.css';
 import NavBar from './components/NavBar';
+import Home from './components/Home';
+import APITest from './components/APITest';
 import { LocalizeProvider } from "react-localize-redux";
 import { withLocalize } from "react-localize-redux";
 
@@ -35,19 +38,20 @@ class App extends Component {
           <NavBar />
 
           <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <p>
-              Edit <code>src/App.js</code> and save to reload.
-            </p>
-            <p className="App-intro">{this.state.apiResponse}</p>
-            <a
-              className="App-link"
-              href="https://reactjs.org"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learn React
-            </a>
+            <div className="page-content">
+              <Route
+                exact path="/"
+                render={(props) => <Home {...props}
+                  apiResponse={this.state.apiResponse}
+                />}
+              />
+              <Route
+                path="/api"
+                render={(props) => <APITest {...props}
+                  apiResponse={this.state.apiResponse}
+                />}
+              />
+            </div>
           </header>
         </div>
         </Router>
