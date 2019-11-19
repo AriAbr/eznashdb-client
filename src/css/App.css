@@ -22,7 +22,7 @@
 .page-content{
   position: absolute;
   top: 56px;
-  background-color: lightgrey;
+  background-color: white;
   color: black;
   width: 100%;
   height: calc(100% - 56px);

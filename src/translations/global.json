@@ -1,5 +1,9 @@
 {
   "appTitle": ["The Ezrat Nashim Database", "מאגר הנתונים עזרת נשים"],
   "logIn": ["Login", "התחברות"],
-  "home": ["Home", "דף הבית"]
+  "home": ["Home", "דף הבית"],
+  "search": ["Search", "חיפוש"],
+  "addShul": ["Add a Shul", "הוספת בית כנסת"],
+  "welcomeTo": ["Welcome to", "ברוכים הבאים ל"],
+  "appSubtitle": ["A crowdsourced database of shuls around the world.", "מאגר נתונים קראוד-סורס של בתי כנסת ברחבי העולם."]
 }
