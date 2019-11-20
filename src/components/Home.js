@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { withLocalize } from "react-localize-redux";
 import { Container, Typography, Button, } from '@material-ui/core';
-import logo from '../logo.svg';
 import { withStyles } from "@material-ui/core/styles"
 
 const styles = theme => ({
@@ -16,12 +15,12 @@ const styles = theme => ({
     whiteSpace: 'nowrap',
     margin: 'auto'
   },
-  homeButtonEng: {
+  homeButtonsEng: {
     width: '180px',
     display: 'inline-block',
     margin: '0 10px'
   },
-  homeButtonHeb: {
+  homeButtonsHeb: {
     fontFamily: 'Segoe UI',
     width: '180px',
     display: 'inline-block',
@@ -49,7 +48,7 @@ class Home extends Component {
       direction: 'ltr',
       textAlign: 'left'
     }
-    var homeButtonClassName = classes.homeButtonEng;
+    var homeButtonsClassName = classes.homeButtonsEng;
 
 
     if (this.props.activeLanguage && this.props.activeLanguage.code === "he") {
@@ -57,14 +56,14 @@ class Home extends Component {
         direction: 'rtl',
         textAlign: 'right'
       }
-      homeButtonClassName = classes.homeButtonHeb;
+      homeButtonsClassName = classes.homeButtonsHeb;
     }
 
     return (
       <div id="home-outer-div">
         <main>
           <div className={classes.heroContent} style={{direction: directionStyling.direction, fontFamily: 'Segoe UI'}}>
-            <Container maxWidth="m">
+            <Container maxWidth="lg">
               <Typography variant="h5" align="center" color="textSecondary" paragraph>
                 {welcomeTo}
               </Typography>
@@ -75,11 +74,11 @@ class Home extends Component {
                 {appSubtitle}
               </Typography>
               <div className={classes.heroButtons}>
-                <Button variant="contained" color="primary" size="large" className={homeButtonClassName}>
-                  <i class="fas fa-search"></i> {search}
+                <Button variant="contained" color="primary" size="large" className={homeButtonsClassName}>
+                  <i className="fas fa-search"></i> {search}
                 </Button>
-                <Button variant="outlined" color="primary" size="large" className={homeButtonClassName}>
-                  <i class="fas fa-plus"></i> {addShul}
+                <Button variant="outlined" color="primary" size="large" className={homeButtonsClassName}>
+                  <i className="fas fa-plus"></i> {addShul}
                 </Button>
               </div>
             </Container>

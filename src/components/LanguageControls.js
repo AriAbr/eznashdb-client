@@ -33,6 +33,9 @@ const styles = theme => ({
     msFilter: 'fliph', /*IE*/
     filter: 'fliph', /*IE*/
   },
+  drawerSelect: {
+    color: '#757575 !important'
+  },
   selectMenuEng: {
 
   },
@@ -125,6 +128,10 @@ class LanguageControls extends React.Component<any, any> {
       }
       selectClassName = classes.selectHeb;
       selectMenuClassName = classes.selectMenuHeb;
+    }
+
+    if (this.props.parent === 'drawer') {
+      selectClassName += " " + classes.drawerSelect;
     }
 
     return (

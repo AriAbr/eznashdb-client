@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import { withLocalize } from "react-localize-redux";
 import logo from '../logo.svg';
 
@@ -12,19 +11,6 @@ class APITest extends Component {
   }
 
   render() {
-
-    var directionStyling = {
-      direction: 'ltr',
-      textAlign: 'left'
-    }
-
-    if (this.props.activeLanguage && this.props.activeLanguage.code === "he") {
-      directionStyling = {
-        direction: 'rtl',
-        textAlign: 'right'
-      }
-    }
-
     return (
       <div>
         <img src={logo} className="App-logo" alt="logo" />
@@ -44,9 +30,5 @@ class APITest extends Component {
     );
   }
 }
-
-APITest.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
 
 export default withLocalize(APITest);

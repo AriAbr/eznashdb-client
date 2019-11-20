@@ -2,3 +2,30 @@
   text-decoration: none;
   color: white;
 }
+
+.drawer-link{
+  text-decoration: none !important;
+  color: #757575;
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.menu-button{
+  display: inline-block !important;
+}
+
+.navbar-controls {
+  display: none !important;
+}
+
+@media (min-width: 600px) {
+
+  .menu-button{
+    display: none !important;
+  }
+
+  .navbar-controls{
+    display: inline-block !important;
+  }
+
+}

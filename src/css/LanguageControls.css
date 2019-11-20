@@ -3,6 +3,6 @@
   vertical-align: -2px;
 }
 
-.language-controls-div{
-  display: inline-block;
+#language-controls-div{
+  display: inline !important;
 }
