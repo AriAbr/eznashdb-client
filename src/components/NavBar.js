@@ -28,6 +28,9 @@ const styles = theme => ({
   title: {
     flexGrow: 1,
   },
+  drawer: {
+    width: '200px'
+  }
 });
 
 class NavBar extends Component {
@@ -115,6 +118,9 @@ class NavBar extends Component {
           onClose={(e) => {this.toggleDrawer(e, 'right', false)}}
           style={{
             direction: directionStyling.direction,
+          }}
+          classes={{
+            paper: classes.drawer,
           }}
         >
 
