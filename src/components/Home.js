@@ -7,7 +7,13 @@ import { withStyles } from "@material-ui/core/styles"
 const styles = theme => ({
   heroContent: {
     backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(8, 0, 6),
+  },
+  heroTextEng: {
+
+  },
+  heroTextHeb: {
+    fontFamily: 'Segoe UI',
+    fontWeight: 400
   },
   heroButtons: {
     marginTop: theme.spacing(4),
@@ -49,6 +55,7 @@ class Home extends Component {
       textAlign: 'left'
     }
     var homeButtonsClassName = classes.homeButtonsEng;
+    var heroTextClassName = classes.heroTextEng;
 
 
     if (this.props.activeLanguage && this.props.activeLanguage.code === "he") {
@@ -57,20 +64,20 @@ class Home extends Component {
         textAlign: 'right'
       }
       homeButtonsClassName = classes.homeButtonsHeb;
+      heroTextClassName = classes.heroTextHeb;
+
     }
 
     return (
       <div id="home-outer-div">
-        <main>
           <div className={classes.heroContent} style={{direction: directionStyling.direction, fontFamily: 'Segoe UI'}}>
-            <Container maxWidth="lg">
-              <Typography variant="h5" align="center" color="textSecondary" paragraph>
+              <Typography  className={heroTextClassName} variant="h5" align="center" color="textSecondary" paragraph>
                 {welcomeTo}
               </Typography>
-              <Typography component="h1" variant="h1" align="center" color="textPrimary" gutterBottom>
+              <Typography className={heroTextClassName} component="h1" variant="h1" align="center" color="textPrimary" gutterBottom>
                 {appTitle}
               </Typography>
-              <Typography variant="h5" align="center" color="textSecondary" paragraph>
+              <Typography  className={heroTextClassName} variant="h5" align="center" color="textSecondary" paragraph>
                 {appSubtitle}
               </Typography>
               <div className={classes.heroButtons}>
@@ -81,9 +88,7 @@ class Home extends Component {
                   <i className="fas fa-plus"></i> {addShul}
                 </Button>
               </div>
-            </Container>
           </div>
-        </main>
       </div>
     );
   }

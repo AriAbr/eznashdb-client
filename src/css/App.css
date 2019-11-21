@@ -7,34 +7,35 @@
 }
 
 .App-header {
-  background-color: #282c34;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
-  position: relative;
 }
 
 .page-content{
-  position: absolute;
-  top: 56px;
   background-color: white;
   color: black;
-  width: 100%;
-  height: calc(100% - 56px);
+  width: calc(100% - 20px);
+  padding: 66px 0 10px 0;
+  margin: 0 10px;
+  min-height: calc(100vh - 116px);
 }
 
 @media (min-width: 600px) {
 
   .page-content{
-    top: 64px;
-    height: calc(100% - 64px);
+    padding: 74px 0 10px 0;
+    min-height: calc(100vh - 124px);
   }
 
+}
+
+#page-content-scroll-buffer{
+  height: 40px;
 }
 
 .App-link {

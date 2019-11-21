@@ -33,12 +33,9 @@ class App extends Component {
 
     return (
       <LocalizeProvider>
-      <Router>
-
-        <div className="App">
-          <NavBar />
-
-          <header className="App-header">
+        <Router>
+          <div className="App">
+            <NavBar />
             <div className="page-content">
               <Route
                 exact path="/"
@@ -53,10 +50,9 @@ class App extends Component {
                 />}
               />
             </div>
-          </header>
-        </div>
+            <div id='page-content-scroll-buffer'></div>
+          </div>
         </Router>
-
       </LocalizeProvider>
     );
   }
