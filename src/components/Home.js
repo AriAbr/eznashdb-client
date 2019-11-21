@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withLocalize } from "react-localize-redux";
-import { Container, Typography, Button, } from '@material-ui/core';
+import { Typography, Button } from '@material-ui/core';
 import { withStyles } from "@material-ui/core/styles"
 
 const styles = theme => ({
@@ -81,12 +82,17 @@ class Home extends Component {
                 {appSubtitle}
               </Typography>
               <div className={classes.heroButtons}>
+
                 <Button variant="contained" color="primary" size="large" className={homeButtonsClassName}>
                   <i className="fas fa-search"></i> {search}
                 </Button>
-                <Button variant="outlined" color="primary" size="large" className={homeButtonsClassName}>
-                  <i className="fas fa-plus"></i> {addShul}
-                </Button>
+
+                <Link to={`/add-shul`} className="navbar-link">
+                  <Button variant="outlined" color="primary" size="large" className={homeButtonsClassName}>
+                    <i className="fas fa-plus"></i> {addShul}
+                  </Button>
+                </Link>
+
               </div>
           </div>
       </div>

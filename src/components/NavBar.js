@@ -59,6 +59,7 @@ class NavBar extends Component {
     const { classes } = this.props;
     const logIn = this.props.translate("logIn");
     const home = this.props.translate("home");
+    const addShul = this.props.translate("addShul");
 
     var directionStyling = {
       direction: 'ltr',
@@ -95,6 +96,10 @@ class NavBar extends Component {
                 <Button color="inherit" className={navButtonClassName}>{home}</Button>
               </Link>
 
+              <Link to={`/add-shul`} className="navbar-link">
+                <Button color="inherit" className={navButtonClassName}>{addShul}</Button>
+              </Link>
+
               <Link to={`/api`} className="navbar-link">
                 <Button color="inherit" className={navButtonClassName}>API</Button>
               </Link>
@@ -127,6 +132,11 @@ class NavBar extends Component {
           <Link to={`/`} className={"drawer-link " + navButtonClassName + " drawer-link"} onClick={() => {this.onDrawerSelection()}}>
             <ListItem button>
               {home.toUpperCase()}
+            </ListItem>
+          </Link>
+          <Link to={`/add-shul`} className={"drawer-link " + navButtonClassName + " drawer-link"} onClick={() => {this.onDrawerSelection()}}>
+            <ListItem button>
+              {addShul.toUpperCase()}
             </ListItem>
           </Link>
           <Link to={`/api`} className={"drawer-link " + navButtonClassName + " drawer-link"} onClick={() => {this.onDrawerSelection()}}>

@@ -7,6 +7,7 @@ import './css/Home.css';
 import NavBar from './components/NavBar';
 import Home from './components/Home';
 import APITest from './components/APITest';
+import AddShul from './components/AddShul';
 import { LocalizeProvider } from "react-localize-redux";
 import { withLocalize } from "react-localize-redux";
 
@@ -40,7 +41,11 @@ class App extends Component {
               <Route
                 exact path="/"
                 render={(props) => <Home {...props}
-                  apiResponse={this.state.apiResponse}
+                />}
+              />
+              <Route
+                path="/add-shul"
+                render={(props) => <AddShul {...props}
                 />}
               />
               <Route
