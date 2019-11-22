@@ -4,6 +4,7 @@ import './css/App.css';
 import './css/NavBar.css';
 import './css/LanguageControls.css';
 import './css/Home.css';
+import './css/AddShul.css';
 import NavBar from './components/NavBar';
 import Home from './components/Home';
 import APITest from './components/APITest';

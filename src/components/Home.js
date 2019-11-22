@@ -19,19 +19,19 @@ const styles = theme => ({
   heroButtons: {
     marginTop: theme.spacing(4),
     width: '100%',
-    whiteSpace: 'nowrap',
+    whiteSpace: 'normal',
     margin: 'auto'
   },
   homeButtonsEng: {
-    width: '180px',
+    width: '200px',
     display: 'inline-block',
-    margin: '0 10px'
+    margin: '10px'
   },
   homeButtonsHeb: {
     fontFamily: 'Segoe UI',
-    width: '180px',
+    width: '200px',
     display: 'inline-block',
-    margin: '0 10px'
+    margin: '10px'
   },
 });
 

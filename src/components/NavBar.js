@@ -27,6 +27,9 @@ const styles = theme => ({
   },
   title: {
     flexGrow: 1,
+    whiteSpace: 'nowrap',
+    width: 'calc(100% - 50px)',
+    overflow: 'hidden',
   },
   drawer: {
     width: '200px'

@@ -5,5 +5,9 @@
   "search": ["Search", "חיפוש"],
   "addShul": ["Add a Shul", "הוספת בית כנסת"],
   "welcomeTo": ["Welcome to", "ברוכים הבאים ל"],
-  "appSubtitle": ["A crowdsourced database of shuls around the world.", "מאגר נתונים קראוד-סורס של בתי כנסת ברחבי העולם."]
+  "appSubtitle": ["A crowdsourced database of shuls around the world.", "מאגר נתונים קראוד-סורס של בתי כנסת ברחבי העולם."],
+  "country": ["Country", "ארץ"],
+  "stateRegion": ["State/Region", "מדינה/אזור"],
+  "city": ["City", "עיר"],
+  "selectCity": ["Select a City", "בחר/י עיר"]
 }

@@ -16,6 +16,7 @@
 
 .navbar-controls {
   display: none !important;
+  white-space: nowrap;
 }
 
 @media (min-width: 700px) {
