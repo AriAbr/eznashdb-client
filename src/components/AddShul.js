@@ -222,7 +222,7 @@ class AddShul extends Component {
         textAlign: 'right'
       }
       sortedRegions = this.state.regions.sort((a, b) => a["he"].localeCompare(b["he"]));
-      sortedCities = this.state.cities.sort((a, b) => a["he"].localeCompare(b["en"]));
+      sortedCities = this.state.cities.sort((a, b) => a["he"].localeCompare(b["he"]));
     }
 
     const countries = this.state.countries.map((country) => {
