@@ -22,16 +22,13 @@ const styles = theme => ({
     whiteSpace: 'normal',
     margin: 'auto'
   },
-  homeButtonsEng: {
+  homeButtons: {
     width: '200px',
     display: 'inline-block',
     margin: '10px'
   },
   homeButtonsHeb: {
     fontFamily: 'Segoe UI',
-    width: '200px',
-    display: 'inline-block',
-    margin: '10px'
   },
 });
 
@@ -51,27 +48,17 @@ class Home extends Component {
     const search = this.props.translate("search");
     const addShul = this.props.translate("addShul");
 
-    var directionStyling = {
-      direction: 'ltr',
-      textAlign: 'left'
-    }
-    var homeButtonsClassName = classes.homeButtonsEng;
+    var homeButtonsClassName = classes.homeButtons;
     var heroTextClassName = classes.heroTextEng;
 
-
     if (this.props.activeLanguage && this.props.activeLanguage.code === "he") {
-      directionStyling = {
-        direction: 'rtl',
-        textAlign: 'right'
-      }
-      homeButtonsClassName = classes.homeButtonsHeb;
+      homeButtonsClassName += ' ' + classes.homeButtonsHeb;
       heroTextClassName = classes.heroTextHeb;
-
     }
 
     return (
       <div id="home-outer-div">
-          <div className={classes.heroContent} style={{direction: directionStyling.direction, fontFamily: 'Segoe UI'}}>
+          <div className={classes.heroContent} style={{fontFamily: 'Segoe UI'}}>
               <Typography  className={heroTextClassName} variant="h5" align="center" color="textSecondary" paragraph>
                 {welcomeTo}
               </Typography>

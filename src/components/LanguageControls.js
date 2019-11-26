@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { withLocalize } from 'react-localize-redux';
 import globalTranslations from '../translations/global.json';
@@ -17,44 +17,17 @@ const styles = theme => ({
   title: {
     flexGrow: 1,
   },
-  selectEng: {
+  select: {
     color: 'white',
     fontFamily: 'inherit',
     fontWeight: 500,
-  },
-  selectHeb: {
-    color: 'white',
-    fontFamily: 'inherit',
-    fontWeight: 500,
-    MozTransform: 'scaleX(-1)',
-    WebkitTransform: 'scaleX(-1)',
-    OTransform: 'scaleX(-1)',
-    transform: 'scaleX(-1)',
-    msFilter: 'fliph', /*IE*/
-    filter: 'fliph', /*IE*/
   },
   drawerSelect: {
     color: '#757575 !important'
   },
-  selectMenuEng: {
-
-  },
-  selectMenuHeb: {
-    color: 'white',
-    fontFamily: 'inherit',
-    fontWeight: 500,
-    paddingRight: '0px',
-    paddingLeft: '24px',
-    MozTransform: 'scaleX(-1)',
-    WebkitTransform: 'scaleX(-1)',
-    OTransform: 'scaleX(-1)',
-    transform: 'scaleX(-1)',
-    msFilter: 'fliph', /*IE*/
-    filter: 'fliph', /*IE*/
-  }
 });
 
-class LanguageControls extends React.Component<any, any> {
+class LanguageControls extends Component {
 
   constructor(props) {
     super(props);
@@ -74,7 +47,7 @@ class LanguageControls extends React.Component<any, any> {
 
   getDefaultLangCode(){
     var defaultLangCode = "en";
-    if('window.localStorage.ezNashDBLang'){
+    if(window.localStorage.ezNashDBLang){
       defaultLangCode = window.localStorage.ezNashDBLang;
     } else {
       if (this.getCountryCode() === "IL"){
@@ -108,6 +81,14 @@ class LanguageControls extends React.Component<any, any> {
       return countryCode;
   }
 
+  componentDidUpdate(prevProps, prevState, snapshot){
+    if(this.props.activeLanguage && prevProps.activeLanguage !== this.props.activeLanguage){
+      var dir = this.props.activeLanguage.code === 'en' ? 'ltr' : 'rtl';
+      var body = document.getElementsByTagName('body')[0];
+      body.dir = dir;
+    }
+  }
+
   render() {
     const { classes } = this.props;
     var languageCode = "";
@@ -115,20 +96,7 @@ class LanguageControls extends React.Component<any, any> {
       languageCode = this.props.activeLanguage.code;
     }
 
-    var directionStyling = {
-      direction: 'ltr',
-      textAlign: 'left'
-    }
-    var selectClassName = classes.selectEng;
-    var selectMenuClassName = classes.selectMenuEng;
-    if(this.props.activeLanguage && this.props.activeLanguage.code === "he"){
-      directionStyling = {
-        direction: 'rtl',
-        textAlign: 'right'
-      }
-      selectClassName = classes.selectHeb;
-      selectMenuClassName = classes.selectMenuHeb;
-    }
+    var selectClassName = classes.select;
 
     if (this.props.parent === 'drawer') {
       selectClassName += " " + classes.drawerSelect;
@@ -142,13 +110,12 @@ class LanguageControls extends React.Component<any, any> {
             onChange={(e, val) => {this.handleLanguageChange(e, val)}}
             classes={{
               select: selectClassName,
-              selectMenu: selectMenuClassName,
             }}
           >
-            <MenuItem style={{ direction: directionStyling.direction }} value={"en"} >
+            <MenuItem value={"en"} >
               <img src="/usa-flag.png" alt="USA flag" className="language-flag-icon" />&nbsp;EN
             </MenuItem>
-            <MenuItem style={{ direction: directionStyling.direction }} value={"he"}>
+            <MenuItem value={"he"}>
               <img src="/israel-flag.png"alt="Israel flag" className="language-flag-icon" />&nbsp;עב
             </MenuItem>
           </Select>

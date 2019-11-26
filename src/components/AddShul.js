@@ -18,6 +18,8 @@ const styles = theme => ({
   },
   paper: {
     padding: '20px',
+    direction: 'ltr',
+    textAlign: 'left',
   },
 });
 
@@ -254,23 +256,25 @@ class AddShul extends Component {
       sortedCities = this.state.cities.sort((a, b) => a["he"].localeCompare(b["he"]));
     }
 
-    const countries = this.state.countries.map((country) => {
-      return <MenuItem value={country.shortName}>{country.name}</MenuItem>
+    const countries = this.state.countries.map((country, key) => {
+      return <MenuItem value={country.shortName} key={key}>{country.name}</MenuItem>
     });
+
     if(isHebrew){
       countries.unshift(
-        <Divider />
+        <Divider key={this.state.countries.length+1}/>
       )
       countries.unshift(
-        <MenuItem value={"IL-HE"} style={{direction: directionStyling.direction}}>ישראל</MenuItem>
+        <MenuItem value={"IL-HE"} key={this.state.countries.length}>ישראל</MenuItem>
       )
     }
+
     const isIsrael = ["IL-HE", "IL"].includes(this.state.selCountry)
-    const regions = sortedRegions.map((region) => {
-      return <MenuItem value={region["he"]} style={{direction: isIsrael ? directionStyling.direction : 'ltr'}}>{isHebrew ? region["he"] : region["en"]}</MenuItem>
+    const regions = sortedRegions.map((region, key) => {
+      return <MenuItem value={region["he"]} key={key}>{isHebrew ? region["he"] : region["en"]}</MenuItem>
     });
-    const cities = sortedCities.map((city) => {
-      return <MenuItem value={city["he"]} style={{direction: isIsrael ? directionStyling.direction : 'ltr'}}>{isHebrew ? city["he"] : city["en"]}</MenuItem>
+    const cities = sortedCities.map((city, key) => {
+      return <MenuItem value={city["he"]} key={key}>{isHebrew ? city["he"] : city["en"]}</MenuItem>
     });
     const regionsDisabled = this.state.selCountry === "";
     const citiesDisabled = this.state.selRegion === "";
@@ -280,7 +284,7 @@ class AddShul extends Component {
           <Typography variant="h2" component="h2" gutterBottom>
             {addShul}
           </Typography>
-          <Paper className={classes.paper} id="add-shul-form-div" elevation={2} style={{direction: directionStyling.direction, textAlign: directionStyling.textAlign}}>
+          <Paper className={classes.paper} id="add-shul-form-div" elevation={2}>
           <Typography variant="h4" component="h2" gutterBottom>
             {selectCity}
           </Typography>

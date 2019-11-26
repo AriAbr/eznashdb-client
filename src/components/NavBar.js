@@ -13,11 +13,8 @@ const styles = theme => ({
   root: {
     flexGrow: 1,
   },
-  menuButtonEng: {
+  menuButton: {
     marginLeft: theme.spacing(2),
-  },
-  menuButtonHeb: {
-    marginRight: theme.spacing(2),
   },
   navButtonEng: {
     
@@ -30,6 +27,7 @@ const styles = theme => ({
     whiteSpace: 'nowrap',
     width: 'calc(100% - 50px)',
     overflow: 'hidden',
+    textAlign: 'left'
   },
   drawer: {
     width: '200px'
@@ -44,7 +42,7 @@ class NavBar extends Component {
       };
   }
 
-  toggleDrawer(e, side, open){
+  toggleDrawer(e, open){
     if (e.type === 'keydown' && (e.key === 'Tab' || e.key === 'Shift')) {
       return;
     }
@@ -64,31 +62,17 @@ class NavBar extends Component {
     const home = this.props.translate("home");
     const addShul = this.props.translate("addShul");
 
-    var directionStyling = {
-      direction: 'ltr',
-      textAlign: 'left'
-    }
-    var menuButtonClassName = classes.menuButtonEng;
     var navButtonClassName = classes.navButtonEng;
-    var drawerSide = 'right';
 
     if (this.props.activeLanguage && this.props.activeLanguage.code === "he") {
-      directionStyling = {
-        direction: 'rtl',
-        textAlign: 'right'
-      }
-      menuButtonClassName = classes.menuButtonHeb;
       navButtonClassName = classes.navButtonHeb;
-      drawerSide = 'left'
     }
-
-    menuButtonClassName += " menu-button";
 
     return (
       <div className={classes.root}>
-        <AppBar position="fixed" style={{direction: directionStyling.direction}}>
+        <AppBar position="fixed">
           <Toolbar>
-            <Typography variant="h6" className={classes.title} style={{ textAlign: directionStyling.textAlign }}>
+            <Typography variant="h6" className={classes.title}>
               <Translate id="appTitle" />
             </Typography>
 
@@ -110,8 +94,8 @@ class NavBar extends Component {
               <Button color="inherit" className={navButtonClassName}>{logIn}</Button>
             </div>
 
-            <IconButton edge="start" className={menuButtonClassName} color="inherit" aria-label="menu"
-              onClick={(e) => {this.toggleDrawer(e, 'right', true)}}
+            <IconButton edge="start" className={classes.menuButton + ' menu-button'} color="inherit" aria-label="menu"
+              onClick={(e) => {this.toggleDrawer(e, true)}}
             >
               <MenuIcon />
             </IconButton>
@@ -120,38 +104,35 @@ class NavBar extends Component {
         </AppBar>
 
         <Drawer
-          anchor={drawerSide}
+          anchor='right'
           open={this.state.drawerIsOpen}
           variant='temporary'
-          onClose={(e) => {this.toggleDrawer(e, 'right', false)}}
-          style={{
-            direction: directionStyling.direction,
-          }}
+          onClose={(e) => {this.toggleDrawer(e, false)}}
           classes={{
             paper: classes.drawer,
           }}
         >
 
-          <Link to={`/`} className={"drawer-link " + navButtonClassName + " drawer-link"} onClick={() => {this.onDrawerSelection()}}>
+          <Link to={`/`} className={navButtonClassName + " drawer-link"} onClick={() => {this.onDrawerSelection()}}>
             <ListItem button>
               {home.toUpperCase()}
             </ListItem>
           </Link>
-          <Link to={`/add-shul`} className={"drawer-link " + navButtonClassName + " drawer-link"} onClick={() => {this.onDrawerSelection()}}>
+          <Link to={`/add-shul`} className={navButtonClassName + " drawer-link"} onClick={() => {this.onDrawerSelection()}}>
             <ListItem button>
               {addShul.toUpperCase()}
             </ListItem>
           </Link>
-          <Link to={`/api`} className={"drawer-link " + navButtonClassName + " drawer-link"} onClick={() => {this.onDrawerSelection()}}>
+          <Link to={`/api`} className={navButtonClassName + " drawer-link"} onClick={() => {this.onDrawerSelection()}}>
             <ListItem button>
               API
             </ListItem>
           </Link>
-          <ListItem button className={"drawer-link " + navButtonClassName + " drawer-link"} onClick={() => {this.onDrawerSelection()}} style={{color: '#757575'}}>
+          <ListItem button className={navButtonClassName + " drawer-link"} onClick={() => {this.onDrawerSelection()}} style={{color: '#757575'}}>
             {logIn.toUpperCase()}
           </ListItem>
           <Divider />
-          <ListItem style={{display: 'block', textAlign: directionStyling.textAlign }}>
+          <ListItem style={{display: 'block'}}>
             <LanguageControls style={{margin: "auto", color: "black !important"}} parent='drawer' />
           </ListItem>
 
