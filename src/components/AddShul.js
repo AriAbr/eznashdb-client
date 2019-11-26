@@ -74,7 +74,10 @@ class AddShul extends Component {
     }
     var cities = this.getCities(countryCode, region);
     if(cities.length === 0){
-      cities = ["N/A"];
+      cities = [{
+        "en": "N/A",
+        "he": "N/A"
+      }];
       this.setState({
         selRegion: region,
         cities: cities,
