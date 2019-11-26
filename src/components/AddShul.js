@@ -125,10 +125,10 @@ class AddShul extends Component {
     for(let i = 0; i < cities.length; i++){
       var currCity = cities[i];
       var currLishka = {
-        "en": currCity["lishka_en"],
+        "en": this.getFormattedIsraelName(currCity["lishka_en"]),
         "he": currCity["lishka_he"]
       };
-      const lishkaIndex = lishkaot.map(lishka => lishka["en"]).indexOf(currCity["lishka_en"]);
+      const lishkaIndex = lishkaot.map(lishka => lishka["he"]).indexOf(currCity["lishka_he"]);
       if(lishkaIndex === -1){
         lishkaot.push(currLishka);
       }
@@ -151,10 +151,10 @@ class AddShul extends Component {
     var regionCities = [];
     for(let i = 0; i < allCities.length; i++){
       var currCity = allCities[i];
-      var cityRegion = currCity["lishka_en"]
+      var cityRegion = currCity["lishka_he"]
       if(cityRegion === region){
         var cityData = {
-          "en": currCity["english_name"],
+          "en": this.getFormattedIsraelName(currCity["english_name"]),
           "he": currCity["name"]
         };
         regionCities.push(cityData);
@@ -175,6 +175,32 @@ class AddShul extends Component {
       formattedCities.push(cityObj)
     }
     return formattedCities;
+  }
+
+  getFormattedIsraelName(name){
+    var lowerCaseName = name.toLowerCase();
+    var formattedName = '';
+    var lowerLetters = 'abcdefghijklmnopqrstuvwyyz';
+    lowerLetters = lowerLetters.split('');
+
+    var nextIsUpper = true;
+    for(let i = 0; i < lowerCaseName.length; i++){
+      var currChar = lowerCaseName[i];
+      //add char
+      if(nextIsUpper){
+        formattedName += currChar.toUpperCase();
+      } else {
+        formattedName += currChar;
+      }
+      //handle next char
+      if(['\''].concat(lowerLetters).includes(currChar)){
+        nextIsUpper = false;
+      } else {
+        nextIsUpper = true
+      }
+    }
+
+    return formattedName;
   }
 
   componentDidMount(){
@@ -238,7 +264,7 @@ class AddShul extends Component {
     }
     const isIsrael = ["IL-HE", "IL"].includes(this.state.selCountry)
     const regions = sortedRegions.map((region) => {
-      return <MenuItem value={region["en"]} style={{direction: isIsrael ? directionStyling.direction : 'ltr'}}>{isHebrew ? region["he"] : region["en"]}</MenuItem>
+      return <MenuItem value={region["he"]} style={{direction: isIsrael ? directionStyling.direction : 'ltr'}}>{isHebrew ? region["he"] : region["en"]}</MenuItem>
     });
     const cities = sortedCities.map((city) => {
       return <MenuItem value={city["he"]} style={{direction: isIsrael ? directionStyling.direction : 'ltr'}}>{isHebrew ? city["he"] : city["en"]}</MenuItem>
