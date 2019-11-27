@@ -2,8 +2,11 @@ import React, {Component} from 'react';
 import { withLocalize } from "react-localize-redux";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from 'prop-types';
-import { FormControl, InputLabel, Select, MenuItem, Paper, Typography, Divider} from '@material-ui/core';
+import { Button, FormControl, InputLabel, Select, MenuItem, Paper, Typography, Divider, DialogActions, DialogContent, 
+  DialogContentText, DialogTitle, Table, TableRow, TableCell, TableBody} from '@material-ui/core';
 import * as israelCities from '../data/israel-cities';
+import AnimateHeight from 'react-animate-height';
+
 
 const csc = require('countrycitystatejson')
 
@@ -21,6 +24,17 @@ const styles = theme => ({
     direction: 'ltr',
     textAlign: 'left',
   },
+  dialogContent: {
+    "&:focus": {
+      outline:'none'
+    }
+  },
+  dialogActions: {
+    justifyContent: 'flex-start',
+  },
+  savedShulNameCell: {
+    fontWeight: 'bold'
+  },
 });
 
 class AddShul extends Component {
@@ -33,9 +47,30 @@ class AddShul extends Component {
         selRegion: "",
         cities: [],
         selCity: "",
+        duplicatesDialogIsOpen: false,
+        duplicatesQuestionHeight: 0,
+        savedShulRows: [ //saving dummy data here for now
+          {"name": "Keter Torah"},
+          {"name": "Rinat"},
+          {"name": "Bnai Yeshurun"},
+          {"name": "Beth Aaron"},
+          {"name": "Netivot Shalom"},
+        ]
       };
 
     }
+
+  openDuplicatesQuestion(){
+    this.setState({
+      duplicatesQuestionHeight: 'auto',
+    })
+  }
+
+  closeDuplicatesQuestion(){
+    this.setState({
+      duplicatesQuestionHeight: 0,
+    })
+  }
 
   handleCountrySelect(e){
     var countryCode = e.target.value;
@@ -99,6 +134,8 @@ class AddShul extends Component {
     var city = e.target.value;
     this.setState({
       selCity: city,
+    }, () => {
+      this.openDuplicatesQuestion();
     })
   }
 
@@ -237,6 +274,9 @@ class AddShul extends Component {
     const stateOrRegion = this.props.translate("stateOrRegion");
     const city = this.props.translate("city");
     const selectCity = this.props.translate("selectCity");
+    const checkIfShulListed = this.props.translate("checkIfShulListed");
+    const viewEdit = this.props.translate("viewEdit");
+    const shulNotListed = this.props.translate("shulNotListed");
 
     const isHebrew = (this.props.activeLanguage && this.props.activeLanguage.code === "he");
 
@@ -269,7 +309,6 @@ class AddShul extends Component {
       )
     }
 
-    const isIsrael = ["IL-HE", "IL"].includes(this.state.selCountry)
     const regions = sortedRegions.map((region, key) => {
       return <MenuItem value={region["he"]} key={key}>{isHebrew ? region["he"] : region["en"]}</MenuItem>
     });
@@ -278,6 +317,8 @@ class AddShul extends Component {
     });
     const regionsDisabled = this.state.selCountry === "";
     const citiesDisabled = this.state.selRegion === "";
+
+    const { duplicatesQuestionHeight } = this.state;
 
     return (
       <div>
@@ -324,8 +365,46 @@ class AddShul extends Component {
               {cities}
             </Select>
           </FormControl>
-        </Paper>
+          <AnimateHeight
+            duration={ 750 }
+            height={ duplicatesQuestionHeight }
+          >
+            <DialogTitle id="duplicates-question-title">
+              {checkIfShulListed}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText
+                id="duplicates-dialog-content-text"
+                ref={null}
+                tabIndex={-1}
+                className={classes.dialogContent}
+              >
+                <Table className={classes.table} aria-label="simple table" size="small" >
+                  <TableBody>
+                    {this.state.savedShulRows.map(shul => (
+                      <TableRow key={shul.name}>
+                        <TableCell component="th" scope="row" className={classes.savedShulNameCell}>
+                          {shul.name}
+                        </TableCell>
+                        <TableCell align="right">
+                          <Button variant="outlined" color="default" size="small" >
+                            {viewEdit}
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions className={classes.dialogActions}>
+              <Button variant="outlined" color="primary" size="medium" onClick={() => {this.closeDuplicatesQuestion()}} >
+                {shulNotListed}
+              </Button>
+            </DialogActions>
 
+          </AnimateHeight>
+        </Paper>
       </div>
     );
   }

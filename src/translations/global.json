@@ -9,5 +9,8 @@
   "country": ["Country", "ארץ"],
   "stateOrRegion": ["State/Region", "מדינה/אזור"],
   "city": ["City", "עיר"],
-  "selectCity": ["Select a City", "בחר/י עיר"]
+  "selectCity": ["Select a City", "בחר/י עיר"],
+  "checkIfShulListed": ["Check if your shul is already listed:", "בדוק/י אם בית הכנסת שלך כבר רשום:"],
+  "viewEdit": ["View / Edit", "תצוגה / עריכה"],
+  "shulNotListed": ["Shul not listed (Continue)", "בית הכנסת לא רשום (המשך)"]
 }

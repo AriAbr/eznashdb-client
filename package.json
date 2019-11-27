@@ -9,6 +9,7 @@
     "jquery": "^3.4.1",
     "jss-rtl": "^0.3.0",
     "react": "^16.11.0",
+    "react-animate-height": "^2.0.17",
     "react-dom": "^16.11.0",
     "react-localize-redux": "^3.5.3",
     "react-router-dom": "^5.1.2",
