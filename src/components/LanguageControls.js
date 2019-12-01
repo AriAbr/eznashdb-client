@@ -86,6 +86,19 @@ class LanguageControls extends Component {
       var dir = this.props.activeLanguage.code === 'en' ? 'ltr' : 'rtl';
       var body = document.getElementsByTagName('body')[0];
       body.dir = dir;
+
+      var title = this.props.activeLanguage.code === 'en' ? 'The Ezrat Nashim Database' : 'מאגר הנתונים עזרת נשים';
+      var titleElem = null; 
+      if(document.getElementsByTagName('title').length > 0){
+        titleElem = document.getElementsByTagName('title')[0];
+        titleElem.innerHTML = title;
+      } else {
+        titleElem = document.createElement('title');
+        titleElem.innerHTML = title;
+        var headElem = document.getElementsByTagName('head')[0];
+        headElem.appendChild(titleElem);
+      }
+
     }
   }
 
