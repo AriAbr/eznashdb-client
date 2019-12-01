@@ -1,4 +1,13 @@
-#add-shul-form-div{
-  max-width: 1000px;
+#add-shul-paper{
+  max-width: 600px;
   margin: auto;
+  margin-bottom: 20px;
+}
+
+#general-info-questions-outer-div{
+  margin: 15px 9px;
+}
+
+.section-header{
+  text-align: center;
 }

@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import { withLocalize } from "react-localize-redux";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from 'prop-types';
-import { Button, FormControl, InputLabel, Select, MenuItem, Paper, Typography, Divider, DialogActions, DialogContent, 
-  DialogContentText, DialogTitle, Table, TableRow, TableCell, TableBody} from '@material-ui/core';
+import { Button, FormControl, InputLabel, Select, MenuItem, Paper, Typography, Divider, DialogActions, Table, TableRow, TableCell,
+  TableBody, TextField, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
 import * as israelCities from '../data/israel-cities';
 import AnimateHeight from 'react-animate-height';
 
@@ -14,7 +14,15 @@ const csc = require('countrycitystatejson')
 const styles = theme => ({
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 120,
+    border: '1px solid lightgrey',
+    borderRadius: '7px',
+    padding: '20px',
+    width: 'calc(100% - 60px)',
+  },
+  locationFormControl: {
+    width: 300,
+    marginRight: '20px',
+    marginBottom: '10px',
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
@@ -34,6 +42,10 @@ const styles = theme => ({
   },
   savedShulNameCell: {
     fontWeight: 'bold'
+  },
+  textField: {
+    width: 300,
+    marginBottom: '10px',
   },
 });
 
@@ -55,10 +67,55 @@ class AddShul extends Component {
           {"name": "Bnai Yeshurun"},
           {"name": "Beth Aaron"},
           {"name": "Netivot Shalom"},
-        ]
+        ],
+        shulName: '',
+        nussach: '',
+        denomination: '',
+        femaleLeadership: '',
+        kaddishWithMen: '',
+        kaddishAlone: '',
+        childcare: '',
       };
 
     }
+
+  handleTextInput(e, inputName){
+    var value = e.target.value;
+    if(inputName === 'shulName'){
+      this.setState({
+        shulName: value,
+      })
+    } else if (inputName === 'nussach'){
+      this.setState({
+        nussach: value,
+      })
+    } else if (inputName === 'denomination') {
+      this.setState({
+        denomination: value,
+      })
+    }
+  }
+
+  handleRadioInput(e, inputName){
+    var value = e.target.value;
+    if(inputName === 'femaleLeadership'){
+      this.setState({
+        femaleLeadership: value,
+      })
+    } else if (inputName === 'kaddishWithMen'){
+      this.setState({
+        kaddishWithMen: value,
+      })
+    } else if (inputName === 'kaddishAlone') {
+      this.setState({
+        kaddishAlone: value,
+      })
+    } else if (inputName === 'childcare') {
+      this.setState({
+        childcare: value,
+      })
+    }
+  }
 
   openDuplicatesQuestion(){
     this.setState({
@@ -273,25 +330,34 @@ class AddShul extends Component {
     const country = this.props.translate("country");
     const stateOrRegion = this.props.translate("stateOrRegion");
     const city = this.props.translate("city");
-    const selectCity = this.props.translate("selectCity");
+    const location = this.props.translate("location");
+    const identification = this.props.translate("identification");
     const checkIfShulListed = this.props.translate("checkIfShulListed");
     const viewEdit = this.props.translate("viewEdit");
     const shulNotListed = this.props.translate("shulNotListed");
+    const generalInfo = this.props.translate("generalInfo");
+    const shulName = this.props.translate("shulName");
+    const nussach = this.props.translate("nussach");
+    const denomination = this.props.translate("denomination");
+    const femaleLeadership = this.props.translate("femaleLeadership");
+    const kaddish = this.props.translate("kaddish");
+    const childcare = this.props.translate("childcare");
+    const femaleLeadershipQuestion = this.props.translate("femaleLeadershipQuestion");
+    const kaddishWithMenQuestion = this.props.translate("kaddishWithMenQuestion");
+    const kaddishAloneQuestion = this.props.translate("kaddishAloneQuestion");
+    const childcareQuestion = this.props.translate("childcareQuestion");
+    const yes = this.props.translate("yes");
+    const no = this.props.translate("no");
+    const unsure = this.props.translate("unsure");
+    const manAlwaysKaddish = this.props.translate("manAlwaysKaddish");
+
 
     const isHebrew = (this.props.activeLanguage && this.props.activeLanguage.code === "he");
 
-    var directionStyling = {
-      direction: 'ltr',
-      textAlign: 'left'
-    }
     var sortedRegions = this.state.regions.sort((a, b) => a["en"].localeCompare(b["en"]));
     var sortedCities = this.state.cities.sort((a, b) => a["en"].localeCompare(b["en"]));
 
     if (isHebrew) {
-      directionStyling = {
-        direction: 'rtl',
-        textAlign: 'right'
-      }
       sortedRegions = this.state.regions.sort((a, b) => a["he"].localeCompare(b["he"]));
       sortedCities = this.state.cities.sort((a, b) => a["he"].localeCompare(b["he"]));
     }
@@ -322,88 +388,149 @@ class AddShul extends Component {
 
     return (
       <div>
-          <Typography variant="h2" component="h2" gutterBottom>
-            {addShul}
+        <Typography variant="h2" component="h2" gutterBottom>
+          {addShul}
+        </Typography>
+        <Paper className={classes.paper} id="add-shul-paper" elevation={2}>
+          <Typography variant="h4" component="h2" gutterBottom className='section-header'>
+            {generalInfo}
           </Typography>
-          <Paper className={classes.paper} id="add-shul-form-div" elevation={2}>
-          <Typography variant="h4" component="h2" gutterBottom>
-            {selectCity}
-          </Typography>
-          <FormControl className={classes.formControl}>
-            <InputLabel id="add-shul-country-label">{country}</InputLabel>
-            <Select
-              labelId="add-shul-country-label"
-              id="add-shul-country-select"
-              value={this.state.selCountry}
-              onChange={(e) => {this.handleCountrySelect(e)}}
-              
-            >
-              {countries}
-            </Select>
-          </FormControl>
-          <FormControl className={classes.formControl}>
-            <InputLabel id="add-shul-region-label">{stateOrRegion}</InputLabel>
-            <Select
-              labelId="add-shul-region-label"
-              id="add-shul-region-select"
-              value={this.state.selRegion}
-              onChange={(e) => {this.handleRegionSelect(e)}}
-              disabled={regionsDisabled}
-            >
-              {regions}
-            </Select>
-          </FormControl>
-          <FormControl className={classes.formControl}>
-            <InputLabel id="add-shul-city-label">{city}</InputLabel>
-            <Select
-              labelId="add-shul-city-label"
-              id="add-shul-city-select"
-              value={this.state.selCity}
-              onChange={(e) => {this.handleCitySelect(e)}}
-              disabled={citiesDisabled}
-            >
-              {cities}
-            </Select>
-          </FormControl>
-          <AnimateHeight
-            duration={ 750 }
-            height={ duplicatesQuestionHeight }
-          >
-            <DialogTitle id="duplicates-question-title">
-              {checkIfShulListed}
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText
-                id="duplicates-dialog-content-text"
-                ref={null}
-                tabIndex={-1}
-                className={classes.dialogContent}
+          <div id='general-info-questions-outer-div'>
+            <Typography variant="h6" component="h2" gutterBottom className='question-header'>
+              {location}
+            </Typography>
+            <div className={classes.formControl}>
+              <FormControl className={classes.locationFormControl}>
+                <InputLabel id="add-shul-country-label">{country}</InputLabel>
+                <Select
+                  labelId="add-shul-country-label"
+                  id="add-shul-country-select"
+                  value={this.state.selCountry}
+                  onChange={(e) => {this.handleCountrySelect(e)}}
+                >
+                  {countries}
+                </Select>
+              </FormControl>
+              <FormControl className={classes.locationFormControl}>
+                <InputLabel id="add-shul-region-label">{stateOrRegion}</InputLabel>
+                <Select
+                  labelId="add-shul-region-label"
+                  id="add-shul-region-select"
+                  value={this.state.selRegion}
+                  onChange={(e) => {this.handleRegionSelect(e)}}
+                  disabled={regionsDisabled}
+                >
+                  {regions}
+                </Select>
+              </FormControl>
+              <FormControl className={classes.locationFormControl}>
+                <InputLabel id="add-shul-city-label">{city}</InputLabel>
+                <Select
+                  labelId="add-shul-city-label"
+                  id="add-shul-city-select"
+                  value={this.state.selCity}
+                  onChange={(e) => {this.handleCitySelect(e)}}
+                  disabled={citiesDisabled}
+                >
+                  {cities}
+                </Select>
+              </FormControl>
+              <AnimateHeight
+                duration={ 750 }
+                height={ duplicatesQuestionHeight }
               >
-                <Table className={classes.table} aria-label="simple table" size="small" >
-                  <TableBody>
-                    {this.state.savedShulRows.map(shul => (
-                      <TableRow key={shul.name}>
-                        <TableCell component="th" scope="row" className={classes.savedShulNameCell}>
-                          {shul.name}
-                        </TableCell>
-                        <TableCell align="right">
-                          <Button variant="outlined" color="default" size="small" >
-                            {viewEdit}
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions className={classes.dialogActions}>
-              <Button variant="outlined" color="primary" size="medium" onClick={() => {this.closeDuplicatesQuestion()}} >
-                {shulNotListed}
-              </Button>
-            </DialogActions>
+                <Divider style={{margin: '20px 0'}} />
+                <Typography variant="body1" component="h2" gutterBottom>
+                  <b>{checkIfShulListed}</b>
+                </Typography>
+                  <Table className={classes.table} aria-label="simple table" size="small" >
+                    <TableBody>
+                      {this.state.savedShulRows.map(shul => (
+                        <TableRow key={shul.name}>
+                          <TableCell component="th" scope="row" className={classes.savedShulNameCell}>
+                            {shul.name}
+                          </TableCell>
+                          <TableCell align="right">
+                            <Button variant="outlined" color="default" size="small" >
+                              {viewEdit}
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                <DialogActions className={classes.dialogActions}>
+                  <Button variant="outlined" color="primary" size="medium" onClick={() => {this.closeDuplicatesQuestion()}} >
+                    {shulNotListed}
+                  </Button>
+                </DialogActions>
+              </AnimateHeight>
+            </div>
 
-          </AnimateHeight>
+            <Typography variant="h6" component="h2" gutterBottom className='question-header'>
+              {identification}
+            </Typography>
+            <FormControl className={classes.formControl}>
+              <TextField id="shul-name-input" className={classes.textField} label={shulName} required
+                onChange={(e) => {this.handleTextInput(e, 'shulName')}} value={this.state.shulName} />
+              <TextField id="nussach-input" className={classes.textField} label={nussach} 
+                onChange={(e) => {this.handleTextInput(e, 'nussach')}} value={this.state.nussach} />
+              <TextField id="denomination-input" className={classes.textField} label={denomination}
+                onChange={(e) => {this.handleTextInput(e, 'denomination')}} value={this.state.denomination} />
+            </FormControl>
+
+            <Typography variant="h6" component="h2" gutterBottom className='question-header'>
+              {femaleLeadership}
+            </Typography>
+            <FormControl component="fieldset" className={classes.formControl}>
+              <Typography variant="body1" component="h2" gutterBottom>
+                <b>{femaleLeadershipQuestion}</b>
+              </Typography>
+              <RadioGroup aria-label="femaleLeadership" name="femaleLeadership" value={this.state.femaleLeadership} 
+                onChange={(e) => {this.handleRadioInput(e, 'femaleLeadership')}}>
+                <FormControlLabel value="yes" control={<Radio color="primary" />} label={yes} />
+                <FormControlLabel value="no" control={<Radio color="primary" />} label={no} />
+                <FormControlLabel value="unsure" control={<Radio color="primary" />} label={unsure} />
+              </RadioGroup>
+            </FormControl>
+            <Typography variant="h6" component="h2" gutterBottom className='question-header'>
+              {kaddish}
+            </Typography>
+            <FormControl component="fieldset" className={classes.formControl}>
+              <Typography variant="body1" component="h2" gutterBottom>
+                <b>{kaddishWithMenQuestion}</b>
+              </Typography>
+              <RadioGroup aria-label="kaddishWithMen" name="kaddishWithMen" value={this.state.kaddishWithMen} onChange={(e) => {this.handleRadioInput(e, 'kaddishWithMen')}}>
+                <FormControlLabel value="yes" control={<Radio color="primary" />} label={yes} />
+                <FormControlLabel value="no" control={<Radio color="primary" />} label={no} />
+                <FormControlLabel value="unsure" control={<Radio color="primary" />} label={unsure} />
+              </RadioGroup>
+            </FormControl>
+            <FormControl component="fieldset" className={classes.formControl}>
+              <Typography variant="body1" component="h2" gutterBottom>
+                <b>{kaddishAloneQuestion}</b>
+              </Typography>
+              <RadioGroup aria-label="kaddishAlone" name="kaddishAlone" value={this.state.kaddishAlone} onChange={(e) => {this.handleRadioInput(e, 'kaddishAlone')}}>
+                <FormControlLabel value="yes" control={<Radio color="primary" />} label={yes} />
+                <FormControlLabel value="no" control={<Radio color="primary" />} label={no} />
+                <FormControlLabel value="unsure" control={<Radio color="primary" />} label={unsure} />
+                <FormControlLabel value="alwaysMan" control={<Radio color="primary" />} label={manAlwaysKaddish} />
+              </RadioGroup>
+            </FormControl>
+            <Typography variant="h6" component="h2" gutterBottom className='question-header'>
+              {childcare}
+            </Typography>
+            <FormControl component="fieldset" className={classes.formControl}>
+              <Typography variant="body1" component="h2" gutterBottom>
+                <b>{childcareQuestion}</b>
+              </Typography>
+              <RadioGroup aria-label="childcare" name="childcare" value={this.state.childcare} onChange={(e) => {this.handleRadioInput(e, 'childcare')}}>
+                <FormControlLabel value="yes" control={<Radio color="primary" />} label={yes} />
+                <FormControlLabel value="no" control={<Radio color="primary" />} label={no} />
+                <FormControlLabel value="unsure" control={<Radio color="primary" />} label={unsure} />
+              </RadioGroup>
+            </FormControl>
+          </div>
         </Paper>
       </div>
     );

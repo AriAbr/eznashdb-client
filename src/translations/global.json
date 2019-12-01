@@ -9,8 +9,25 @@
   "country": ["Country", "ארץ"],
   "stateOrRegion": ["State/Region", "מדינה/אזור"],
   "city": ["City", "עיר"],
-  "selectCity": ["Select a City", "בחר/י עיר"],
   "checkIfShulListed": ["Check if your shul is already listed:", "בדוק/י אם בית הכנסת שלך כבר רשום:"],
   "viewEdit": ["View / Edit", "תצוגה / עריכה"],
-  "shulNotListed": ["Shul not listed (Continue)", "בית הכנסת לא רשום (המשך)"]
+  "shulNotListed": ["Shul not listed (Continue)", "בית הכנסת לא רשום (המשך)"],
+  "generalInfo": ["General Info", "מידע כללי"],
+  "shulName": ["Shul Name", "שם בית הכנסת"],
+  "nussach": ["Nussach", "נוסח התפילה"],
+  "denomination": ["Denomination", "זרם יהדות"],
+  "location": ["Location", "מיקום"],
+  "identification": ["Identification", "זיהוי"],
+  "femaleLeadership": ["Female Leadership", "מנהיגות נשית"],
+  "kaddish": ["Kaddish", "קדיש"],
+  "childcare": ["Childcare", "טיפול בילדים"],
+  "femaleLeadershipQuestion": ["Are there any women in leadership positions?", "האם יש נשים בתפקידי מנהיגות?"],
+  "kaddishWithMenQuestion": ["Can a woman join men in saying kaddish?", "האם אישה יכולה להצטרף לגברים באמירת קדיש?"],
+  "kaddishAloneQuestion": ["If there are no men saying kaddish, can a woman say kaddish alone?", "אם אין גברים שאומרים קדיש, האם אישה יכולה לומר קדיש לבד?"],
+  "childcareQuestion": ["Is there an on-site childcare program?", "האם יש תוכנית לטיפול בילדים באתר?"],
+  "yes": ["Yes", "כן"],
+  "no": ["No", "לא"],
+  "unsure": ["Unsure", "לא בטוח/ה"],
+  "manAlwaysKaddish": ["A man always says kaddish", "גבר תמיד אומר קדיש"]
+
 }
