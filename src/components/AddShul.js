@@ -21,6 +21,7 @@ const styles = theme => ({
   },
   locationFormControl: {
     width: 300,
+    maxWidth: '100%',
     marginRight: '20px',
     marginBottom: '10px',
   },
@@ -45,6 +46,7 @@ const styles = theme => ({
   },
   textField: {
     width: 300,
+    maxWidth: '100%',
     marginBottom: '10px',
   },
 });
