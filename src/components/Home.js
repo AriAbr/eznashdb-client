@@ -44,13 +44,13 @@ class Home extends Component {
     return (
       <div id="home-outer-div">
           <div className={classes.heroContent} style={{fontFamily: 'Segoe UI'}}>
-              <Typography  className={classes.heroText} variant="h5" align="center" color="textSecondary" paragraph>
+              <Typography  className={classes.heroText + " subtitle-text"} variant="h5" align="center" color="textSecondary" paragraph>
                 {welcomeTo}
               </Typography>
-              <Typography className={classes.heroText} component="h1" variant="h1" align="center" color="textPrimary" gutterBottom>
+              <Typography className={classes.heroText + " title-text"} variant="h2" component="h2" align="center" color="textPrimary" gutterBottom>
                 {appTitle}
               </Typography>
-              <Typography  className={classes.heroText} variant="h5" align="center" color="textSecondary" paragraph>
+              <Typography  className={classes.heroText + " subtitle-text"} variant="h5" align="center" color="textSecondary" paragraph>
                 {appSubtitle}
               </Typography>
               <div className={classes.heroButtons}>

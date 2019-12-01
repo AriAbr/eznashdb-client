@@ -5,3 +5,23 @@
   flex-direction: column;
   min-height: calc(100vh - 126px);
 }
+
+.title-text{
+  font-size: 65px !important;
+}
+
+.subtitle-text{
+  font-size: 20px !important;
+}
+
+@media (min-width: 460px) {
+
+  .title-text{
+    font-size: 96px !important;
+  }
+  
+  .subtitle-text{
+    font-size: 24px !important;
+  }
+
+}
