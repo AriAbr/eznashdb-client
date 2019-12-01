@@ -42,6 +42,12 @@ class LocalizedApp extends Component {
     var direction = (this.props.activeLanguage && this.props.activeLanguage.code === 'he') ? 'rtl' : 'ltr'
     const theme = createMuiTheme({
       direction: direction,
+      typography: {
+        fontFamily: [
+          "Rubik",
+          'sans-serif'
+        ].join(','),
+      },
     });
 
     return (

@@ -12,6 +12,19 @@ const csc = require('countrycitystatejson')
 
 
 const styles = theme => ({
+  mainHeader: {
+    fontWeight: 400
+  },
+  sectionHeader: {
+    textAlign: 'center',
+    fontWeight: 400
+  },
+  questionHeader:{
+    fontWeight: 500
+  },
+  questionText:{
+    fontWeight: 400
+  },
   formControl: {
     margin: theme.spacing(1),
     border: '1px solid lightgrey',
@@ -390,15 +403,15 @@ class AddShul extends Component {
 
     return (
       <div>
-        <Typography variant="h2" component="h2" gutterBottom>
+        <Typography variant="h2" component="h2" gutterBottom className={classes.mainHeader}>
           {addShul}
         </Typography>
         <Paper className={classes.paper} id="add-shul-paper" elevation={2}>
-          <Typography variant="h4" component="h2" gutterBottom className='section-header'>
+          <Typography variant="h4" component="h2" gutterBottom className={classes.sectionHeader}>
             {generalInfo}
           </Typography>
           <div id='general-info-questions-outer-div'>
-            <Typography variant="h6" component="h2" gutterBottom className='question-header'>
+            <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
               {location}
             </Typography>
             <div className={classes.formControl}>
@@ -469,7 +482,7 @@ class AddShul extends Component {
               </AnimateHeight>
             </div>
 
-            <Typography variant="h6" component="h2" gutterBottom className='question-header'>
+            <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
               {identification}
             </Typography>
             <FormControl className={classes.formControl}>
@@ -481,12 +494,12 @@ class AddShul extends Component {
                 onChange={(e) => {this.handleTextInput(e, 'denomination')}} value={this.state.denomination} />
             </FormControl>
 
-            <Typography variant="h6" component="h2" gutterBottom className='question-header'>
+            <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
               {femaleLeadership}
             </Typography>
             <FormControl component="fieldset" className={classes.formControl}>
-              <Typography variant="body1" component="h2" gutterBottom>
-                <b>{femaleLeadershipQuestion}</b>
+              <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
+                {femaleLeadershipQuestion}
               </Typography>
               <RadioGroup aria-label="femaleLeadership" name="femaleLeadership" value={this.state.femaleLeadership} 
                 onChange={(e) => {this.handleRadioInput(e, 'femaleLeadership')}}>
@@ -495,12 +508,12 @@ class AddShul extends Component {
                 <FormControlLabel value="unsure" control={<Radio color="primary" />} label={unsure} />
               </RadioGroup>
             </FormControl>
-            <Typography variant="h6" component="h2" gutterBottom className='question-header'>
+            <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
               {kaddish}
             </Typography>
             <FormControl component="fieldset" className={classes.formControl}>
-              <Typography variant="body1" component="h2" gutterBottom>
-                <b>{kaddishWithMenQuestion}</b>
+              <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
+                {kaddishWithMenQuestion}
               </Typography>
               <RadioGroup aria-label="kaddishWithMen" name="kaddishWithMen" value={this.state.kaddishWithMen} onChange={(e) => {this.handleRadioInput(e, 'kaddishWithMen')}}>
                 <FormControlLabel value="yes" control={<Radio color="primary" />} label={yes} />
@@ -509,8 +522,8 @@ class AddShul extends Component {
               </RadioGroup>
             </FormControl>
             <FormControl component="fieldset" className={classes.formControl}>
-              <Typography variant="body1" component="h2" gutterBottom>
-                <b>{kaddishAloneQuestion}</b>
+              <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
+                {kaddishAloneQuestion}
               </Typography>
               <RadioGroup aria-label="kaddishAlone" name="kaddishAlone" value={this.state.kaddishAlone} onChange={(e) => {this.handleRadioInput(e, 'kaddishAlone')}}>
                 <FormControlLabel value="yes" control={<Radio color="primary" />} label={yes} />
@@ -519,12 +532,12 @@ class AddShul extends Component {
                 <FormControlLabel value="alwaysMan" control={<Radio color="primary" />} label={manAlwaysKaddish} />
               </RadioGroup>
             </FormControl>
-            <Typography variant="h6" component="h2" gutterBottom className='question-header'>
+            <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
               {childcare}
             </Typography>
             <FormControl component="fieldset" className={classes.formControl}>
-              <Typography variant="body1" component="h2" gutterBottom>
-                <b>{childcareQuestion}</b>
+              <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
+                {childcareQuestion}
               </Typography>
               <RadioGroup aria-label="childcare" name="childcare" value={this.state.childcare} onChange={(e) => {this.handleRadioInput(e, 'childcare')}}>
                 <FormControlLabel value="yes" control={<Radio color="primary" />} label={yes} />

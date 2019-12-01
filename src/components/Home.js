@@ -9,12 +9,8 @@ const styles = theme => ({
   heroContent: {
     backgroundColor: theme.palette.background.paper,
   },
-  heroTextEng: {
-
-  },
-  heroTextHeb: {
-    fontFamily: 'Segoe UI',
-    fontWeight: 400
+  heroText: {
+    fontWeight: 400,
   },
   heroButtons: {
     marginTop: theme.spacing(4),
@@ -26,9 +22,6 @@ const styles = theme => ({
     width: '200px',
     display: 'inline-block',
     margin: '10px'
-  },
-  homeButtonsHeb: {
-    fontFamily: 'Segoe UI',
   },
 });
 
@@ -48,34 +41,26 @@ class Home extends Component {
     const search = this.props.translate("search");
     const addShul = this.props.translate("addShul");
 
-    var homeButtonsClassName = classes.homeButtons;
-    var heroTextClassName = classes.heroTextEng;
-
-    if (this.props.activeLanguage && this.props.activeLanguage.code === "he") {
-      homeButtonsClassName += ' ' + classes.homeButtonsHeb;
-      heroTextClassName = classes.heroTextHeb;
-    }
-
     return (
       <div id="home-outer-div">
           <div className={classes.heroContent} style={{fontFamily: 'Segoe UI'}}>
-              <Typography  className={heroTextClassName} variant="h5" align="center" color="textSecondary" paragraph>
+              <Typography  className={classes.heroText} variant="h5" align="center" color="textSecondary" paragraph>
                 {welcomeTo}
               </Typography>
-              <Typography className={heroTextClassName} component="h1" variant="h1" align="center" color="textPrimary" gutterBottom>
+              <Typography className={classes.heroText} component="h1" variant="h1" align="center" color="textPrimary" gutterBottom>
                 {appTitle}
               </Typography>
-              <Typography  className={heroTextClassName} variant="h5" align="center" color="textSecondary" paragraph>
+              <Typography  className={classes.heroText} variant="h5" align="center" color="textSecondary" paragraph>
                 {appSubtitle}
               </Typography>
               <div className={classes.heroButtons}>
 
-                <Button variant="contained" color="primary" size="large" className={homeButtonsClassName}>
+                <Button variant="contained" color="primary" size="large" className={classes.homeButtons}>
                   <i className="fas fa-search"></i> {search}
                 </Button>
 
                 <Link to={`/add-shul`} className="navbar-link">
-                  <Button variant="outlined" color="primary" size="large" className={homeButtonsClassName}>
+                  <Button variant="outlined" color="primary" size="large" className={classes.homeButtons}>
                     <i className="fas fa-plus"></i> {addShul}
                   </Button>
                 </Link>

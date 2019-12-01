@@ -16,18 +16,30 @@ const styles = theme => ({
   menuButton: {
     marginLeft: theme.spacing(2),
   },
-  navButtonEng: {
-    
+  navButton: {
+    fontWeight: 500,
   },
   navButtonHeb: {
-    fontFamily: 'Segoe UI',
+    fontSize: '16px',
+    lineHeight: '24.5px',
+  },
+  drawerLink: {
+    fontWeight: 500,
+    textDecoration: 'none !important',
+    color: '#757575',
+    fontSize: '18px',
+  },
+  drawerLinkHeb: {
+    fontSize: '20px',
+    lineHeight: '22px',
   },
   title: {
     flexGrow: 1,
     whiteSpace: 'nowrap',
     width: 'calc(100% - 50px)',
     overflow: 'hidden',
-    textAlign: 'left'
+    textAlign: 'left',
+    textOverflow: 'ellipsis',
   },
   drawer: {
     width: '200px'
@@ -62,11 +74,8 @@ class NavBar extends Component {
     const home = this.props.translate("home");
     const addShul = this.props.translate("addShul");
 
-    var navButtonClassName = classes.navButtonEng;
-
-    if (this.props.activeLanguage && this.props.activeLanguage.code === "he") {
-      navButtonClassName = classes.navButtonHeb;
-    }
+    var navButtonClassName = this.props.activeLanguage && this.props.activeLanguage.code === 'en' ? classes.navButton : classes.navButton + " " + classes.navButtonHeb;
+    var drawerLinkClassName = this.props.activeLanguage && this.props.activeLanguage.code === 'en' ? classes.drawerLink : classes.drawerLink + " " + classes.drawerLinkHeb;
 
     return (
       <div className={classes.root}>
@@ -113,22 +122,22 @@ class NavBar extends Component {
           }}
         >
 
-          <Link to={`/`} className={navButtonClassName + " drawer-link"} onClick={() => {this.onDrawerSelection()}}>
+          <Link to={`/`} className={drawerLinkClassName} onClick={() => {this.onDrawerSelection()}}>
             <ListItem button>
               {home.toUpperCase()}
             </ListItem>
           </Link>
-          <Link to={`/add-shul`} className={navButtonClassName + " drawer-link"} onClick={() => {this.onDrawerSelection()}}>
+          <Link to={`/add-shul`} className={drawerLinkClassName} onClick={() => {this.onDrawerSelection()}}>
             <ListItem button>
               {addShul.toUpperCase()}
             </ListItem>
           </Link>
-          <Link to={`/api`} className={navButtonClassName + " drawer-link"} onClick={() => {this.onDrawerSelection()}}>
+          <Link to={`/api`} className={drawerLinkClassName} onClick={() => {this.onDrawerSelection()}}>
             <ListItem button>
               API
             </ListItem>
           </Link>
-          <ListItem button className={navButtonClassName + " drawer-link"} onClick={() => {this.onDrawerSelection()}} style={{color: '#757575'}}>
+          <ListItem button className={drawerLinkClassName} onClick={() => {this.onDrawerSelection()}} style={{color: '#757575'}}>
             {logIn.toUpperCase()}
           </ListItem>
           <Divider />
