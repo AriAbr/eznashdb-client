@@ -54,9 +54,6 @@ const styles = theme => ({
   dialogActions: {
     justifyContent: 'flex-start',
   },
-  savedShulNameCell: {
-    fontWeight: 'bold'
-  },
   textField: {
     width: 300,
     maxWidth: '100%',
@@ -455,14 +452,14 @@ class AddShul extends Component {
                 height={ duplicatesQuestionHeight }
               >
                 <Divider style={{margin: '20px 0'}} />
-                <Typography variant="body1" component="h2" gutterBottom>
-                  <b>{checkIfShulListed}</b>
+                <Typography variant="body1" component="h2" gutterBottom className={classes.questionHeader}>
+                  {checkIfShulListed}
                 </Typography>
                   <Table className={classes.table} aria-label="simple table" size="small" >
                     <TableBody>
                       {this.state.savedShulRows.map(shul => (
                         <TableRow key={shul.name}>
-                          <TableCell component="th" scope="row" className={classes.savedShulNameCell}>
+                          <TableCell component="th" scope="row" className={classes.questionText}>
                             {shul.name}
                           </TableCell>
                           <TableCell align="right">
