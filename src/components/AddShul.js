@@ -3,7 +3,7 @@ import { withLocalize } from "react-localize-redux";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from 'prop-types';
 import { Button, FormControl, InputLabel, Select, MenuItem, Paper, Typography, Divider, DialogActions, Table, TableRow, TableCell,
-  TableBody, TextField, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
+  TableBody, TextField, RadioGroup, FormControlLabel, Radio, FormGroup, Checkbox} from '@material-ui/core';
 import * as israelCities from '../data/israel-cities';
 import AnimateHeight from 'react-animate-height';
 
@@ -20,7 +20,7 @@ const styles = theme => ({
     fontWeight: 400
   },
   questionHeader:{
-    fontWeight: 500
+    fontWeight: 500,
   },
   questionText:{
     fontWeight: 400
@@ -28,9 +28,19 @@ const styles = theme => ({
   formControl: {
     margin: theme.spacing(1),
     border: '1px solid lightgrey',
-    borderRadius: '7px',
+    borderRadius: '4px',
     padding: '20px',
     width: 'calc(100% - 60px)',
+  },
+  borderBox: {
+    backgroundColor: '#d5d5d5',
+  },
+  questionBox: {
+    backgroundColor: '#fafafa'
+  },
+  placementBox: {
+    border: '0px solid lightgrey',
+    padding: '0 20px',
   },
   locationFormControl: {
     width: 300,
@@ -80,15 +90,26 @@ class AddShul extends Component {
           {"name": "Beth Aaron"},
           {"name": "Netivot Shalom"},
         ],
-        shulName: '',
-        nussach: '',
-        denomination: '',
-        femaleLeadership: '',
-        kaddishWithMen: '',
-        kaddishAlone: '',
-        childcare: '',
+        shulName: "",
+        nussach: "",
+        denomination: "",
+        femaleLeadership: "",
+        kaddishWithMen: "",
+        kaddishAlone: "",
+        childcare: "",
+        roomName: "",
+        size: "",
+        centered: false,
+        sameFloorSide: false,
+        sameFloorBack: false,
+        sameFloorElevated: false,
+        sameFloorLevel: false,
+        balconySide: false,
+        balconyBack: false,
+        onlyMen: false,
+        mixedSeating: false,
+        visAud: "",
       };
-
     }
 
   handleTextInput(e, inputName){
@@ -104,6 +125,10 @@ class AddShul extends Component {
     } else if (inputName === 'denomination') {
       this.setState({
         denomination: value,
+      })
+    } else if (inputName === 'roomName') {
+      this.setState({
+        roomName: value,
       })
     }
   }
@@ -125,6 +150,55 @@ class AddShul extends Component {
     } else if (inputName === 'childcare') {
       this.setState({
         childcare: value,
+      })
+    } else if (inputName === 'size') {
+      this.setState({
+        size: value,
+      })
+    } else if (inputName === 'visAud') {
+      this.setState({
+        visAud: value,
+      })
+    }
+  }
+
+  handleCheckboxInput(e){
+    var inputName = e.target.value;
+    if(inputName === 'centered'){
+      this.setState({
+        centered: !this.state.centered,
+      })
+    } else if (inputName === 'sameFloorSide'){
+      this.setState({
+        sameFloorSide: !this.state.sameFloorSide,
+      })
+    } else if (inputName === 'sameFloorBack'){
+      this.setState({
+        sameFloorBack: !this.state.sameFloorBack,
+      })
+    } else if (inputName === 'sameFloorElevated'){
+      this.setState({
+        sameFloorElevated: !this.state.sameFloorElevated,
+      })
+    } else if (inputName === 'sameFloorLevel'){
+      this.setState({
+        sameFloorLevel: !this.state.sameFloorLevel,
+      })
+    } else if (inputName === 'balconySide'){
+      this.setState({
+        balconySide: !this.state.balconySide,
+      })
+    } else if (inputName === 'balconyBack'){
+      this.setState({
+        balconyBack: !this.state.balconyBack,
+      })
+    } else if (inputName === 'onlyMen'){
+      this.setState({
+        onlyMen: !this.state.onlyMen,
+      })
+    } else if (inputName === 'mixedSeating'){
+      this.setState({
+        mixedSeating: !this.state.mixedSeating,
       })
     }
   }
@@ -362,7 +436,33 @@ class AddShul extends Component {
     const no = this.props.translate("no");
     const unsure = this.props.translate("unsure");
     const manAlwaysKaddish = this.props.translate("manAlwaysKaddish");
-
+    const womensSections = this.props.translate("womensSections");
+    const Room = this.props.translate("Room");
+    const roomName = this.props.translate("roomName");
+    const womensSectionSize = this.props.translate("womensSectionSize");
+    const sizeQuestion = this.props.translate("sizeQuestion");
+    const muchSmaller = this.props.translate("muchSmaller");
+    const somewhatSmaller = this.props.translate("somewhatSmaller");
+    const sameSize = this.props.translate("sameSize");
+    const larger = this.props.translate("larger");
+    const placement = this.props.translate("placement");
+    const placementQuestion = this.props.translate("placementQuestion");
+    const sameFloor = this.props.translate("sameFloor");
+    const balcony = this.props.translate("balcony");
+    const noWomensSection = this.props.translate("noWomensSection");
+    const centered = this.props.translate("centered");
+    const side = this.props.translate("side");
+    const back = this.props.translate("back");
+    const elevated = this.props.translate("elevated");
+    const levelWithMens = this.props.translate("levelWithMens");
+    const onlyMens = this.props.translate("onlyMens");
+    const mixedSeating = this.props.translate("mixedSeating");
+    const visAud = this.props.translate("visAud");
+    const visAudQuestion = this.props.translate("visAudQuestion");
+    const visAudQuestionSubtitle1 = this.props.translate("visAudQuestionSubtitle1");
+    const visAudQuestionSubtitle2 = this.props.translate("visAudQuestionSubtitle2");
+    const difficult = this.props.translate("difficult");
+    const easy = this.props.translate("easy");
 
     const isHebrew = (this.props.activeLanguage && this.props.activeLanguage.code === "he");
 
@@ -404,14 +504,16 @@ class AddShul extends Component {
           {addShul}
         </Typography>
         <Paper className={classes.paper} id="add-shul-paper" elevation={2}>
+
           <Typography variant="h4" component="h2" gutterBottom className={classes.sectionHeader}>
             {generalInfo}
           </Typography>
-          <div id='general-info-questions-outer-div'>
+          <FormControl className={classes.formControl + " " + classes.borderBox}>
+
             <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
               {location}
             </Typography>
-            <div className={classes.formControl}>
+            <div className={classes.formControl + " " + classes.questionBox}>
               <FormControl className={classes.locationFormControl}>
                 <InputLabel id="add-shul-country-label">{country}</InputLabel>
                 <Select
@@ -482,7 +584,7 @@ class AddShul extends Component {
             <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
               {identification}
             </Typography>
-            <FormControl className={classes.formControl}>
+            <FormControl className={classes.formControl + " " + classes.questionBox}>
               <TextField id="shul-name-input" className={classes.textField} label={shulName} required
                 onChange={(e) => {this.handleTextInput(e, 'shulName')}} value={this.state.shulName} />
               <TextField id="nussach-input" className={classes.textField} label={nussach} 
@@ -494,7 +596,7 @@ class AddShul extends Component {
             <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
               {femaleLeadership}
             </Typography>
-            <FormControl component="fieldset" className={classes.formControl}>
+            <FormControl component="fieldset" className={classes.formControl + " " + classes.questionBox}>
               <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
                 {femaleLeadershipQuestion}
               </Typography>
@@ -505,10 +607,11 @@ class AddShul extends Component {
                 <FormControlLabel value="unsure" control={<Radio color="primary" />} label={unsure} />
               </RadioGroup>
             </FormControl>
+
             <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
               {kaddish}
             </Typography>
-            <FormControl component="fieldset" className={classes.formControl}>
+            <FormControl component="fieldset" className={classes.formControl + " " + classes.questionBox}>
               <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
                 {kaddishWithMenQuestion}
               </Typography>
@@ -518,7 +621,7 @@ class AddShul extends Component {
                 <FormControlLabel value="unsure" control={<Radio color="primary" />} label={unsure} />
               </RadioGroup>
             </FormControl>
-            <FormControl component="fieldset" className={classes.formControl}>
+            <FormControl component="fieldset" className={classes.formControl + " " + classes.questionBox}>
               <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
                 {kaddishAloneQuestion}
               </Typography>
@@ -529,10 +632,11 @@ class AddShul extends Component {
                 <FormControlLabel value="alwaysMan" control={<Radio color="primary" />} label={manAlwaysKaddish} />
               </RadioGroup>
             </FormControl>
+
             <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
               {childcare}
             </Typography>
-            <FormControl component="fieldset" className={classes.formControl}>
+            <FormControl component="fieldset" className={classes.formControl + " " + classes.questionBox}>
               <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
                 {childcareQuestion}
               </Typography>
@@ -542,7 +646,131 @@ class AddShul extends Component {
                 <FormControlLabel value="unsure" control={<Radio color="primary" />} label={unsure} />
               </RadioGroup>
             </FormControl>
-          </div>
+
+          </FormControl>
+
+        </Paper>
+
+        <Paper className={classes.paper} id="add-shul-paper" elevation={2}>
+          <Typography variant="h4" component="h2" gutterBottom className={classes.sectionHeader}>
+            {womensSections}
+          </Typography>
+
+          <Typography variant="h5" component="h2" gutterBottom className={classes.questionHeader} style={{textAlign: 'center'}}>
+            {Room} 1
+          </Typography>
+          <FormControl className={classes.formControl + " " + classes.borderBox}>
+
+            <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
+              {roomName}
+            </Typography>
+            <FormControl className={classes.formControl + " " + classes.questionBox}>
+              <TextField id="shul-name-input" className={classes.textField} label={roomName} required
+                onChange={(e) => {this.handleTextInput(e, 'roomName')}} value={this.state.roomName} />
+            </FormControl>
+
+            <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
+              {womensSectionSize}
+            </Typography>
+            <FormControl component="fieldset" className={classes.formControl + " " + classes.questionBox}>
+              <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
+                {sizeQuestion}
+              </Typography>
+              <RadioGroup aria-label="size" name="size" value={this.state.size} onChange={(e) => {this.handleRadioInput(e, 'size')}}>
+                <FormControlLabel value="XS" control={<Radio color="primary" />} label={muchSmaller} />
+                <FormControlLabel value="S" control={<Radio color="primary" />} label={somewhatSmaller} />
+                <FormControlLabel value="M" control={<Radio color="primary" />} label={sameSize} />
+                <FormControlLabel value="L" control={<Radio color="primary" />} label={larger} />
+                <FormControlLabel value="unsure" control={<Radio color="primary" />} label={unsure} />
+              </RadioGroup>
+            </FormControl>
+            
+            <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
+              {placement}
+            </Typography>
+            <FormControl component="fieldset" className={classes.formControl + " " + classes.questionBox}>
+              <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
+                {placementQuestion}
+              </Typography>
+              <FormControl component="fieldset" className={classes.formControl + " " + classes.placementBox} style={{marginTop: '20px'}}>
+                <Typography variant="body1" component="h2" gutterBottom className={classes.questionHeader}>
+                  {sameFloor}
+                </Typography>
+                <FormGroup>
+                  <FormControlLabel
+                    control={<Checkbox checked={this.state.centered} onChange={(e) => {this.handleCheckboxInput(e)}} value={"centered"}  color="primary" />}
+                    label={centered}
+                  />
+                  <FormControlLabel
+                    control={<Checkbox checked={this.state.sameFloorSide} onChange={(e) => {this.handleCheckboxInput(e)}} value={"sameFloorSide"}  color="primary" />}
+                    label={side}
+                  />
+                  <FormControlLabel
+                    control={<Checkbox checked={this.state.sameFloorBack} onChange={(e) => {this.handleCheckboxInput(e)}} value={"sameFloorBack"}  color="primary" />}
+                    label={back}
+                  />
+                  <FormControlLabel
+                    control={<Checkbox checked={this.state.sameFloorElevated} onChange={(e) => {this.handleCheckboxInput(e)}} value={"sameFloorElevated"}  color="primary" />}
+                    label={elevated}
+                  />
+                  <FormControlLabel
+                    control={<Checkbox checked={this.state.sameFloorLevel} onChange={(e) => {this.handleCheckboxInput(e)}} value={"sameFloorLevel"}  color="primary" />}
+                    label={levelWithMens}
+                  />
+                </FormGroup>
+              </FormControl>
+              <FormControl component="fieldset" className={classes.formControl + " " + classes.placementBox} >
+                <Typography variant="body1" component="h2" gutterBottom className={classes.questionHeader}>
+                  {balcony}
+                </Typography>
+                <FormGroup>
+                  <FormControlLabel
+                    control={<Checkbox checked={this.state.balconySide} onChange={(e) => {this.handleCheckboxInput(e)}} value={"balconySide"}  color="primary" />}
+                    label={side}
+                  />
+                  <FormControlLabel
+                    control={<Checkbox checked={this.state.balconyBack} onChange={(e) => {this.handleCheckboxInput(e)}} value={"balconyBack"}  color="primary" />}
+                    label={back}
+                  />
+                </FormGroup>
+              </FormControl>
+              <FormControl component="fieldset" className={classes.formControl + " " + classes.placementBox} >
+                <Typography variant="body1" component="h2" gutterBottom className={classes.questionHeader}>
+                  {noWomensSection}
+                </Typography>
+                <FormGroup>
+                  <FormControlLabel
+                    control={<Checkbox checked={this.state.onlyMen} onChange={(e) => {this.handleCheckboxInput(e)}} value={"onlyMen"}  color="primary" />}
+                    label={onlyMens}
+                  />
+                  <FormControlLabel
+                    control={<Checkbox checked={this.state.mixedSeating} onChange={(e) => {this.handleCheckboxInput(e)}} value={"mixedSeating"}  color="primary" />}
+                    label={mixedSeating}
+                  />
+                </FormGroup>
+              </FormControl>
+            </FormControl>
+
+            <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
+              {visAud}
+            </Typography>
+            <FormControl component="fieldset" className={classes.formControl + " " + classes.questionBox}>
+              <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
+                {visAudQuestion + " "}
+                {visAudQuestionSubtitle1} <span className={classes.questionHeader}>{unsure}</span> {visAudQuestionSubtitle2}
+              </Typography>
+              <RadioGroup aria-label="visAud" name="visAud" value={this.state.visAud} onChange={(e) => {this.handleRadioInput(e, 'visAud')}}>
+                <FormControlLabel value="1" control={<Radio color="primary" />} label={"1 - " + difficult} />
+                <FormControlLabel value="2" control={<Radio color="primary" />} label="2" />
+                <FormControlLabel value="3" control={<Radio color="primary" />} label="3" />
+                <FormControlLabel value="4" control={<Radio color="primary" />} label="4" />
+                <FormControlLabel value="5" control={<Radio color="primary" />} label={"5 - " + easy} />
+                <FormControlLabel value="unsure" control={<Radio color="primary" />} label={unsure} />
+              </RadioGroup>
+            </FormControl>
+
+          </FormControl>
+          
         </Paper>
       </div>
     );
