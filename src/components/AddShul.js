@@ -32,11 +32,19 @@ const styles = theme => ({
     padding: '20px',
     width: 'calc(100% - 60px)',
   },
-  borderBox: {
+  generalBorderBox: {
     backgroundColor: '#d5d5d5',
   },
-  questionBox: {
+  roomBorderBox: {
+    backgroundColor: 'slategrey',
+    color: 'white'
+  },
+  generalQuestionBox: {
     backgroundColor: '#fafafa'
+  },
+  roomQuestionBox: {
+    backgroundColor: 'aliceblue',
+    color: 'black'
   },
   placementBox: {
     border: '0px solid lightgrey',
@@ -68,6 +76,21 @@ const styles = theme => ({
     width: 300,
     maxWidth: '100%',
     marginBottom: '10px',
+  },
+  addRoomOuterDiv:{
+    textAlign: 'right',
+    padding: '0 10px'
+  },
+  heroButtons: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'flex-end',
+    flexWrap: 'wrap',
+  },
+  homeButtons: {
+    minWidth: '220px',
+    display: 'inline-block',
+    margin: '10px'
   },
 });
 
@@ -463,6 +486,8 @@ class AddShul extends Component {
     const visAudQuestionSubtitle2 = this.props.translate("visAudQuestionSubtitle2");
     const difficult = this.props.translate("difficult");
     const easy = this.props.translate("easy");
+    const addRoom = this.props.translate("addRoom");
+    const submit = this.props.translate("submit");
 
     const isHebrew = (this.props.activeLanguage && this.props.activeLanguage.code === "he");
 
@@ -503,17 +528,17 @@ class AddShul extends Component {
         <Typography variant="h2" component="h2" gutterBottom className={classes.mainHeader}>
           {addShul}
         </Typography>
-        <Paper className={classes.paper} id="add-shul-paper" elevation={2}>
+        <Paper className={classes.paper} id="add-shul-paper" elevation={12}>
 
           <Typography variant="h4" component="h2" gutterBottom className={classes.sectionHeader}>
             {generalInfo}
           </Typography>
-          <FormControl className={classes.formControl + " " + classes.borderBox}>
+          <FormControl className={classes.formControl + " " + classes.generalBorderBox}>
 
             <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
               {location}
             </Typography>
-            <div className={classes.formControl + " " + classes.questionBox}>
+            <div className={classes.formControl + " " + classes.generalQuestionBox}>
               <FormControl className={classes.locationFormControl}>
                 <InputLabel id="add-shul-country-label">{country}</InputLabel>
                 <Select
@@ -584,7 +609,7 @@ class AddShul extends Component {
             <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
               {identification}
             </Typography>
-            <FormControl className={classes.formControl + " " + classes.questionBox}>
+            <FormControl className={classes.formControl + " " + classes.generalQuestionBox}>
               <TextField id="shul-name-input" className={classes.textField} label={shulName} required
                 onChange={(e) => {this.handleTextInput(e, 'shulName')}} value={this.state.shulName} />
               <TextField id="nussach-input" className={classes.textField} label={nussach} 
@@ -596,7 +621,7 @@ class AddShul extends Component {
             <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
               {femaleLeadership}
             </Typography>
-            <FormControl component="fieldset" className={classes.formControl + " " + classes.questionBox}>
+            <FormControl component="fieldset" className={classes.formControl + " " + classes.generalQuestionBox}>
               <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
                 {femaleLeadershipQuestion}
               </Typography>
@@ -611,7 +636,7 @@ class AddShul extends Component {
             <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
               {kaddish}
             </Typography>
-            <FormControl component="fieldset" className={classes.formControl + " " + classes.questionBox}>
+            <FormControl component="fieldset" className={classes.formControl + " " + classes.generalQuestionBox}>
               <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
                 {kaddishWithMenQuestion}
               </Typography>
@@ -621,7 +646,7 @@ class AddShul extends Component {
                 <FormControlLabel value="unsure" control={<Radio color="primary" />} label={unsure} />
               </RadioGroup>
             </FormControl>
-            <FormControl component="fieldset" className={classes.formControl + " " + classes.questionBox}>
+            <FormControl component="fieldset" className={classes.formControl + " " + classes.generalQuestionBox}>
               <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
                 {kaddishAloneQuestion}
               </Typography>
@@ -636,7 +661,7 @@ class AddShul extends Component {
             <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
               {childcare}
             </Typography>
-            <FormControl component="fieldset" className={classes.formControl + " " + classes.questionBox}>
+            <FormControl component="fieldset" className={classes.formControl + " " + classes.generalQuestionBox}>
               <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
                 {childcareQuestion}
               </Typography>
@@ -649,22 +674,19 @@ class AddShul extends Component {
 
           </FormControl>
 
-        </Paper>
-
-        <Paper className={classes.paper} id="add-shul-paper" elevation={2}>
-          <Typography variant="h4" component="h2" gutterBottom className={classes.sectionHeader}>
+          <Typography variant="h4" component="h2" gutterBottom className={classes.sectionHeader} style={{marginTop: '20px'}}>
             {womensSections}
           </Typography>
 
-          <Typography variant="h5" component="h2" gutterBottom className={classes.questionHeader} style={{textAlign: 'center'}}>
-            {Room} 1
+          <Typography variant="h5" component="h2" gutterBottom className={classes.questionHeader} style={{textAlign: 'center', wordBreak: 'break-word'}}>
+            {this.state.roomName.length > 0 ? this.state.roomName : Room + " 1"}
           </Typography>
-          <FormControl className={classes.formControl + " " + classes.borderBox}>
+          <FormControl className={classes.formControl + " " + classes.roomBorderBox}>
 
             <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
               {roomName}
             </Typography>
-            <FormControl className={classes.formControl + " " + classes.questionBox}>
+            <FormControl className={classes.formControl + " " + classes.roomQuestionBox}>
               <TextField id="shul-name-input" className={classes.textField} label={roomName} required
                 onChange={(e) => {this.handleTextInput(e, 'roomName')}} value={this.state.roomName} />
             </FormControl>
@@ -672,7 +694,7 @@ class AddShul extends Component {
             <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
               {womensSectionSize}
             </Typography>
-            <FormControl component="fieldset" className={classes.formControl + " " + classes.questionBox}>
+            <FormControl component="fieldset" className={classes.formControl + " " + classes.roomQuestionBox}>
               <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
                 {sizeQuestion}
               </Typography>
@@ -688,7 +710,7 @@ class AddShul extends Component {
             <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
               {placement}
             </Typography>
-            <FormControl component="fieldset" className={classes.formControl + " " + classes.questionBox}>
+            <FormControl component="fieldset" className={classes.formControl + " " + classes.roomQuestionBox}>
               <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
                 {placementQuestion}
               </Typography>
@@ -754,7 +776,7 @@ class AddShul extends Component {
             <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
               {visAud}
             </Typography>
-            <FormControl component="fieldset" className={classes.formControl + " " + classes.questionBox}>
+            <FormControl component="fieldset" className={classes.formControl + " " + classes.roomQuestionBox}>
               <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
                 {visAudQuestion + " "}
                 {visAudQuestionSubtitle1} <span className={classes.questionHeader}>{unsure}</span> {visAudQuestionSubtitle2}
@@ -770,7 +792,20 @@ class AddShul extends Component {
             </FormControl>
 
           </FormControl>
-          
+
+          <div className={classes.heroButtons}>
+
+            <Button variant="outlined" color="primary" size="large" className={classes.homeButtons}>
+              <i className="fas fa-plus"></i> &nbsp; {addRoom}
+            </Button>
+
+            <Button variant="contained" color="primary" size="large" className={classes.homeButtons}>
+              <i class="fas fa-paper-plane"></i> &nbsp; {submit}
+            </Button>
+
+          </div>
+
+
         </Paper>
       </div>
     );

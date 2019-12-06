@@ -55,5 +55,7 @@
   "visAudQuestionSubtitle1": ["Select", "בחר/י"],
   "visAudQuestionSubtitle2": ["if you do not use the women's section", "אם אינך משתמש/ת בעזרת הנשים"],
   "difficult": ["Difficult", "קשה"],
-  "easy": ["Easy", "קל"]
+  "easy": ["Easy", "קל"],
+  "addRoom": ["Add another room", "הוסף/י חדר נוסף"],
+  "submit": ["Submit", "שלח/י"]
 }
