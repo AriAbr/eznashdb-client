@@ -22,6 +22,12 @@ const styles = theme => ({
   questionHeader:{
     fontWeight: 500,
   },
+  roomHeader:{
+    fontWeight: 500,
+    textAlign: 'left',
+    wordBreak: 'break-word',
+    margin: '8px'
+  },
   questionText:{
     fontWeight: 400
   },
@@ -96,46 +102,90 @@ const styles = theme => ({
 
 class AddShul extends Component {
   constructor(props) {
-      super(props);
-      this.state = {
-        countries: [],
-        selCountry: "",
-        regions: [],
-        selRegion: "",
-        cities: [],
-        selCity: "",
-        duplicatesDialogIsOpen: false,
-        duplicatesQuestionHeight: 0,
-        savedShulRows: [ //saving dummy data here for now
-          {"name": "Keter Torah"},
-          {"name": "Rinat"},
-          {"name": "Bnai Yeshurun"},
-          {"name": "Beth Aaron"},
-          {"name": "Netivot Shalom"},
-        ],
-        shulName: "",
-        nussach: "",
-        denomination: "",
-        femaleLeadership: "",
-        kaddishWithMen: "",
-        kaddishAlone: "",
-        childcare: "",
-        roomNames: [""],
-        roomSizes: [""],
-        isCenteredVals: [false],
-        isSameFloorSideVals: [false],
-        isSameFloorBackVals: [false],
-        isSameFloorElevatedVals: [false],
-        isSameFloorLevelVals: [false],
-        isBalconySideVals: [false],
-        isBalconyBackVals: [false],
-        isOnlyMenVals: [false],
-        isMixedSeatingVals: [false],
-        visAudVals: [""],
-      };
-    }
+    super(props);
+    this.state = {
+      countries: [],
+      selCountry: "",
+      regions: [],
+      selRegion: "",
+      cities: [],
+      selCity: "",
+      duplicatesDialogIsOpen: false,
+      duplicatesQuestionHeight: 0,
+      savedShulRows: [ //saving dummy data here for now
+        {"name": "Keter Torah"},
+        {"name": "Rinat"},
+        {"name": "Bnai Yeshurun"},
+        {"name": "Beth Aaron"},
+        {"name": "Netivot Shalom"},
+      ],
+      shulName: "",
+      nussach: "",
+      denomination: "",
+      femaleLeadership: "",
+      kaddishWithMen: "",
+      kaddishAlone: "",
+      childcare: "",
+      roomNames: [""],
+      roomSizes: [""],
+      isCenteredVals: [false],
+      isSameFloorSideVals: [false],
+      isSameFloorBackVals: [false],
+      isSameFloorElevatedVals: [false],
+      isSameFloorLevelVals: [false],
+      isBalconySideVals: [false],
+      isBalconyBackVals: [false],
+      isOnlyMenVals: [false],
+      isMixedSeatingVals: [false],
+      visAudVals: [""],
+    };
+  }
 
-  handleTextInput(e, inputName){
+  addRoom(e){
+    console.log("adding room");
+    var roomNames = this.state.roomNames;
+    var roomSizes = this.state.roomSizes;
+    var isCenteredVals = this.state.isCenteredVals;
+    var isSameFloorSideVals = this.state.isSameFloorSideVals;
+    var isSameFloorBackVals = this.state.isSameFloorBackVals;
+    var isSameFloorElevatedVals = this.state.isSameFloorElevatedVals;
+    var isSameFloorLevelVals = this.state.isSameFloorLevelVals;
+    var isBalconySideVals = this.state.isBalconySideVals;
+    var isBalconyBackVals = this.state.isBalconyBackVals;
+    var isOnlyMenVals = this.state.isOnlyMenVals;
+    var isMixedSeatingVals = this.state.isMixedSeatingVals;
+    var visAudVals = this.state.visAudVals;
+
+    roomNames.push("");
+    roomSizes.push("");
+    isCenteredVals.push(false);
+    isSameFloorSideVals.push(false);
+    isSameFloorBackVals.push(false)
+    isSameFloorElevatedVals.push(false)
+    isSameFloorLevelVals.push(false);
+    isBalconySideVals.push(false);
+    isBalconyBackVals.push(false);
+    isOnlyMenVals.push(false);
+    isMixedSeatingVals.push(false);
+    visAudVals.push("");
+
+    this.setState({
+      roomNames,
+      roomSizes,
+      isCenteredVals,
+      isSameFloorSideVals,
+      isSameFloorBackVals,
+      isSameFloorElevatedVals,
+      isSameFloorLevelVals,
+      isBalconySideVals,
+      isBalconyBackVals,
+      isOnlyMenVals,
+      isMixedSeatingVals,
+      visAudVals,
+    })
+  }
+
+  handleTextInput(e, inputName, key){
     var value = e.target.value;
     if(inputName === 'shulName'){
       this.setState({
@@ -151,14 +201,14 @@ class AddShul extends Component {
       })
     } else if (inputName === 'roomName') {
       var roomNames = this.state.roomNames;
-      roomNames[0] = value;
+      roomNames[key] = value;
       this.setState({
         roomNames: roomNames,
       })
     }
   }
 
-  handleRadioInput(e, inputName){
+  handleRadioInput(e, inputName, key){
     var value = e.target.value;
     if(inputName === 'femaleLeadership'){
       this.setState({
@@ -178,72 +228,72 @@ class AddShul extends Component {
       })
     } else if (inputName === 'size') {
       var roomSizes = this.state.roomSizes;
-      roomSizes[0] = value;
+      roomSizes[key] = value;
       this.setState({
         roomSizes: roomSizes,
       })
     } else if (inputName === 'visAud') {
       var visAudVals = this.state.visAudVals;
-      visAudVals[0] = value;
+      visAudVals[key] = value;
       this.setState({
         visAudVals: visAudVals,
       })
     }
   }
 
-  handleCheckboxInput(e){
+  handleCheckboxInput(e, key){
     var inputName = e.target.value;
     if(inputName === 'centered'){
       var isCenteredVals = this.state.isCenteredVals;
-      isCenteredVals[0] = !this.state.isCenteredVals[0]
+      isCenteredVals[key] = !this.state.isCenteredVals[key]
       this.setState({
         isCenteredVals: isCenteredVals,
       })
     } else if (inputName === 'sameFloorSide'){
       var isSameFloorSideVals = this.state.isSameFloorSideVals;
-      isSameFloorSideVals[0] = !this.state.isSameFloorSideVals[0];
+      isSameFloorSideVals[key] = !this.state.isSameFloorSideVals[key];
       this.setState({
         isSameFloorSideVals: isSameFloorSideVals,
       })
     } else if (inputName === 'sameFloorBack'){
       var isSameFloorBackVals = this.state.isSameFloorBackVals;
-      isSameFloorBackVals[0] = !this.state.isSameFloorBackVals[0];
+      isSameFloorBackVals[key] = !this.state.isSameFloorBackVals[key];
       this.setState({
         isSameFloorBackVals: isSameFloorBackVals,
       })
     } else if (inputName === 'sameFloorElevated'){
       var isSameFloorElevatedVals = this.state.isSameFloorElevatedVals;
-      isSameFloorElevatedVals[0] = !this.state.isSameFloorElevatedVals[0];
+      isSameFloorElevatedVals[key] = !this.state.isSameFloorElevatedVals[key];
       this.setState({
         isSameFloorElevatedVals: isSameFloorElevatedVals,
       })
     } else if (inputName === 'sameFloorLevel'){
       var isSameFloorLevelVals = this.state.isSameFloorLevelVals;
-      isSameFloorLevelVals[0] = !this.state.isSameFloorLevelVals[0];
+      isSameFloorLevelVals[key] = !this.state.isSameFloorLevelVals[key];
       this.setState({
         isSameFloorLevelVals: isSameFloorLevelVals,
       })
     } else if (inputName === 'balconySide'){
       var isBalconySideVals = this.state.isBalconySideVals;
-      isBalconySideVals[0] = !this.state.isBalconySideVals[0];
+      isBalconySideVals[key] = !this.state.isBalconySideVals[key];
       this.setState({
         isBalconySideVals: isBalconySideVals,
       })
     } else if (inputName === 'balconyBack'){
       var isBalconyBackVals = this.state.isBalconyBackVals;
-      isBalconyBackVals[0] = !this.state.isBalconyBackVals[0];
+      isBalconyBackVals[key] = !this.state.isBalconyBackVals[key];
       this.setState({
         isBalconyBackVals: isBalconyBackVals,
       })
     } else if (inputName === 'onlyMen'){
       var isOnlyMenVals = this.state.isOnlyMenVals;
-      isOnlyMenVals[0] = !this.state.isOnlyMenVals[0];
+      isOnlyMenVals[key] = !this.state.isOnlyMenVals[key];
       this.setState({
         isOnlyMenVals: isOnlyMenVals,
       })
     } else if (inputName === 'mixedSeating'){
       var isMixedSeatingVals = this.state.isMixedSeatingVals;
-      isMixedSeatingVals[0] = !this.state.isMixedSeatingVals[0];
+      isMixedSeatingVals[key] = !this.state.isMixedSeatingVals[key];
       this.setState({
         isMixedSeatingVals: isMixedSeatingVals,
       })
@@ -484,7 +534,8 @@ class AddShul extends Component {
     const unsure = this.props.translate("unsure");
     const manAlwaysKaddish = this.props.translate("manAlwaysKaddish");
     const womensSections = this.props.translate("womensSections");
-    const Room = this.props.translate("Room");
+    const rooms = this.props.translate("rooms");
+    const room = this.props.translate("room");
     const roomName = this.props.translate("roomName");
     const womensSectionSize = this.props.translate("womensSectionSize");
     const sizeQuestion = this.props.translate("sizeQuestion");
@@ -546,6 +597,129 @@ class AddShul extends Component {
     const citiesDisabled = this.state.selRegion === "";
 
     const { duplicatesQuestionHeight } = this.state;
+
+    var roomHeaderIcon = <i class="fas fa-angle-right"></i>;
+    if(isHebrew){
+      roomHeaderIcon = <i class="fas fa-angle-left"></i>;
+    }
+
+    const roomSections = this.state.roomNames.map((roomNameVal, key) => {return <>
+      <Typography variant="h5" component="h2" gutterBottom className={classes.roomHeader}>
+        {roomHeaderIcon} {this.state.roomNames[key].length > key ? this.state.roomNames[key] : room + ` ${key+1}`}
+      </Typography>
+      <FormControl className={classes.formControl + " " + classes.roomBorderBox}>
+
+        <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
+          {roomName}
+        </Typography>
+        <FormControl className={classes.formControl + " " + classes.roomQuestionBox}>
+          <TextField id="shul-name-input" className={classes.textField} label={roomName} required
+            onChange={(e) => {this.handleTextInput(e, 'roomName', key)}} value={this.state.roomNames[key]} />
+        </FormControl>
+
+        <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
+          {womensSectionSize}
+        </Typography>
+        <FormControl component="fieldset" className={classes.formControl + " " + classes.roomQuestionBox}>
+          <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
+            {sizeQuestion}
+          </Typography>
+          <RadioGroup aria-label="size" name="size" value={this.state.roomSizes[key]} onChange={(e) => {this.handleRadioInput(e, 'size', key)}}>
+            <FormControlLabel value="XS" control={<Radio color="primary" />} label={muchSmaller} />
+            <FormControlLabel value="S" control={<Radio color="primary" />} label={somewhatSmaller} />
+            <FormControlLabel value="M" control={<Radio color="primary" />} label={sameSize} />
+            <FormControlLabel value="L" control={<Radio color="primary" />} label={larger} />
+            <FormControlLabel value="unsure" control={<Radio color="primary" />} label={unsure} />
+          </RadioGroup>
+        </FormControl>
+        
+        <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
+          {placement}
+        </Typography>
+        <FormControl component="fieldset" className={classes.formControl + " " + classes.roomQuestionBox}>
+          <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
+            {placementQuestion}
+          </Typography>
+          <FormControl component="fieldset" className={classes.formControl + " " + classes.placementBox} style={{marginTop: '20px'}}>
+            <Typography variant="body1" component="h2" gutterBottom className={classes.questionHeader}>
+              {sameFloor}
+            </Typography>
+            <FormGroup>
+              <FormControlLabel
+                control={<Checkbox checked={this.state.isCenteredVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"centered"}  color="primary" />}
+                label={centered}
+              />
+              <FormControlLabel
+                control={<Checkbox checked={this.state.isSameFloorSideVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"sameFloorSide"}  color="primary" />}
+                label={side}
+              />
+              <FormControlLabel
+                control={<Checkbox checked={this.state.isSameFloorBackVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"sameFloorBack"}  color="primary" />}
+                label={back}
+              />
+              <FormControlLabel
+                control={<Checkbox checked={this.state.isSameFloorElevatedVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"sameFloorElevated"}  color="primary" />}
+                label={elevated}
+              />
+              <FormControlLabel
+                control={<Checkbox checked={this.state.isSameFloorLevelVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"sameFloorLevel"}  color="primary" />}
+                label={levelWithMens}
+              />
+            </FormGroup>
+          </FormControl>
+          <FormControl component="fieldset" className={classes.formControl + " " + classes.placementBox} >
+            <Typography variant="body1" component="h2" gutterBottom className={classes.questionHeader}>
+              {balcony}
+            </Typography>
+            <FormGroup>
+              <FormControlLabel
+                control={<Checkbox checked={this.state.isBalconySideVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"balconySide"}  color="primary" />}
+                label={side}
+              />
+              <FormControlLabel
+                control={<Checkbox checked={this.state.isBalconyBackVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"balconyBack"}  color="primary" />}
+                label={back}
+              />
+            </FormGroup>
+          </FormControl>
+          <FormControl component="fieldset" className={classes.formControl + " " + classes.placementBox} >
+            <Typography variant="body1" component="h2" gutterBottom className={classes.questionHeader}>
+              {noWomensSection}
+            </Typography>
+            <FormGroup>
+              <FormControlLabel
+                control={<Checkbox checked={this.state.isOnlyMenVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"onlyMen"}  color="primary" />}
+                label={onlyMens}
+              />
+              <FormControlLabel
+                control={<Checkbox checked={this.state.isMixedSeatingVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"mixedSeating"}  color="primary" />}
+                label={mixedSeating}
+              />
+            </FormGroup>
+          </FormControl>
+        </FormControl>
+
+        <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
+          {visAud}
+        </Typography>
+        <FormControl component="fieldset" className={classes.formControl + " " + classes.roomQuestionBox}>
+          <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
+            {visAudQuestion + " "}
+            {visAudQuestionSubtitle1} <span className={classes.questionHeader}>{unsure}</span> {visAudQuestionSubtitle2}
+          </Typography>
+          <RadioGroup aria-label="visAud" name="visAud" value={this.state.visAudVals[key]} onChange={(e) => {this.handleRadioInput(e, 'visAud', key)}}>
+            <FormControlLabel value="1" control={<Radio color="primary" />} label={"1 - " + difficult} />
+            <FormControlLabel value="2" control={<Radio color="primary" />} label="2" />
+            <FormControlLabel value="3" control={<Radio color="primary" />} label="3" />
+            <FormControlLabel value="4" control={<Radio color="primary" />} label="4" />
+            <FormControlLabel value="5" control={<Radio color="primary" />} label={"5 - " + easy} />
+            <FormControlLabel value="unsure" control={<Radio color="primary" />} label={unsure} />
+          </RadioGroup>
+        </FormControl>
+
+      </FormControl>
+      
+    </>});
 
     return (
       <div>
@@ -699,127 +873,13 @@ class AddShul extends Component {
           </FormControl>
 
           <Typography variant="h4" component="h2" gutterBottom className={classes.sectionHeader} style={{marginTop: '20px'}}>
-            {womensSections}
+            {rooms}
           </Typography>
-
-          <Typography variant="h5" component="h2" gutterBottom className={classes.questionHeader} style={{textAlign: 'center', wordBreak: 'break-word'}}>
-            {this.state.roomNames[0].length > 0 ? this.state.roomNames[0] : Room + " 1"}
-          </Typography>
-          <FormControl className={classes.formControl + " " + classes.roomBorderBox}>
-
-            <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
-              {roomName}
-            </Typography>
-            <FormControl className={classes.formControl + " " + classes.roomQuestionBox}>
-              <TextField id="shul-name-input" className={classes.textField} label={roomName} required
-                onChange={(e) => {this.handleTextInput(e, 'roomName')}} value={this.state.roomNames[0]} />
-            </FormControl>
-
-            <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
-              {womensSectionSize}
-            </Typography>
-            <FormControl component="fieldset" className={classes.formControl + " " + classes.roomQuestionBox}>
-              <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
-                {sizeQuestion}
-              </Typography>
-              <RadioGroup aria-label="size" name="size" value={this.state.roomSizes[0]} onChange={(e) => {this.handleRadioInput(e, 'size')}}>
-                <FormControlLabel value="XS" control={<Radio color="primary" />} label={muchSmaller} />
-                <FormControlLabel value="S" control={<Radio color="primary" />} label={somewhatSmaller} />
-                <FormControlLabel value="M" control={<Radio color="primary" />} label={sameSize} />
-                <FormControlLabel value="L" control={<Radio color="primary" />} label={larger} />
-                <FormControlLabel value="unsure" control={<Radio color="primary" />} label={unsure} />
-              </RadioGroup>
-            </FormControl>
-            
-            <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
-              {placement}
-            </Typography>
-            <FormControl component="fieldset" className={classes.formControl + " " + classes.roomQuestionBox}>
-              <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
-                {placementQuestion}
-              </Typography>
-              <FormControl component="fieldset" className={classes.formControl + " " + classes.placementBox} style={{marginTop: '20px'}}>
-                <Typography variant="body1" component="h2" gutterBottom className={classes.questionHeader}>
-                  {sameFloor}
-                </Typography>
-                <FormGroup>
-                  <FormControlLabel
-                    control={<Checkbox checked={this.state.isCenteredVals[0]} onChange={(e) => {this.handleCheckboxInput(e)}} value={"centered"}  color="primary" />}
-                    label={centered}
-                  />
-                  <FormControlLabel
-                    control={<Checkbox checked={this.state.isSameFloorSideVals[0]} onChange={(e) => {this.handleCheckboxInput(e)}} value={"sameFloorSide"}  color="primary" />}
-                    label={side}
-                  />
-                  <FormControlLabel
-                    control={<Checkbox checked={this.state.isSameFloorBackVals[0]} onChange={(e) => {this.handleCheckboxInput(e)}} value={"sameFloorBack"}  color="primary" />}
-                    label={back}
-                  />
-                  <FormControlLabel
-                    control={<Checkbox checked={this.state.isSameFloorElevatedVals[0]} onChange={(e) => {this.handleCheckboxInput(e)}} value={"sameFloorElevated"}  color="primary" />}
-                    label={elevated}
-                  />
-                  <FormControlLabel
-                    control={<Checkbox checked={this.state.isSameFloorLevelVals[0]} onChange={(e) => {this.handleCheckboxInput(e)}} value={"sameFloorLevel"}  color="primary" />}
-                    label={levelWithMens}
-                  />
-                </FormGroup>
-              </FormControl>
-              <FormControl component="fieldset" className={classes.formControl + " " + classes.placementBox} >
-                <Typography variant="body1" component="h2" gutterBottom className={classes.questionHeader}>
-                  {balcony}
-                </Typography>
-                <FormGroup>
-                  <FormControlLabel
-                    control={<Checkbox checked={this.state.isBalconySideVals[0]} onChange={(e) => {this.handleCheckboxInput(e)}} value={"balconySide"}  color="primary" />}
-                    label={side}
-                  />
-                  <FormControlLabel
-                    control={<Checkbox checked={this.state.isBalconyBackVals[0]} onChange={(e) => {this.handleCheckboxInput(e)}} value={"balconyBack"}  color="primary" />}
-                    label={back}
-                  />
-                </FormGroup>
-              </FormControl>
-              <FormControl component="fieldset" className={classes.formControl + " " + classes.placementBox} >
-                <Typography variant="body1" component="h2" gutterBottom className={classes.questionHeader}>
-                  {noWomensSection}
-                </Typography>
-                <FormGroup>
-                  <FormControlLabel
-                    control={<Checkbox checked={this.state.isOnlyMenVals[0]} onChange={(e) => {this.handleCheckboxInput(e)}} value={"onlyMen"}  color="primary" />}
-                    label={onlyMens}
-                  />
-                  <FormControlLabel
-                    control={<Checkbox checked={this.state.isMixedSeatingVals[0]} onChange={(e) => {this.handleCheckboxInput(e)}} value={"mixedSeating"}  color="primary" />}
-                    label={mixedSeating}
-                  />
-                </FormGroup>
-              </FormControl>
-            </FormControl>
-
-            <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
-              {visAud}
-            </Typography>
-            <FormControl component="fieldset" className={classes.formControl + " " + classes.roomQuestionBox}>
-              <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
-                {visAudQuestion + " "}
-                {visAudQuestionSubtitle1} <span className={classes.questionHeader}>{unsure}</span> {visAudQuestionSubtitle2}
-              </Typography>
-              <RadioGroup aria-label="visAud" name="visAud" value={this.state.visAudVals[0]} onChange={(e) => {this.handleRadioInput(e, 'visAud')}}>
-                <FormControlLabel value="1" control={<Radio color="primary" />} label={"1 - " + difficult} />
-                <FormControlLabel value="2" control={<Radio color="primary" />} label="2" />
-                <FormControlLabel value="3" control={<Radio color="primary" />} label="3" />
-                <FormControlLabel value="4" control={<Radio color="primary" />} label="4" />
-                <FormControlLabel value="5" control={<Radio color="primary" />} label={"5 - " + easy} />
-                <FormControlLabel value="unsure" control={<Radio color="primary" />} label={unsure} />
-              </RadioGroup>
-            </FormControl>
-
-          </FormControl>
+          {roomSections}
 
           <div className={classes.heroButtons}>
 
-            <Button variant="outlined" color="primary" size="large" className={classes.homeButtons}>
+            <Button variant="outlined" color="primary" size="large" className={classes.homeButtons} onClick={(e) => {this.addRoom(e)}}>
               <i className="fas fa-plus"></i> &nbsp; {addRoom}
             </Button>
 
