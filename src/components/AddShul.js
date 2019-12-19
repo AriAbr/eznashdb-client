@@ -104,7 +104,7 @@ const styles = theme => ({
     borderRadius: '4px',
     display: 'flex',
     justifyContent: 'space-between',
-    width: 'calc(100% - 20px)',
+    width: 'calc(100% - 18px)',
   },
 });
 
