@@ -1,5 +1,5 @@
 #add-shul-paper{
-  max-width: 600px;
+  max-width: 900px;
   margin: auto;
   margin-bottom: 20px;
   background-color: #fafafa;
@@ -7,4 +7,8 @@
 
 .section-header{
   text-align: center;
+}
+
+.add-shul-placement-options{
+  display: inline-block;
 }

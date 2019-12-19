@@ -38,6 +38,11 @@ const styles = theme => ({
     padding: '20px',
     width: 'calc(100% - 60px)',
   },
+  singleSelect:{
+    width: 200,
+    marginTop: '10px',
+    maxWidth: '100%',
+  },
   generalBorderBox: {
     backgroundColor: '#d5d5d5',
   },
@@ -54,10 +59,12 @@ const styles = theme => ({
   },
   placementBox: {
     border: '0px solid lightgrey',
-    padding: '0 20px',
+    padding: '0',
+    width:'fit-content',
+    display: 'inherit'
   },
-  locationFormControl: {
-    width: 300,
+  locationAndIdFormControl: {
+    width: 200,
     maxWidth: '100%',
     marginRight: '20px',
     marginBottom: '10px',
@@ -79,7 +86,7 @@ const styles = theme => ({
     justifyContent: 'flex-start',
   },
   textField: {
-    width: 300,
+    width: 200,
     maxWidth: '100%',
     marginBottom: '10px',
   },
@@ -106,6 +113,10 @@ const styles = theme => ({
     justifyContent: 'space-between',
     width: 'calc(100% - 18px)',
   },
+  formControlLabel:{
+    width: 'fit-content',
+    display: 'block'
+  }
 });
 
 class AddShul extends Component {
@@ -274,7 +285,7 @@ class AddShul extends Component {
     }
   }
 
-  handleRadioInput(e, inputName, key){
+  handleSelectInput(e, inputName, key){ //using this for everything except country selects
     var value = e.target.value;
     if(inputName === 'femaleLeadership'){
       this.setState({
@@ -687,11 +698,9 @@ class AddShul extends Component {
           {roomHeaderIcon} {this.state.roomNames[key].length > key ? this.state.roomNames[key] : room + ` ${key+1}`}
 
         </Typography>
-        {this.state.roomNames.length > 1 &&
-          <Button variant="outlined" color="default" size="small" onClick={(e) => {this.openDeleteRoomDialog(e, key)}}>
-            <i className="fas fa-trash-alt"></i> &nbsp; {deleteTranslated}
-          </Button>
-        }
+        <Button variant="outlined" color="default" size="small" onClick={(e) => {this.openDeleteRoomDialog(e, key)}} disabled={this.state.roomNames.length <= 1}>
+          <i className="fas fa-trash-alt"></i> &nbsp; {deleteTranslated}
+        </Button>
 
       </div>
 
@@ -712,79 +721,16 @@ class AddShul extends Component {
           <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
             {sizeQuestion}
           </Typography>
-          <RadioGroup aria-label="size" name="size" value={this.state.roomSizes[key]} onChange={(e) => {this.handleRadioInput(e, 'size', key)}}>
-            <FormControlLabel value="XS" control={<Radio color="primary" size="small"/>} label={muchSmaller} />
-            <FormControlLabel value="S" control={<Radio color="primary" size="small"/>} label={somewhatSmaller} />
-            <FormControlLabel value="M" control={<Radio color="primary" size="small"/>} label={sameSize} />
-            <FormControlLabel value="L" control={<Radio color="primary" size="small"/>} label={larger} />
-            <FormControlLabel value="unsure" control={<Radio color="primary" size="small"/>} label={unsure} />
-          </RadioGroup>
-        </FormControl>
-        
-        <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
-          {placement}
-        </Typography>
-        <FormControl component="fieldset" className={classes.formControl + " " + classes.roomQuestionBox} size="small" >
-          <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
-            {placementQuestion}
-          </Typography>
-          <FormControl component="fieldset" className={classes.formControl + " " + classes.placementBox} style={{marginTop: '20px'}} size="small" >
-            <Typography variant="body1" component="h2" gutterBottom className={classes.questionHeader}>
-              {sameFloor}
-            </Typography>
-            <FormGroup>
-              <FormControlLabel
-                control={<Checkbox checked={this.state.isCenteredVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"centered"}  color="primary" size="small"/>}
-                label={centered}
-              />
-              <FormControlLabel
-                control={<Checkbox checked={this.state.isSameFloorSideVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"sameFloorSide"}  color="primary" size="small"/>}
-                label={side}
-              />
-              <FormControlLabel
-                control={<Checkbox checked={this.state.isSameFloorBackVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"sameFloorBack"}  color="primary" size="small"/>}
-                label={back}
-              />
-              <FormControlLabel
-                control={<Checkbox checked={this.state.isSameFloorElevatedVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"sameFloorElevated"}  color="primary" size="small"/>}
-                label={elevated}
-              />
-              <FormControlLabel
-                control={<Checkbox checked={this.state.isSameFloorLevelVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"sameFloorLevel"}  color="primary" size="small"/>}
-                label={levelWithMens}
-              />
-            </FormGroup>
-          </FormControl>
-          <FormControl component="fieldset" className={classes.formControl + " " + classes.placementBox} size="small" >
-            <Typography variant="body1" component="h2" gutterBottom className={classes.questionHeader}>
-              {balcony}
-            </Typography>
-            <FormGroup>
-              <FormControlLabel
-                control={<Checkbox checked={this.state.isBalconySideVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"balconySide"}  color="primary" size="small"/>}
-                label={side}
-              />
-              <FormControlLabel
-                control={<Checkbox checked={this.state.isBalconyBackVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"balconyBack"}  color="primary" size="small"/>}
-                label={back}
-              />
-            </FormGroup>
-          </FormControl>
-          <FormControl component="fieldset" className={classes.formControl + " " + classes.placementBox} size="small" >
-            <Typography variant="body1" component="h2" gutterBottom className={classes.questionHeader}>
-              {noWomensSection}
-            </Typography>
-            <FormGroup>
-              <FormControlLabel
-                control={<Checkbox checked={this.state.isOnlyMenVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"onlyMen"}  color="primary" size="small"/>}
-                label={onlyMens}
-              />
-              <FormControlLabel
-                control={<Checkbox checked={this.state.isMixedSeatingVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"mixedSeating"}  color="primary" size="small"/>}
-                label={mixedSeating}
-              />
-            </FormGroup>
-          </FormControl>
+          <Select value={this.state.roomSizes[key] || ""} onChange={(e) => {this.handleSelectInput(e, 'size', key)}} displayEmpty className={classes.singleSelect}>
+            <MenuItem dense value="">
+              <em>Select</em>
+            </MenuItem>
+            <MenuItem dense value="XS">{muchSmaller}</MenuItem>
+            <MenuItem dense value="S">{somewhatSmaller}</MenuItem>
+            <MenuItem dense value="M">{sameSize}</MenuItem>
+            <MenuItem dense value="L">{larger}</MenuItem>
+            <MenuItem dense value="unsure">{unsure}</MenuItem>
+          </Select>
         </FormControl>
 
         <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
@@ -795,14 +741,99 @@ class AddShul extends Component {
             {visAudQuestion + " "}
             {visAudQuestionSubtitle1} <span className={classes.questionHeader}>{unsure}</span> {visAudQuestionSubtitle2}
           </Typography>
-          <RadioGroup aria-label="visAud" name="visAud" value={this.state.visAudVals[key]} onChange={(e) => {this.handleRadioInput(e, 'visAud', key)}}>
-            <FormControlLabel value="1" control={<Radio color="primary" size="small"/>} label={"1 - " + difficult} />
-            <FormControlLabel value="2" control={<Radio color="primary" size="small"/>} label="2" />
-            <FormControlLabel value="3" control={<Radio color="primary" size="small"/>} label="3" />
-            <FormControlLabel value="4" control={<Radio color="primary" size="small"/>} label="4" />
-            <FormControlLabel value="5" control={<Radio color="primary" size="small"/>} label={"5 - " + easy} />
-            <FormControlLabel value="unsure" control={<Radio color="primary" size="small"/>} label={unsure} />
-          </RadioGroup>
+          <Select value={this.state.visAudVals[key] || ""} onChange={(e) => {this.handleSelectInput(e, 'visAud', key)}} displayEmpty className={classes.singleSelect}>
+            <MenuItem dense value="">
+              <em>Select</em>
+            </MenuItem>
+            <MenuItem dense value="1">{"1 - " + difficult}</MenuItem>
+            <MenuItem dense value="2">{"2"}</MenuItem>
+            <MenuItem dense value="3">{"3"}</MenuItem>
+            <MenuItem dense value="4">{"4"}</MenuItem>
+            <MenuItem dense value="5">{"5 - " + easy}</MenuItem>
+            <MenuItem dense value="unsure">{unsure}</MenuItem>
+          </Select>
+        </FormControl>
+        
+        <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
+          {placement}
+        </Typography>
+        <FormControl component="fieldset" className={classes.formControl + " " + classes.roomQuestionBox} size="small" >
+          <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
+            {placementQuestion}
+          </Typography>
+          <div>
+            <div className="add-shul-placement-options">
+              <FormControl component="fieldset" className={classes.formControl + " " + classes.placementBox} size="small" >
+                <Typography variant="body1" component="h2" gutterBottom className={classes.questionHeader}>
+                  {sameFloor}
+                </Typography>
+                <FormGroup>
+                  <FormControlLabel
+                    control={<Checkbox checked={this.state.isCenteredVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}}value={"centered"}  color="primary" size="small"/>}
+                    label={centered}
+                    className={classes.formControlLabel}
+                  />
+                  <FormControlLabel
+                    control={<Checkbox checked={this.state.isSameFloorSideVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"sameFloorSide"}  color="primary" size="small"/>}
+                    label={side}
+                    className={classes.formControlLabel}
+                  />
+                  <FormControlLabel
+                    control={<Checkbox checked={this.state.isSameFloorBackVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"sameFloorBack"}  color="primary" size="small"/>}
+                    label={back}
+                    className={classes.formControlLabel}
+                  />
+                </FormGroup>
+              </FormControl>
+              <FormControl component="fieldset" className={classes.formControl + " " + classes.placementBox} size="small" >
+                <Typography variant="body1" component="h2" gutterBottom className={classes.questionHeader}>
+                  {elevated}
+                </Typography>
+                <FormGroup>
+                  <FormControlLabel
+                    control={<Checkbox checked={this.state.isSameFloorElevatedVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"sameFloorElevated"}  color="primary" size="small"/>}
+                    label={elevated}
+                    className={classes.formControlLabel}
+                  />
+                  <FormControlLabel
+                    control={<Checkbox checked={this.state.isSameFloorLevelVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"sameFloorLevel"}  color="primary" size="small"/>}
+                    label={levelWithMens}
+                    className={classes.formControlLabel}
+                  />
+                </FormGroup>
+              </FormControl>
+              <FormControl component="fieldset" className={classes.formControl + " " + classes.placementBox} size="small" >
+                <Typography variant="body1" component="h2" gutterBottom className={classes.questionHeader}>
+                  {balcony}
+                </Typography>
+                <FormGroup>
+                  <FormControlLabel
+                    control={<Checkbox checked={this.state.isBalconySideVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"balconySide"}  color="primary" size="small"/>}
+                    label={side}
+                  />
+                  <FormControlLabel
+                    control={<Checkbox checked={this.state.isBalconyBackVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"balconyBack"}  color="primary" size="small"/>}
+                    label={back}
+                  />
+                </FormGroup>
+              </FormControl>
+              <FormControl component="fieldset" className={classes.formControl + " " + classes.placementBox} size="small" >
+                <Typography variant="body1" component="h2" gutterBottom className={classes.questionHeader}>
+                  {noWomensSection}
+                </Typography>
+                <FormGroup>
+                  <FormControlLabel
+                    control={<Checkbox checked={this.state.isOnlyMenVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"onlyMen"}  color="primary" size="small"/>}
+                    label={onlyMens}
+                  />
+                  <FormControlLabel
+                    control={<Checkbox checked={this.state.isMixedSeatingVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"mixedSeating"}  color="primary" size="small"/>}
+                    label={mixedSeating}
+                  />
+                </FormGroup>
+              </FormControl>
+            </div>
+          </div>
         </FormControl>
 
       </FormControl>
@@ -825,7 +856,7 @@ class AddShul extends Component {
               {location}
             </Typography>
             <div className={classes.formControl + " " + classes.generalQuestionBox}>
-              <FormControl className={classes.locationFormControl} size="small" >
+              <FormControl className={classes.locationAndIdFormControl} size="small" >
                 <InputLabel id="add-shul-country-label">{country}</InputLabel>
                 <Select
                   labelId="add-shul-country-label"
@@ -836,7 +867,7 @@ class AddShul extends Component {
                   {countries}
                 </Select>
               </FormControl>
-              <FormControl className={classes.locationFormControl} size="small" >
+              <FormControl className={classes.locationAndIdFormControl} size="small" >
                 <InputLabel id="add-shul-region-label">{stateOrRegion}</InputLabel>
                 <Select
                   labelId="add-shul-region-label"
@@ -848,7 +879,7 @@ class AddShul extends Component {
                   {regions}
                 </Select>
               </FormControl>
-              <FormControl className={classes.locationFormControl} size="small" >
+              <FormControl className={classes.locationAndIdFormControl} size="small" >
                 <InputLabel id="add-shul-city-label">{city}</InputLabel>
                 <Select
                   labelId="add-shul-city-label"
@@ -895,14 +926,21 @@ class AddShul extends Component {
             <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
               {identification}
             </Typography>
-            <FormControl className={classes.formControl + " " + classes.generalQuestionBox} size="small" >
-              <TextField id="shul-name-input" className={classes.textField} label={shulName} required margin='dense' size='small'
-                onChange={(e) => {this.handleTextInput(e, 'shulName')}} value={this.state.shulName} />
-              <TextField id="nussach-input" className={classes.textField} label={nussach} margin='dense' size='small'
-                onChange={(e) => {this.handleTextInput(e, 'nussach')}} value={this.state.nussach} />
-              <TextField id="denomination-input" className={classes.textField} label={denomination} margin='dense' size='small'
-                onChange={(e) => {this.handleTextInput(e, 'denomination')}} value={this.state.denomination} />
-            </FormControl>
+
+            <div className={classes.formControl + " " + classes.generalQuestionBox}>
+              <FormControl className={classes.locationAndIdFormControl} size="small" >
+                <TextField id="shul-name-input" label={shulName} required size='small'
+                  onChange={(e) => {this.handleTextInput(e, 'shulName')}} value={this.state.shulName} />
+              </FormControl>
+              <FormControl className={classes.locationAndIdFormControl} size="small" >
+                <TextField id="nussach-input" label={nussach} size='small'
+                  onChange={(e) => {this.handleTextInput(e, 'nussach')}} value={this.state.nussach} />
+              </FormControl>
+              <FormControl className={classes.locationAndIdFormControl} size="small" >
+                <TextField id="denomination-input" label={denomination} size='small'
+                  onChange={(e) => {this.handleTextInput(e, 'denomination')}} value={this.state.denomination} />
+              </FormControl>
+            </div>
 
             <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
               {femaleLeadership}
@@ -911,12 +949,15 @@ class AddShul extends Component {
               <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
                 {femaleLeadershipQuestion}
               </Typography>
-              <RadioGroup aria-label="femaleLeadership" name="femaleLeadership" value={this.state.femaleLeadership} 
-                onChange={(e) => {this.handleRadioInput(e, 'femaleLeadership')}}>
-                <FormControlLabel value="yes" control={<Radio color="primary" size="small"/>} label={yes} />
-                <FormControlLabel value="no" control={<Radio color="primary" size="small"/>} label={no} />
-                <FormControlLabel value="unsure" control={<Radio color="primary" size="small"/>} label={unsure} />
-              </RadioGroup>
+
+              <Select value={this.state.femaleLeadership || ""} onChange={(e) => {this.handleSelectInput(e, 'femaleLeadership')}} displayEmpty className={classes.singleSelect}>
+                <MenuItem dense value="">
+                  <em>Select</em>
+                </MenuItem>
+                <MenuItem dense value="yes">{yes}</MenuItem>
+                <MenuItem dense value="no">{no}</MenuItem>
+                <MenuItem dense value="unsure">{unsure}</MenuItem>
+              </Select>
             </FormControl>
 
             <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
@@ -926,22 +967,29 @@ class AddShul extends Component {
               <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
                 {kaddishWithMenQuestion}
               </Typography>
-              <RadioGroup aria-label="kaddishWithMen" name="kaddishWithMen" value={this.state.kaddishWithMen} onChange={(e) => {this.handleRadioInput(e, 'kaddishWithMen')}}>
-                <FormControlLabel value="yes" control={<Radio color="primary" size="small"/>} label={yes} />
-                <FormControlLabel value="no" control={<Radio color="primary" size="small"/>} label={no} />
-                <FormControlLabel value="unsure" control={<Radio color="primary" size="small"/>} label={unsure} />
-              </RadioGroup>
+              <Select value={this.state.kaddishWithMen || ""} onChange={(e) => {this.handleSelectInput(e, 'kaddishWithMen')}} displayEmpty className={classes.singleSelect}>
+                <MenuItem dense value="">
+                  <em>Select</em>
+                </MenuItem>
+                <MenuItem dense value="yes">{yes}</MenuItem>
+                <MenuItem dense value="no">{no}</MenuItem>
+                <MenuItem dense value="unsure">{unsure}</MenuItem>
+              </Select>
             </FormControl>
             <FormControl component="fieldset" className={classes.formControl + " " + classes.generalQuestionBox} size="small" >
               <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
                 {kaddishAloneQuestion}
               </Typography>
-              <RadioGroup aria-label="kaddishAlone" name="kaddishAlone" value={this.state.kaddishAlone} onChange={(e) => {this.handleRadioInput(e, 'kaddishAlone')}}>
-                <FormControlLabel value="yes" control={<Radio color="primary" size="small"/>} label={yes} />
-                <FormControlLabel value="no" control={<Radio color="primary" size="small"/>} label={no} />
-                <FormControlLabel value="unsure" control={<Radio color="primary" size="small"/>} label={unsure} />
-                <FormControlLabel value="alwaysMan" control={<Radio color="primary" size="small"/>} label={manAlwaysKaddish} />
-              </RadioGroup>
+              <Select value={this.state.kaddishAlone || ""} onChange={(e) => {this.handleSelectInput(e, 'kaddishAlone')}} displayEmpty className={classes.singleSelect}>
+                <MenuItem dense value="">
+                  <em>Select</em>
+                </MenuItem>
+                <MenuItem dense value="yes">{yes}</MenuItem>
+                <MenuItem dense value="no">{no}</MenuItem>
+                <MenuItem dense value="unsure">{unsure}</MenuItem>
+                <MenuItem dense value="alwaysMan">{manAlwaysKaddish}</MenuItem>
+              </Select>
+
             </FormControl>
 
             <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
@@ -951,11 +999,15 @@ class AddShul extends Component {
               <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
                 {childcareQuestion}
               </Typography>
-              <RadioGroup aria-label="childcare" name="childcare" value={this.state.childcare} onChange={(e) => {this.handleRadioInput(e, 'childcare')}}>
-                <FormControlLabel value="yes" control={<Radio color="primary" size="small"/>} label={yes} />
-                <FormControlLabel value="no" control={<Radio color="primary" size="small"/>} label={no} />
-                <FormControlLabel value="unsure" control={<Radio color="primary" size="small"/>} label={unsure} />
-              </RadioGroup>
+              <Select value={this.state.childcare || ""} onChange={(e) => {this.handleSelectInput(e, 'childcare')}} displayEmpty className={classes.singleSelect}>
+                <MenuItem dense value="">
+                  <em>Select</em>
+                </MenuItem>
+                <MenuItem dense value="yes">{yes}</MenuItem>
+                <MenuItem dense value="no">{no}</MenuItem>
+                <MenuItem dense value="unsure">{unsure}</MenuItem>
+              </Select>
+
             </FormControl>
 
           </FormControl>
