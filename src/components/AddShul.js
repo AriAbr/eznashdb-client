@@ -644,6 +644,7 @@ class AddShul extends Component {
     const willBeDeleted = this.props.translate("willBeDeleted");
     const deleteRoom = this.props.translate("deleteRoom");
     const cancel = this.props.translate("cancel");
+    const select = this.props.translate("select");
 
     const isHebrew = (this.props.activeLanguage && this.props.activeLanguage.code === "he");
 
@@ -723,7 +724,7 @@ class AddShul extends Component {
           </Typography>
           <Select value={this.state.roomSizes[key] || ""} onChange={(e) => {this.handleSelectInput(e, 'size', key)}} displayEmpty className={classes.singleSelect}>
             <MenuItem dense value="">
-              <em>Select</em>
+              <em>{select}</em>
             </MenuItem>
             <MenuItem dense value="XS">{muchSmaller}</MenuItem>
             <MenuItem dense value="S">{somewhatSmaller}</MenuItem>
@@ -743,7 +744,7 @@ class AddShul extends Component {
           </Typography>
           <Select value={this.state.visAudVals[key] || ""} onChange={(e) => {this.handleSelectInput(e, 'visAud', key)}} displayEmpty className={classes.singleSelect}>
             <MenuItem dense value="">
-              <em>Select</em>
+              <em>{select}</em>
             </MenuItem>
             <MenuItem dense value="1">{"1 - " + difficult}</MenuItem>
             <MenuItem dense value="2">{"2"}</MenuItem>
@@ -952,7 +953,7 @@ class AddShul extends Component {
 
               <Select value={this.state.femaleLeadership || ""} onChange={(e) => {this.handleSelectInput(e, 'femaleLeadership')}} displayEmpty className={classes.singleSelect}>
                 <MenuItem dense value="">
-                  <em>Select</em>
+                  <em>{select}</em>
                 </MenuItem>
                 <MenuItem dense value="yes">{yes}</MenuItem>
                 <MenuItem dense value="no">{no}</MenuItem>
@@ -969,7 +970,7 @@ class AddShul extends Component {
               </Typography>
               <Select value={this.state.kaddishWithMen || ""} onChange={(e) => {this.handleSelectInput(e, 'kaddishWithMen')}} displayEmpty className={classes.singleSelect}>
                 <MenuItem dense value="">
-                  <em>Select</em>
+                  <em>{select}</em>
                 </MenuItem>
                 <MenuItem dense value="yes">{yes}</MenuItem>
                 <MenuItem dense value="no">{no}</MenuItem>
@@ -982,7 +983,7 @@ class AddShul extends Component {
               </Typography>
               <Select value={this.state.kaddishAlone || ""} onChange={(e) => {this.handleSelectInput(e, 'kaddishAlone')}} displayEmpty className={classes.singleSelect}>
                 <MenuItem dense value="">
-                  <em>Select</em>
+                  <em>{select}</em>
                 </MenuItem>
                 <MenuItem dense value="yes">{yes}</MenuItem>
                 <MenuItem dense value="no">{no}</MenuItem>
@@ -1001,7 +1002,7 @@ class AddShul extends Component {
               </Typography>
               <Select value={this.state.childcare || ""} onChange={(e) => {this.handleSelectInput(e, 'childcare')}} displayEmpty className={classes.singleSelect}>
                 <MenuItem dense value="">
-                  <em>Select</em>
+                  <em>{select}</em>
                 </MenuItem>
                 <MenuItem dense value="yes">{yes}</MenuItem>
                 <MenuItem dense value="no">{no}</MenuItem>

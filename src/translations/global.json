@@ -64,5 +64,6 @@
   "areYouSure": ["Are you sure?", "האם את/ה בטוח/ה?"],
   "willBeDeleted": ["will be deleted along with all information associated with it.", "יימחק יחד עם כל המידע הקשור אליו."],
   "deleteRoom": ["Delete Room", "מחק/י חדר"],
-  "cancel": ["Cancel", "בטל/י"]
+  "cancel": ["Cancel", "בטל/י"],
+  "select": ["Select", "בחר/י"]
 }
