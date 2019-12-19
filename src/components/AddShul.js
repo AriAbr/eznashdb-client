@@ -3,7 +3,8 @@ import { withLocalize } from "react-localize-redux";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from 'prop-types';
 import { Button, FormControl, InputLabel, Select, MenuItem, Paper, Typography, Divider, DialogActions, Table, TableRow, TableCell,
-  TableBody, TextField, RadioGroup, FormControlLabel, Radio, FormGroup, Checkbox, FormLabel} from '@material-ui/core';
+  TableBody, TextField, RadioGroup, FormControlLabel, Radio, FormGroup, Checkbox, Dialog, DialogTitle, DialogContent,
+  DialogContentText} from '@material-ui/core';
 import * as israelCities from '../data/israel-cities';
 import AnimateHeight from 'react-animate-height';
 
@@ -26,7 +27,6 @@ const styles = theme => ({
     fontWeight: 500,
     textAlign: 'left',
     wordBreak: 'break-word',
-    margin: '8px'
   },
   questionText:{
     fontWeight: 400
@@ -98,6 +98,14 @@ const styles = theme => ({
     display: 'inline-block',
     margin: '10px'
   },
+  roomSectionOuterDiv:{
+    margin: theme.spacing(1),
+    marginTop: '20px',
+    borderRadius: '4px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    width: 'calc(100% - 20px)',
+  },
 });
 
 class AddShul extends Component {
@@ -138,11 +146,69 @@ class AddShul extends Component {
       isOnlyMenVals: [false],
       isMixedSeatingVals: [false],
       visAudVals: [""],
+      deleteDialogIsOpen: false,
+      roomToDelete: null,
     };
   }
 
+  openDeleteRoomDialog(e, key){
+    this.setState({
+      deleteDialogIsOpen: true, roomToDelete: key
+    })
+  }
+
+  closeDeleteRoomDialog(){
+    this.setState({
+      deleteDialogIsOpen: false, roomToDelete: null
+    })
+  }
+
+  deleteRoom(e, key){
+    this.closeDeleteRoomDialog();
+
+    var roomNames = this.state.roomNames;
+    var roomSizes = this.state.roomSizes;
+    var isCenteredVals = this.state.isCenteredVals;
+    var isSameFloorSideVals = this.state.isSameFloorSideVals;
+    var isSameFloorBackVals = this.state.isSameFloorBackVals;
+    var isSameFloorElevatedVals = this.state.isSameFloorElevatedVals;
+    var isSameFloorLevelVals = this.state.isSameFloorLevelVals;
+    var isBalconySideVals = this.state.isBalconySideVals;
+    var isBalconyBackVals = this.state.isBalconyBackVals;
+    var isOnlyMenVals = this.state.isOnlyMenVals;
+    var isMixedSeatingVals = this.state.isMixedSeatingVals;
+    var visAudVals = this.state.visAudVals;
+
+    roomNames.splice(key, 1);
+    roomSizes.splice(key, 1);
+    isCenteredVals.splice(key, 1);
+    isSameFloorSideVals.splice(key, 1);
+    isSameFloorBackVals.splice(key, 1);
+    isSameFloorElevatedVals.splice(key, 1);
+    isSameFloorLevelVals.splice(key, 1);
+    isBalconySideVals.splice(key, 1);
+    isBalconyBackVals.splice(key, 1);
+    isOnlyMenVals.splice(key, 1);
+    isMixedSeatingVals.splice(key, 1);
+    visAudVals.splice(key, 1);
+
+    this.setState({
+      roomNames,
+      roomSizes,
+      isCenteredVals,
+      isSameFloorSideVals,
+      isSameFloorBackVals,
+      isSameFloorElevatedVals,
+      isSameFloorLevelVals,
+      isBalconySideVals,
+      isBalconyBackVals,
+      isOnlyMenVals,
+      isMixedSeatingVals,
+      visAudVals,
+    })
+  }
+
   addRoom(e){
-    console.log("adding room");
     var roomNames = this.state.roomNames;
     var roomSizes = this.state.roomSizes;
     var isCenteredVals = this.state.isCenteredVals;
@@ -160,8 +226,8 @@ class AddShul extends Component {
     roomSizes.push("");
     isCenteredVals.push(false);
     isSameFloorSideVals.push(false);
-    isSameFloorBackVals.push(false)
-    isSameFloorElevatedVals.push(false)
+    isSameFloorBackVals.push(false);
+    isSameFloorElevatedVals.push(false);
     isSameFloorLevelVals.push(false);
     isBalconySideVals.push(false);
     isBalconyBackVals.push(false);
@@ -533,7 +599,6 @@ class AddShul extends Component {
     const no = this.props.translate("no");
     const unsure = this.props.translate("unsure");
     const manAlwaysKaddish = this.props.translate("manAlwaysKaddish");
-    const womensSections = this.props.translate("womensSections");
     const rooms = this.props.translate("rooms");
     const room = this.props.translate("room");
     const roomName = this.props.translate("roomName");
@@ -563,6 +628,11 @@ class AddShul extends Component {
     const easy = this.props.translate("easy");
     const addRoom = this.props.translate("addRoom");
     const submit = this.props.translate("submit");
+    const deleteTranslated = this.props.translate("delete");
+    const areYouSure = this.props.translate("areYouSure");
+    const willBeDeleted = this.props.translate("willBeDeleted");
+    const deleteRoom = this.props.translate("deleteRoom");
+    const cancel = this.props.translate("cancel");
 
     const isHebrew = (this.props.activeLanguage && this.props.activeLanguage.code === "he");
 
@@ -598,22 +668,40 @@ class AddShul extends Component {
 
     const { duplicatesQuestionHeight } = this.state;
 
-    var roomHeaderIcon = <i class="fas fa-angle-right"></i>;
+    var roomHeaderIcon = <i className="fas fa-angle-right"></i>;
     if(isHebrew){
-      roomHeaderIcon = <i class="fas fa-angle-left"></i>;
+      roomHeaderIcon = <i className="fas fa-angle-left"></i>;
     }
 
-    const roomSections = this.state.roomNames.map((roomNameVal, key) => {return <>
-      <Typography variant="h5" component="h2" gutterBottom className={classes.roomHeader}>
-        {roomHeaderIcon} {this.state.roomNames[key].length > key ? this.state.roomNames[key] : room + ` ${key+1}`}
-      </Typography>
+    var roomNameToDelete = "";
+    if(typeof(this.state.roomToDelete) === "number"){
+      roomNameToDelete = this.state.roomNames[this.state.roomToDelete];
+      if(roomNameToDelete === ""){
+        roomNameToDelete = `${room} ${this.state.roomToDelete + 1}`;
+      }
+    }
+
+    const roomSections = this.state.roomNames.map((roomNameVal, key) => {return <div key={key}>
+      <div className={classes.roomSectionOuterDiv}>
+        <Typography variant="h5" component="h2" className={classes.roomHeader} display='inline'>
+          {roomHeaderIcon} {this.state.roomNames[key].length > key ? this.state.roomNames[key] : room + ` ${key+1}`}
+
+        </Typography>
+        {this.state.roomNames.length > 1 &&
+          <Button variant="outlined" color="default" size="small" onClick={(e) => {this.openDeleteRoomDialog(e, key)}}>
+            <i className="fas fa-trash-alt"></i> &nbsp; {deleteTranslated}
+          </Button>
+        }
+
+      </div>
+
       <FormControl className={classes.formControl + " " + classes.roomBorderBox} size="small" >
 
         <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
           {roomName}
         </Typography>
         <FormControl className={classes.formControl + " " + classes.roomQuestionBox} size="small" >
-          <TextField id="shul-name-input" className={classes.textField} label={roomName} required margin='dense' size='small'
+          <TextField id="room-name-input" className={classes.textField} label={roomName} required margin='dense' size='small'
             onChange={(e) => {this.handleTextInput(e, 'roomName', key)}} value={this.state.roomNames[key]} />
         </FormControl>
 
@@ -719,7 +807,7 @@ class AddShul extends Component {
 
       </FormControl>
       
-    </>});
+    </div>});
 
     return (
       <div>
@@ -731,7 +819,7 @@ class AddShul extends Component {
           <Typography variant="h4" component="h2" gutterBottom className={classes.sectionHeader}>
             {generalInfo}
           </Typography>
-          <FormControl className={classes.formControl + " " + classes.generalBorderBox} size="small"  size="small" >
+          <FormControl className={classes.formControl + " " + classes.generalBorderBox} size="small">
 
             <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
               {location}
@@ -872,7 +960,7 @@ class AddShul extends Component {
 
           </FormControl>
 
-          <Typography variant="h4" component="h2" gutterBottom className={classes.sectionHeader} style={{marginTop: '20px'}}>
+          <Typography variant="h4" component="h2" className={classes.sectionHeader} style={{marginTop: '30px'}}>
             {rooms}
           </Typography>
           {roomSections}
@@ -884,13 +972,35 @@ class AddShul extends Component {
             </Button>
 
             <Button variant="contained" color="primary" size="large" className={classes.homeButtons}>
-              <i class="fas fa-paper-plane"></i> &nbsp; {submit}
+              <i className="fas fa-paper-plane"></i> &nbsp; {submit}
             </Button>
 
           </div>
 
 
         </Paper>
+
+        <Dialog
+          open={this.state.deleteDialogIsOpen}
+          onClose={(e) => {this.closeDeleteRoomDialog()}}
+          aria-labelledby="delete-room-dialog"
+        >
+          <DialogTitle id="delete-room-dialog">{areYouSure}</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              {roomNameToDelete} {willBeDeleted}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button autoFocus onClick={(e) => {this.closeDeleteRoomDialog()}} color="primary">
+              {cancel}
+            </Button>
+            <Button autoFocus onClick={(e) => {this.deleteRoom(e, this.state.roomToDelete)}} color="primary">
+              {deleteRoom}
+            </Button>
+          </DialogActions>
+        </Dialog>
+
       </div>
     );
   }

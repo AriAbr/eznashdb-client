@@ -58,5 +58,10 @@
   "difficult": ["Difficult", "קשה"],
   "easy": ["Easy", "קל"],
   "addRoom": ["Add another room", "הוסף/י חדר נוסף"],
-  "submit": ["Submit", "שלח/י"]
+  "submit": ["Submit", "שלח/י"],
+  "delete": ["Delete", "מחק/י"],
+  "areYouSure": ["Are you sure?", "האם את/ה בטוח/ה?"],
+  "willBeDeleted": ["will be deleted along with all information associated with it.", "יימחק יחד עם כל המידע הקשור אליו."],
+  "deleteRoom": ["Delete Room", "מחק/י חדר"],
+  "cancel": ["Cancel", "בטל/י"]
 }
