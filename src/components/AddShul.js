@@ -627,9 +627,6 @@ class AddShul extends Component {
     const shulName = this.props.translate("shulName");
     const nussach = this.props.translate("nussach");
     const denomination = this.props.translate("denomination");
-    const femaleLeadership = this.props.translate("femaleLeadership");
-    const kaddish = this.props.translate("kaddish");
-    const childcare = this.props.translate("childcare");
     const femaleLeadershipQuestion = this.props.translate("femaleLeadershipQuestion");
     const kaddishWithMenQuestion = this.props.translate("kaddishWithMenQuestion");
     const kaddishAloneQuestion = this.props.translate("kaddishAloneQuestion");
@@ -641,13 +638,11 @@ class AddShul extends Component {
     const rooms = this.props.translate("rooms");
     const room = this.props.translate("room");
     const roomName = this.props.translate("roomName");
-    const womensSectionSize = this.props.translate("womensSectionSize");
     const sizeQuestion = this.props.translate("sizeQuestion");
     const muchSmaller = this.props.translate("muchSmaller");
     const somewhatSmaller = this.props.translate("somewhatSmaller");
     const sameSize = this.props.translate("sameSize");
     const larger = this.props.translate("larger");
-    const placement = this.props.translate("placement");
     const placementQuestion = this.props.translate("placementQuestion");
     const sameFloor = this.props.translate("sameFloor");
     const balcony = this.props.translate("balcony");
@@ -659,11 +654,7 @@ class AddShul extends Component {
     const levelWithMens = this.props.translate("levelWithMens");
     const onlyMens = this.props.translate("onlyMens");
     const mixedSeating = this.props.translate("mixedSeating");
-    const visAud = this.props.translate("visAud");
     const visAudQuestion = this.props.translate("visAudQuestion");
-    const visAudQuestionAlt = this.props.translate("visAudQuestionAlt");
-    const visAudQuestionSubtitle1 = this.props.translate("visAudQuestionSubtitle1");
-    const visAudQuestionSubtitle2 = this.props.translate("visAudQuestionSubtitle2");
     const difficult = this.props.translate("difficult");
     const easy = this.props.translate("easy");
     const addRoom = this.props.translate("addRoom");
@@ -708,11 +699,6 @@ class AddShul extends Component {
     const citiesDisabled = this.state.selRegion === "";
 
     const { duplicatesQuestionHeight } = this.state;
-
-    var roomHeaderIcon = <i className="fas fa-angle-right"></i>;
-    if(isHebrew){
-      roomHeaderIcon = <i className="fas fa-angle-left"></i>;
-    }
 
     var roomNameToDelete = "";
     if(typeof(this.state.roomToDelete) === "number"){
