@@ -6,7 +6,6 @@ import { Button, FormControl, InputLabel, Select, MenuItem, Paper, Typography, D
   TableBody, TextField, FormControlLabel, FormGroup, Checkbox, Dialog, DialogTitle, DialogContent,
   DialogContentText} from '@material-ui/core';
 import * as israelCities from '../data/israel-cities';
-import AnimateHeight from 'react-animate-height';
 
 
 const csc = require('countrycitystatejson')
@@ -44,6 +43,12 @@ const styles = theme => ({
     fontWeight: 200,
     fontSize: '16px',
     float: 'left',
+    marginTop: '16px',
+    verticalAlign: '14px',
+  },
+  duplicateShulText: {
+    fontWeight: 200,
+    fontSize: '16px',
     marginTop: '16px',
     verticalAlign: '14px',
   },
@@ -149,7 +154,7 @@ class AddShul extends Component {
       cities: [],
       selCity: "",
       duplicatesDialogIsOpen: false,
-      duplicatesQuestionHeight: 0,
+      duplicatesQuestionDialogIsOpen: false,
       savedShulRows: [ //saving dummy data here for now
         {"name": "Keter Torah"},
         {"name": "Rinat"},
@@ -399,13 +404,13 @@ class AddShul extends Component {
 
   openDuplicatesQuestion(){
     this.setState({
-      duplicatesQuestionHeight: 'auto',
+      duplicatesQuestionDialogIsOpen: true,
     })
   }
 
   closeDuplicatesQuestion(){
     this.setState({
-      duplicatesQuestionHeight: 0,
+      duplicatesQuestionDialogIsOpen: false,
     })
   }
 
@@ -1070,36 +1075,6 @@ class AddShul extends Component {
                   </Select>
                 </FormControl>
               </span>
-              <AnimateHeight
-                duration={ 750 }
-                height={ duplicatesQuestionHeight }
-              >
-                <Divider style={{margin: '20px 0'}} />
-                <Typography variant="body1" component="h2" gutterBottom>
-                  {checkIfShulListed}
-                </Typography>
-                  <Table className={classes.table} aria-label="simple table" size="small" >
-                    <TableBody>
-                      {this.state.savedShulRows.map(shul => (
-                        <TableRow key={shul.name}>
-                          <TableCell component="th" scope="row" className={classes.questionText}>
-                            {shul.name}
-                          </TableCell>
-                          <TableCell align="right">
-                            <Button variant="outlined" color="default" size="small" >
-                              {viewEdit}
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                <DialogActions className={classes.dialogActions}>
-                  <Button variant="outlined" color="primary" size="medium" onClick={() => {this.closeDuplicatesQuestion()}} >
-                    {shulNotListed}
-                  </Button>
-                </DialogActions>
-              </AnimateHeight>
             </div>
 
             <div className={classes.questionContainer}>
@@ -1288,6 +1263,39 @@ class AddShul extends Component {
             </Button>
             <Button autoFocus onClick={(e) => {this.deleteRoom(e, this.state.roomToDelete)}} color="primary">
               {deleteRoom}
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        <Dialog
+          open={this.state.duplicatesQuestionDialogIsOpen}
+          onClose={(e) => {this.closeDuplicatesQuestion()}}
+          aria-labelledby="check-for-duplicates-dialog"
+        >
+          <DialogTitle id="check-for-duplicates-dialog">{checkIfShulListed}</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              <Table className={classes.table} aria-label="simple table" size="small" >
+                <TableBody>
+                  {this.state.savedShulRows.map(shul => (
+                    <TableRow key={shul.name}>
+                      <TableCell component="th" scope="row" className={classes.duplicateShulText}>
+                        {shul.name}
+                      </TableCell>
+                      <TableCell align="right">
+                        <Button variant="outlined" color="default" size="small" >
+                          {viewEdit}
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button variant="outlined" color="primary" size="medium" onClick={() => {this.closeDuplicatesQuestion()}} >
+              {shulNotListed}
             </Button>
           </DialogActions>
         </Dialog>
