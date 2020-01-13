@@ -53,7 +53,8 @@
   "onlyMens": ["Only men's section", "רק עזרת גברים"],
   "mixedSeating": ["Mixed seating", "ישיבה מעורבת"],
   "visAud": ["Visibility and Audibility", "שמיעות וראיות"],
-  "visAudQuestion": ["Rate how easy it is to see and hear from the women's section.", "דרג/י כמה קל לראות ולשמוע מעזרת הנשים."],
+  "visAudQuestion": ["How easy is it to see and hear from the women's section?", "כמה קל לראות ולשמוע מעזרת הנשים?"],
+  "visAudQuestionAlt": ["Rate how easy it is to see and hear from the women's section.", "דרג/י כמה קל לראות ולשמוע מעזרת הנשים."],
   "visAudQuestionSubtitle1": ["Select", "בחר/י"],
   "visAudQuestionSubtitle2": ["if you do not use the women's section", "אם אינך משתמש/ת בעזרת הנשים"],
   "difficult": ["Difficult", "קשה"],
@@ -62,7 +63,7 @@
   "submit": ["Submit", "שלח/י"],
   "delete": ["Delete", "מחק/י"],
   "areYouSure": ["Are you sure?", "האם את/ה בטוח/ה?"],
-  "willBeDeleted": ["will be deleted along with all information associated with it.", "יימחק יחד עם כל המידע הקשור אליו."],
+  "willBeDeleted": ["will be deleted.", "יימחק."],
   "deleteRoom": ["Delete Room", "מחק/י חדר"],
   "cancel": ["Cancel", "בטל/י"],
   "select": ["Select", "בחר/י"]

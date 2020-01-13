@@ -7,7 +7,7 @@ import { withStyles } from "@material-ui/core/styles"
 
 const styles = theme => ({
   heroContent: {
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: '#fafafa',
   },
   heroText: {
     fontWeight: 400,

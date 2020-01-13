@@ -48,6 +48,15 @@ class LocalizedApp extends Component {
           'sans-serif'
         ].join(','),
       },
+      palette: {
+        secondary: {
+          main: "#cee9f2",
+          // light: "#ff4081",
+          // main: "#f50057",
+          // dark: "#c51162",
+          // contrastText: "#fff",
+        }
+      }
     });
 
     return (

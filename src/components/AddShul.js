@@ -3,7 +3,7 @@ import { withLocalize } from "react-localize-redux";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from 'prop-types';
 import { Button, FormControl, InputLabel, Select, MenuItem, Paper, Typography, Divider, DialogActions, Table, TableRow, TableCell,
-  TableBody, TextField, RadioGroup, FormControlLabel, Radio, FormGroup, Checkbox, Dialog, DialogTitle, DialogContent,
+  TableBody, TextField, FormControlLabel, FormGroup, Checkbox, Dialog, DialogTitle, DialogContent,
   DialogContentText} from '@material-ui/core';
 import * as israelCities from '../data/israel-cities';
 import AnimateHeight from 'react-animate-height';
@@ -14,108 +14,127 @@ const csc = require('countrycitystatejson')
 
 const styles = theme => ({
   mainHeader: {
-    fontWeight: 400
+    fontWeight: 400,
+    fontSize: '40px',
+    textAlign: 'center'
   },
   sectionHeader: {
-    textAlign: 'center',
-    fontWeight: 400
-  },
-  questionHeader:{
-    fontWeight: 500,
+    textAlign: 'left',
+    fontWeight: 400,
+    fontSize: '31px',
   },
   roomHeader:{
-    fontWeight: 500,
+    fontWeight: 400,
     textAlign: 'left',
     wordBreak: 'break-word',
   },
+  questionContainer:{
+    padding: '2px 10px',
+    height: 'fit-content',
+    position: 'relative',
+  },
+  questionGroupContainer: {
+    "& > *:nth-child(odd)":  {
+      backgroundColor: '#f1f1f1',
+    },
+    border: '4px solid #f1f1f1',
+    borderRadius: '7px',
+  },
   questionText:{
-    fontWeight: 400
+    fontWeight: 200,
+    fontSize: '16px',
+    float: 'left',
+    marginTop: '16px',
+    verticalAlign: '14px',
   },
-  formControl: {
+  textBuffer: {
+    WebkitUserSelect: 'none',
+    MozUserSelect: 'none',
+    MsUserSelect: 'none',
+    userSelect: 'none',
+    color: 'transparent',
+    fontWeight: 200,
+    fontSize: '16px',
+    float: 'left',
+    marginTop: '13px',
+    verticalAlign: '14px',
+  },
+  inputBuffer: {
+    width: '140px',
+    height: '36px',
+    display: 'inline-block',
+    marginLeft: '20px',
+    marginBottom: '10px',
+    verticalAlign: '-5px',
+    fontWeight: 200,
+    "& *":  {
+      fontWeight: 200
+    },
+  },
+  inputContainer: {
+    textAlign: 'right',
+    position: 'absolute',
+    right: 10,
+    bottom: 0,
+    "& *":  {
+      fontWeight: 200
+    },
+  },
+  placementGroupContainer: {
     margin: theme.spacing(1),
-    border: '1px solid lightgrey',
-    borderRadius: '4px',
-    padding: '20px',
-    width: 'calc(100% - 60px)',
-  },
-  singleSelect:{
-    width: 200,
-    marginTop: '10px',
-    maxWidth: '100%',
-  },
-  generalBorderBox: {
-    backgroundColor: '#d5d5d5',
-  },
-  roomBorderBox: {
-    backgroundColor: 'slategrey',
-    color: 'white'
-  },
-  generalQuestionBox: {
-    backgroundColor: '#fafafa'
-  },
-  roomQuestionBox: {
-    backgroundColor: 'aliceblue',
-    color: 'black'
-  },
-  placementBox: {
-    border: '0px solid lightgrey',
-    padding: '0',
-    width:'fit-content',
     display: 'inherit'
   },
-  locationAndIdFormControl: {
-    width: 200,
-    maxWidth: '100%',
-    marginRight: '20px',
-    marginBottom: '10px',
+  placementGroupHeader:{
+    fontWeight: 400,
+    fontStyle: 'italic',
   },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
+  textSelectFormControl: {
+    width: 140,
+    maxWidth: '100%',
+    marginLeft: '20px',
+    marginBottom: '10px',
   },
   paper: {
     padding: '20px',
     direction: 'ltr',
     textAlign: 'left',
-  },
-  dialogContent: {
-    "&:focus": {
-      outline:'none'
-    }
+    border: '1px solid #D5D5D5',
+    backgroundColor: 'white'
   },
   dialogActions: {
     justifyContent: 'flex-start',
   },
   textField: {
-    width: 200,
-    maxWidth: '100%',
-    marginBottom: '10px',
+    height: 20
   },
-  addRoomOuterDiv:{
-    textAlign: 'right',
-    padding: '0 10px'
-  },
-  heroButtons: {
+  heroButtonsContainer: {
     width: '100%',
     display: 'flex',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     flexWrap: 'wrap',
   },
-  homeButtons: {
-    minWidth: '220px',
+  heroButton: {
     display: 'inline-block',
-    margin: '10px'
+    margin: '10px 0px 10px 10px'
   },
-  roomSectionOuterDiv:{
-    margin: theme.spacing(1),
-    marginTop: '20px',
-    borderRadius: '4px',
+  roomTitleContainer:{
+    margin: `${theme.spacing(1)}px 0`,
     display: 'flex',
+    marginTop: '20px',
     justifyContent: 'space-between',
-    width: 'calc(100% - 18px)',
+    height: 'fit-content',
+    padding: '0 10px',
   },
   formControlLabel:{
     width: 'fit-content',
-    display: 'block'
+    display: 'block',
+    "& *":  {
+      fontWeight: 200
+    },
+  },
+  select: {
+    height: 20,
+    textAlign: 'left'
   }
 });
 
@@ -159,6 +178,7 @@ class AddShul extends Component {
       visAudVals: [""],
       deleteDialogIsOpen: false,
       roomToDelete: null,
+      focusedInput: null,
     };
   }
 
@@ -562,6 +582,12 @@ class AddShul extends Component {
     return formattedName;
   }
 
+  setFocusedInput(e, inputName){
+    this.setState({
+      focusedInput: inputName
+    })
+  }
+
   componentDidMount(){
     this.getIsraelRegions();
     var countries = csc.getCountries();
@@ -585,6 +611,8 @@ class AddShul extends Component {
 
   render() {
     const { classes } = this.props;
+
+    const inputLabelOffset = -6;
 
     const addShul = this.props.translate("addShul");
     const country = this.props.translate("country");
@@ -633,6 +661,7 @@ class AddShul extends Component {
     const mixedSeating = this.props.translate("mixedSeating");
     const visAud = this.props.translate("visAud");
     const visAudQuestion = this.props.translate("visAudQuestion");
+    const visAudQuestionAlt = this.props.translate("visAudQuestionAlt");
     const visAudQuestionSubtitle1 = this.props.translate("visAudQuestionSubtitle1");
     const visAudQuestionSubtitle2 = this.props.translate("visAudQuestionSubtitle2");
     const difficult = this.props.translate("difficult");
@@ -694,210 +723,373 @@ class AddShul extends Component {
     }
 
     const roomSections = this.state.roomNames.map((roomNameVal, key) => {return <div key={key}>
-      <div className={classes.roomSectionOuterDiv}>
+      <div className={classes.roomTitleContainer}>
         <Typography variant="h5" component="h2" className={classes.roomHeader} display='inline'>
-          {roomHeaderIcon} {this.state.roomNames[key].length > key ? this.state.roomNames[key] : room + ` ${key+1}`}
+          {this.state.roomNames[key].length > key ? this.state.roomNames[key] : room + ` ${key+1}`}
 
         </Typography>
-        <Button variant="outlined" color="default" size="small" onClick={(e) => {this.openDeleteRoomDialog(e, key)}} disabled={this.state.roomNames.length <= 1}>
-          <i className="fas fa-trash-alt"></i> &nbsp; {deleteTranslated}
+        <Button color="default" size="small" onClick={(e) => {this.openDeleteRoomDialog(e, key)}} disabled={this.state.roomNames.length <= 1}>
+          <i class="fas fa-trash"></i> &nbsp; {deleteTranslated}
         </Button>
 
       </div>
 
-      <FormControl className={classes.formControl + " " + classes.roomBorderBox} size="small" >
+      <div className={classes.questionGroupContainer}>
+        <div className={classes.questionContainer}>
+          <span className={classes.questionText}>
+            {roomName}:
+          </span>
+          <div className={classes.inputBuffer}></div>
+          <span className={classes.inputContainer}>
+            <span className={classes.textBuffer}>
+              {roomName}:
+            </span>
+            <FormControl className={classes.textSelectFormControl} size="small" >
+              <TextField id={`room-${key}-name-input`} label={roomName} size='small'
+                onChange={(e) => {this.handleTextInput(e,  'roomName', key)}} value={this.state.roomNames[key]}
+                onFocus={(e) => {this.setFocusedInput(e, `roomName${key}`)}}
+                onBlur ={(e) => {this.setFocusedInput(e, null)}}
+                InputProps={{
+                  className: classes.textField
+                }}
+                InputLabelProps={{
+                  style: {
+                    ...(!(this.state.focusedInput === `roomName${key}` || this.state.roomNames[key]) && { top: `${inputLabelOffset}px` }),
+                  },
+                  disableAnimation: true
+                }}
+              />
+            </FormControl>
+          </span>
+        </div>
 
-        <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
-          {roomName}
-        </Typography>
-        <FormControl className={classes.formControl + " " + classes.roomQuestionBox} size="small" >
-          <TextField id="room-name-input" className={classes.textField} label={roomName} required margin='dense' size='small'
-            onChange={(e) => {this.handleTextInput(e, 'roomName', key)}} value={this.state.roomNames[key]} />
-        </FormControl>
-
-        <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
-          {womensSectionSize}
-        </Typography>
-        <FormControl component="fieldset" className={classes.formControl + " " + classes.roomQuestionBox} size="small" >
-          <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
+        <div className={classes.questionContainer}>
+          <span className={classes.questionText}>
             {sizeQuestion}
-          </Typography>
-          <Select value={this.state.roomSizes[key] || ""} onChange={(e) => {this.handleSelectInput(e, 'size', key)}} displayEmpty className={classes.singleSelect}>
-            <MenuItem dense value="">
-              <em>{select}</em>
-            </MenuItem>
-            <MenuItem dense value="XS">{muchSmaller}</MenuItem>
-            <MenuItem dense value="S">{somewhatSmaller}</MenuItem>
-            <MenuItem dense value="M">{sameSize}</MenuItem>
-            <MenuItem dense value="L">{larger}</MenuItem>
-            <MenuItem dense value="unsure">{unsure}</MenuItem>
-          </Select>
-        </FormControl>
+          </span>
+          <div className={classes.inputBuffer}></div>
+          <span className={classes.inputContainer}>
+            <span className={classes.textBuffer}>
+              {sizeQuestion}
+            </span>
+            <FormControl className={classes.textSelectFormControl} size="small" >
+              <InputLabel id={`room-${key}-size-input-label`}
+                style={{
+                  top: `${inputLabelOffset}px`,
+                  visibility: `${(this.state.focusedInput === `womSecSize${key}` || this.state.roomSizes[key]) ? "hidden" : "visible"}`
+                }}
+                disableAnimation={true}
+              >
+                {select}
+              </InputLabel>
+              <Select
+                labelId={`room-${key}-size-input-label`}
+                id={`room-${key}-size-select`}
+                value={this.state.roomSizes[key]}
+                onChange={(e) => {this.handleSelectInput(e, 'size', key)}}
+                onFocus={(e) => {this.setFocusedInput(e, `womSecSize${key}`)}}
+                onBlur ={(e) => {this.setFocusedInput(e, null)}}
+                className={classes.select}
+              >
+                <MenuItem dense value="">
+                  <em>{select}</em>
+                </MenuItem>
+                <MenuItem dense value="XS">{muchSmaller}</MenuItem>
+                <MenuItem dense value="S">{somewhatSmaller}</MenuItem>
+                <MenuItem dense value="M">{sameSize}</MenuItem>
+                <MenuItem dense value="L">{larger}</MenuItem>
+                <MenuItem dense value="unsure">{unsure}</MenuItem>
+              </Select>
+            </FormControl>
+          </span>
+        </div>
 
-        <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
-          {visAud}
-        </Typography>
-        <FormControl component="fieldset" className={classes.formControl + " " + classes.roomQuestionBox} size="small" >
-          <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
-            {visAudQuestion + " "}
-            {visAudQuestionSubtitle1} <span className={classes.questionHeader}>{unsure}</span> {visAudQuestionSubtitle2}
-          </Typography>
-          <Select value={this.state.visAudVals[key] || ""} onChange={(e) => {this.handleSelectInput(e, 'visAud', key)}} displayEmpty className={classes.singleSelect}>
-            <MenuItem dense value="">
-              <em>{select}</em>
-            </MenuItem>
-            <MenuItem dense value="1">{"1 - " + difficult}</MenuItem>
-            <MenuItem dense value="2">{"2"}</MenuItem>
-            <MenuItem dense value="3">{"3"}</MenuItem>
-            <MenuItem dense value="4">{"4"}</MenuItem>
-            <MenuItem dense value="5">{"5 - " + easy}</MenuItem>
-            <MenuItem dense value="unsure">{unsure}</MenuItem>
-          </Select>
-        </FormControl>
-        
-        <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
-          {placement}
-        </Typography>
-        <FormControl component="fieldset" className={classes.formControl + " " + classes.roomQuestionBox} size="small" >
-          <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
+        <div className={classes.questionContainer}>
+          <span className={classes.questionText}>
+            {visAudQuestion}
+          </span>
+          <div className={classes.inputBuffer}></div>
+          <span className={classes.inputContainer}>
+            <span className={classes.textBuffer}>
+              {visAudQuestion}
+            </span>
+            <FormControl className={classes.textSelectFormControl} size="small" >
+              <InputLabel id={`room-${key}-vis-aud-input-label`}
+                style={{
+                  top: `${inputLabelOffset}px`,
+                  visibility: `${(this.state.focusedInput === `visAud${key}` || this.state.visAudVals[key]) ? "hidden" : "visible"}`
+                }}
+                disableAnimation={true}
+              >
+                {select}
+              </InputLabel>
+              <Select
+                labelId={`room-${key}-vis-aud-input-label`}
+                id={`room-${key}-vis-aud-select`}
+                value={this.state.visAudVals[key]}
+                onChange={(e) => {this.handleSelectInput(e, 'visAud', key)}}
+                onFocus={(e) => {this.setFocusedInput(e, `visAud${key}`)}}
+                onBlur ={(e) => {this.setFocusedInput(e, null)}}
+                className={classes.select}
+              >
+                <MenuItem dense value="">
+                  <em>{select}</em>
+                </MenuItem>
+                <MenuItem dense value="1">{"1 - " + difficult}</MenuItem>
+                <MenuItem dense value="2">{"2"}</MenuItem>
+                <MenuItem dense value="3">{"3"}</MenuItem>
+                <MenuItem dense value="4">{"4"}</MenuItem>
+                <MenuItem dense value="5">{"5 - " + easy}</MenuItem>
+                <MenuItem dense value="unsure">{unsure}</MenuItem>
+              </Select>
+            </FormControl>
+          </span>
+        </div>
+
+
+        <div className={classes.questionContainer}>
+          <span className={classes.questionText}>
             {placementQuestion}
-          </Typography>
-          <div>
-            <div className="add-shul-placement-options">
-              <FormControl component="fieldset" className={classes.formControl + " " + classes.placementBox} size="small" >
-                <Typography variant="body1" component="h2" gutterBottom className={classes.questionHeader}>
-                  {sameFloor}
-                </Typography>
-                <FormGroup>
-                  <FormControlLabel
-                    control={<Checkbox checked={this.state.isCenteredVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}}value={"centered"}  color="primary" size="small"/>}
-                    label={centered}
-                    className={classes.formControlLabel}
-                  />
-                  <FormControlLabel
-                    control={<Checkbox checked={this.state.isSameFloorSideVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"sameFloorSide"}  color="primary" size="small"/>}
-                    label={side}
-                    className={classes.formControlLabel}
-                  />
-                  <FormControlLabel
-                    control={<Checkbox checked={this.state.isSameFloorBackVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"sameFloorBack"}  color="primary" size="small"/>}
-                    label={back}
-                    className={classes.formControlLabel}
-                  />
-                </FormGroup>
-              </FormControl>
-              <FormControl component="fieldset" className={classes.formControl + " " + classes.placementBox} size="small" >
-                <Typography variant="body1" component="h2" gutterBottom className={classes.questionHeader}>
-                  {elevated}
-                </Typography>
-                <FormGroup>
-                  <FormControlLabel
-                    control={<Checkbox checked={this.state.isSameFloorElevatedVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"sameFloorElevated"}  color="primary" size="small"/>}
-                    label={elevated}
-                    className={classes.formControlLabel}
-                  />
-                  <FormControlLabel
-                    control={<Checkbox checked={this.state.isSameFloorLevelVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"sameFloorLevel"}  color="primary" size="small"/>}
-                    label={levelWithMens}
-                    className={classes.formControlLabel}
-                  />
-                </FormGroup>
-              </FormControl>
-              <FormControl component="fieldset" className={classes.formControl + " " + classes.placementBox} size="small" >
-                <Typography variant="body1" component="h2" gutterBottom className={classes.questionHeader}>
-                  {balcony}
-                </Typography>
-                <FormGroup>
-                  <FormControlLabel
-                    control={<Checkbox checked={this.state.isBalconySideVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"balconySide"}  color="primary" size="small"/>}
-                    label={side}
-                  />
-                  <FormControlLabel
-                    control={<Checkbox checked={this.state.isBalconyBackVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"balconyBack"}  color="primary" size="small"/>}
-                    label={back}
-                  />
-                </FormGroup>
-              </FormControl>
-              <FormControl component="fieldset" className={classes.formControl + " " + classes.placementBox} size="small" >
-                <Typography variant="body1" component="h2" gutterBottom className={classes.questionHeader}>
-                  {noWomensSection}
-                </Typography>
-                <FormGroup>
-                  <FormControlLabel
-                    control={<Checkbox checked={this.state.isOnlyMenVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"onlyMen"}  color="primary" size="small"/>}
-                    label={onlyMens}
-                  />
-                  <FormControlLabel
-                    control={<Checkbox checked={this.state.isMixedSeatingVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"mixedSeating"}  color="primary" size="small"/>}
-                    label={mixedSeating}
-                  />
-                </FormGroup>
-              </FormControl>
+          </span>
+
+          <div className="add-shul-placement-options">
+            <div component="fieldset" className={classes.placementGroupContainer} size="small" >
+              <Typography variant="body1" component="h2" gutterBottom className={classes.placementGroupHeader}>
+                {sameFloor}
+              </Typography>
+              <FormGroup>
+                <FormControlLabel
+                  control={<Checkbox checked={this.state.isCenteredVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}}value={"centered"}  color="primary" size="small"/>}
+                  label={centered}
+                  className={classes.formControlLabel}
+                />
+                <FormControlLabel
+                  control={<Checkbox checked={this.state.isSameFloorSideVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"sameFloorSide"}  color="primary" size="small"/>}
+                  label={side}
+                  className={classes.formControlLabel}
+                />
+                <FormControlLabel
+                  control={<Checkbox checked={this.state.isSameFloorBackVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"sameFloorBack"}  color="primary" size="small"/>}
+                  label={back}
+                  className={classes.formControlLabel}
+                />
+              </FormGroup>
+            </div>
+            <div component="fieldset" className={classes.placementGroupContainer} size="small" >
+              <Typography variant="body1" component="h2" gutterBottom className={classes.placementGroupHeader}>
+                {elevated}
+              </Typography>
+              <FormGroup>
+                <FormControlLabel
+                  control={<Checkbox checked={this.state.isSameFloorElevatedVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"sameFloorElevated"}  color="primary" size="small"/>}
+                  label={elevated}
+                  className={classes.formControlLabel}
+                />
+                <FormControlLabel
+                  control={<Checkbox checked={this.state.isSameFloorLevelVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"sameFloorLevel"}  color="primary" size="small"/>}
+                  label={levelWithMens} 
+                  className={classes.formControlLabel}
+                />
+              </FormGroup>
+            </div>
+            <div component="fieldset" className={classes.placementGroupContainer} size="small" >
+              <Typography variant="body1" component="h2" gutterBottom className={classes.placementGroupHeader}>
+                {balcony}
+              </Typography>
+              <FormGroup>
+                <FormControlLabel
+                  control={<Checkbox checked={this.state.isBalconySideVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"balconySide"}  color="primary" size="small"/>}
+                  label={side}
+                  className={classes.formControlLabel}
+                />
+                <FormControlLabel
+                  control={<Checkbox checked={this.state.isBalconyBackVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"balconyBack"}  color="primary" size="small"/>}
+                  label={back}
+                  className={classes.formControlLabel}
+                />
+              </FormGroup>
+            </div>
+            <div component="fieldset" className={classes.placementGroupContainer} size="small" >
+              <Typography variant="body1" component="h2" gutterBottom className={classes.placementGroupHeader}>
+                {noWomensSection}
+              </Typography>
+              <FormGroup>
+                <FormControlLabel
+                  control={<Checkbox checked={this.state.isOnlyMenVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"onlyMen"}  color="primary" size="small"/>}
+                  label={onlyMens}
+                  className={classes.formControlLabel}
+                />
+                <FormControlLabel
+                  control={<Checkbox checked={this.state.isMixedSeatingVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"mixedSeating"}  color="primary" size="small"/>}
+                  label={mixedSeating}
+                  className={classes.formControlLabel}
+                />
+              </FormGroup>
             </div>
           </div>
-        </FormControl>
-
-      </FormControl>
-      
+        </div>
+      </div>
+     
     </div>});
 
     return (
       <div>
-        <Typography variant="h2" component="h2" gutterBottom className={classes.mainHeader}>
-          {addShul}
-        </Typography>
-        <Paper className={classes.paper} id="add-shul-paper" elevation={12}>
 
+        <Paper className={classes.paper} id="add-shul-paper" elevation={0} square>
+          <Typography variant="h2" component="h2" gutterBottom className={classes.mainHeader}>
+            {addShul}
+          </Typography>
           <Typography variant="h4" component="h2" gutterBottom className={classes.sectionHeader}>
             {generalInfo}
           </Typography>
-          <FormControl className={classes.formControl + " " + classes.generalBorderBox} size="small">
 
-            <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
-              {location}
-            </Typography>
-            <div className={classes.formControl + " " + classes.generalQuestionBox}>
-              <FormControl className={classes.locationAndIdFormControl} size="small" >
-                <InputLabel id="add-shul-country-label">{country}</InputLabel>
-                <Select
-                  labelId="add-shul-country-label"
-                  id="add-shul-country-select"
-                  value={this.state.selCountry}
-                  onChange={(e) => {this.handleCountrySelect(e)}}
-                >
-                  {countries}
-                </Select>
-              </FormControl>
-              <FormControl className={classes.locationAndIdFormControl} size="small" >
-                <InputLabel id="add-shul-region-label">{stateOrRegion}</InputLabel>
-                <Select
-                  labelId="add-shul-region-label"
-                  id="add-shul-region-select"
-                  value={this.state.selRegion}
-                  onChange={(e) => {this.handleRegionSelect(e)}}
-                  disabled={regionsDisabled}
-                >
-                  {regions}
-                </Select>
-              </FormControl>
-              <FormControl className={classes.locationAndIdFormControl} size="small" >
-                <InputLabel id="add-shul-city-label">{city}</InputLabel>
-                <Select
-                  labelId="add-shul-city-label"
-                  id="add-shul-city-select"
-                  value={this.state.selCity}
-                  onChange={(e) => {this.handleCitySelect(e)}}
-                  disabled={citiesDisabled}
-                >
-                  {cities}
-                </Select>
-              </FormControl>
+          <div className={classes.questionGroupContainer}>
+
+            <div className={classes.questionContainer}>
+              <span className={classes.questionText}>
+                {identification}:
+              </span>
+              <div className={classes.inputBuffer}></div>
+              <div className={classes.inputBuffer}></div>
+              <div className={classes.inputBuffer}></div>
+              <span className={classes.inputContainer}>
+                <span className={classes.textBuffer}>
+                  {identification}:
+                </span>
+                <FormControl className={classes.textSelectFormControl} size="small" >
+                  <TextField id="shul-name-input" label={shulName} required size='small' 
+                    onChange={(e) => {this.handleTextInput(e, 'shulName')}} value={this.state.shulName} 
+                    onFocus={(e) => {this.setFocusedInput(e, 'shulName')}}
+                    onBlur ={(e) => {this.setFocusedInput(e, null)}}
+                    InputProps={{
+                      className: classes.textField,
+                    }}
+                    InputLabelProps={{
+                      style: {
+                        ...(!(this.state.focusedInput === 'shulName' || this.state.shulName) && { top: `${inputLabelOffset}px` }),
+                      },
+                      disableAnimation: true
+                    }}
+                  />
+                </FormControl>
+                <FormControl className={classes.textSelectFormControl} size="small" >
+                  <TextField id="nussach-input" label={nussach} size='small'
+                    onChange={(e) => {this.handleTextInput(e, 'nussach')}} value={this.state.nussach}
+                    onFocus={(e) => {this.setFocusedInput(e, 'nussach')}}
+                    onBlur ={(e) => {this.setFocusedInput(e, null)}}
+                    InputProps={{
+                      className: classes.textField
+                    }}
+                    InputLabelProps={{
+                      style: {
+                        ...(!(this.state.focusedInput === 'nussach' || this.state.nussach) && { top: `${inputLabelOffset}px` }),
+                      },
+                      disableAnimation: true
+                    }}
+                  />
+                </FormControl>
+                <FormControl className={classes.textSelectFormControl} size="small" >
+                  <TextField id="denomination-input" label={denomination} size='small'
+                    onChange={(e) => {this.handleTextInput(e, 'denomination')}} value={this.state.denomination}
+                    onFocus={(e) => {this.setFocusedInput(e, 'denomination')}}
+                    onBlur ={(e) => {this.setFocusedInput(e, null)}}
+                    InputProps={{
+                      className: classes.textField
+                    }}
+                    InputLabelProps={{
+                      style: {
+                        ...(!(this.state.focusedInput === 'denomination' || this.state.denomination) && { top: `${inputLabelOffset}px` }),
+                      },
+                      disableAnimation: true
+                    }}
+                  />
+                </FormControl>
+              </span>
+            </div>
+
+            <div className={classes.questionContainer}>
+              <span className={classes.questionText}>
+                {location}:
+              </span>
+              <div className={classes.inputBuffer}></div>
+              <div className={classes.inputBuffer}></div>
+              <div className={classes.inputBuffer}></div>
+              <span className={classes.inputContainer}>
+                <span className={classes.textBuffer}>
+                  {location}:
+                </span>
+                <FormControl className={classes.textSelectFormControl} size="small" >
+                  <InputLabel id="add-shul-country-label"
+                    style={
+                      { top: `${(this.state.focusedInput === 'country' || this.state.selCountry) ? "0" : inputLabelOffset}px` }
+                    }
+                    disableAnimation={true}
+                  >
+                    {country}
+                  </InputLabel>
+                  <Select
+                    labelId="add-shul-country-label"
+                    id="add-shul-country-select"
+                    value={this.state.selCountry}
+                    onChange={(e) => {this.handleCountrySelect(e)}}
+                    onFocus={(e) => {this.setFocusedInput(e, 'country')}}
+                    onBlur ={(e) => {this.setFocusedInput(e, null)}}
+                    className={classes.select}
+                  >
+                    {countries}
+                  </Select>
+                </FormControl>
+                <FormControl className={classes.textSelectFormControl} size="small" >
+                  <InputLabel id="add-shul-region-label"
+                    style={
+                      { top: `${(this.state.focusedInput === 'region' || this.state.selRegion) ? "0" : inputLabelOffset}px` }
+                    }
+                    disableAnimation={true}
+                  >
+                    {stateOrRegion}
+                  </InputLabel>
+                  <Select
+                    labelId="add-shul-region-label"
+                    id="add-shul-region-select"
+                    value={this.state.selRegion}
+                    onChange={(e) => {this.handleRegionSelect(e)}}
+                    onFocus={(e) => {this.setFocusedInput(e, 'region')}}
+                    onBlur ={(e) => {this.setFocusedInput(e, null)}}
+                    className={classes.select}
+                    disabled={regionsDisabled}
+                  >
+                    {regions}
+                  </Select>
+                </FormControl>
+                <FormControl className={classes.textSelectFormControl} size="small" >
+                  <InputLabel id="add-shul-city-label"
+                    style={
+                      { top: `${(this.state.focusedInput === 'city' || this.state.selCity) ? "0" : inputLabelOffset}px` }
+                    }
+                    disableAnimation={true}
+                  >
+                    {city}
+                  </InputLabel>
+                  <Select
+                    labelId="add-shul-city-label"
+                    id="add-shul-city-select"
+                    value={this.state.selCity}
+                    onChange={(e) => {this.handleCitySelect(e)}}
+                    onFocus={(e) => {this.setFocusedInput(e, 'city')}}
+                    onBlur ={(e) => {this.setFocusedInput(e, null)}}
+                    className={classes.select}
+                    disabled={citiesDisabled}
+                  >
+                    {cities}
+                  </Select>
+                </FormControl>
+              </span>
               <AnimateHeight
                 duration={ 750 }
                 height={ duplicatesQuestionHeight }
               >
                 <Divider style={{margin: '20px 0'}} />
-                <Typography variant="body1" component="h2" gutterBottom className={classes.questionHeader}>
+                <Typography variant="body1" component="h2" gutterBottom>
                   {checkIfShulListed}
                 </Typography>
                   <Table className={classes.table} aria-label="simple table" size="small" >
@@ -924,107 +1116,167 @@ class AddShul extends Component {
               </AnimateHeight>
             </div>
 
-            <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
-              {identification}
-            </Typography>
-
-            <div className={classes.formControl + " " + classes.generalQuestionBox}>
-              <FormControl className={classes.locationAndIdFormControl} size="small" >
-                <TextField id="shul-name-input" label={shulName} required size='small'
-                  onChange={(e) => {this.handleTextInput(e, 'shulName')}} value={this.state.shulName} />
-              </FormControl>
-              <FormControl className={classes.locationAndIdFormControl} size="small" >
-                <TextField id="nussach-input" label={nussach} size='small'
-                  onChange={(e) => {this.handleTextInput(e, 'nussach')}} value={this.state.nussach} />
-              </FormControl>
-              <FormControl className={classes.locationAndIdFormControl} size="small" >
-                <TextField id="denomination-input" label={denomination} size='small'
-                  onChange={(e) => {this.handleTextInput(e, 'denomination')}} value={this.state.denomination} />
-              </FormControl>
+            <div className={classes.questionContainer}>
+              <span className={classes.questionText}>
+                {femaleLeadershipQuestion}
+              </span>
+              <div className={classes.inputBuffer}></div>
+              <span className={classes.inputContainer}>
+                <span className={classes.textBuffer}>
+                  {femaleLeadershipQuestion}:
+                </span>
+                <FormControl className={classes.textSelectFormControl} size="small" >
+                  <InputLabel id="add-shul-female-leadership-label"
+                    style={{
+                      top: `${inputLabelOffset}px`,
+                      visibility: `${(this.state.focusedInput === 'femaleLeadership' || this.state.femaleLeadership) ? "hidden" : "visible"}`
+                    }}
+                    disableAnimation={true}
+                  >
+                    {select}
+                  </InputLabel>
+                  <Select
+                    labelId="add-shul-female-leadership-label"
+                    id="add-shul-female-leadership-select"
+                    value={this.state.femaleLeadership}
+                    onChange={(e) => {this.handleSelectInput(e, 'femaleLeadership')}}
+                    onFocus={(e) => {this.setFocusedInput(e, 'femaleLeadership')}}
+                    onBlur ={(e) => {this.setFocusedInput(e, null)}}
+                    className={classes.select}
+                  >
+                    <MenuItem dense value="yes">{yes}</MenuItem>
+                    <MenuItem dense value="no">{no}</MenuItem>
+                    <MenuItem dense value="unsure">{unsure}</MenuItem>
+                  </Select>
+                </FormControl>
+              </span>
             </div>
 
-            <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
-              {femaleLeadership}
-            </Typography>
-            <FormControl component="fieldset" className={classes.formControl + " " + classes.generalQuestionBox} size="small" >
-              <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
-                {femaleLeadershipQuestion}
-              </Typography>
-
-              <Select value={this.state.femaleLeadership || ""} onChange={(e) => {this.handleSelectInput(e, 'femaleLeadership')}} displayEmpty className={classes.singleSelect}>
-                <MenuItem dense value="">
-                  <em>{select}</em>
-                </MenuItem>
-                <MenuItem dense value="yes">{yes}</MenuItem>
-                <MenuItem dense value="no">{no}</MenuItem>
-                <MenuItem dense value="unsure">{unsure}</MenuItem>
-              </Select>
-            </FormControl>
-
-            <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
-              {kaddish}
-            </Typography>
-            <FormControl component="fieldset" className={classes.formControl + " " + classes.generalQuestionBox} size="small" >
-              <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
+            <div className={classes.questionContainer}>
+              <span className={classes.questionText}>
                 {kaddishWithMenQuestion}
-              </Typography>
-              <Select value={this.state.kaddishWithMen || ""} onChange={(e) => {this.handleSelectInput(e, 'kaddishWithMen')}} displayEmpty className={classes.singleSelect}>
-                <MenuItem dense value="">
-                  <em>{select}</em>
-                </MenuItem>
-                <MenuItem dense value="yes">{yes}</MenuItem>
-                <MenuItem dense value="no">{no}</MenuItem>
-                <MenuItem dense value="unsure">{unsure}</MenuItem>
-              </Select>
-            </FormControl>
-            <FormControl component="fieldset" className={classes.formControl + " " + classes.generalQuestionBox} size="small" >
-              <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
+              </span>
+              <div className={classes.inputBuffer}></div>
+              <span className={classes.inputContainer}>
+                <span className={classes.textBuffer}>
+                  {kaddishWithMenQuestion}:
+                </span>
+                <FormControl className={classes.textSelectFormControl} size="small" >
+                  <InputLabel id="add-shul-kaddish-with-men-label"
+                    style={{
+                      top: `${inputLabelOffset}px`,
+                      visibility: `${(this.state.focusedInput === 'kaddishWithMen' || this.state.kaddishWithMen) ? "hidden" : "visible"}`
+                    }}
+                    disableAnimation={true}
+                  >
+                    {select}
+                  </InputLabel>
+                  <Select
+                    labelId="add-shul-kaddish-with-men-label"
+                    id="add-shul-kaddish-with-men-select"
+                    value={this.state.kaddishWithMen}
+                    onChange={(e) => {this.handleSelectInput(e, 'kaddishWithMen')}}
+                    onFocus={(e) => {this.setFocusedInput(e, 'kaddishWithMen')}}
+                    onBlur ={(e) => {this.setFocusedInput(e, null)}}
+                    className={classes.select}
+                  >
+                    <MenuItem dense value="yes">{yes}</MenuItem>
+                    <MenuItem dense value="no">{no}</MenuItem>
+                    <MenuItem dense value="unsure">{unsure}</MenuItem>
+                  </Select>
+                </FormControl>
+              </span>
+            </div>
+
+            <div className={classes.questionContainer}>
+              <span className={classes.questionText}>
                 {kaddishAloneQuestion}
-              </Typography>
-              <Select value={this.state.kaddishAlone || ""} onChange={(e) => {this.handleSelectInput(e, 'kaddishAlone')}} displayEmpty className={classes.singleSelect}>
-                <MenuItem dense value="">
-                  <em>{select}</em>
-                </MenuItem>
-                <MenuItem dense value="yes">{yes}</MenuItem>
-                <MenuItem dense value="no">{no}</MenuItem>
-                <MenuItem dense value="unsure">{unsure}</MenuItem>
-                <MenuItem dense value="alwaysMan">{manAlwaysKaddish}</MenuItem>
-              </Select>
+              </span>
+              <div className={classes.inputBuffer}></div>
+              <span className={classes.inputContainer}>
+                <span className={classes.textBuffer}>
+                  {kaddishAloneQuestion}:
+                </span>
+                <FormControl className={classes.textSelectFormControl} size="small" >
+                  <InputLabel id="add-shul-kaddish-alone-label"
+                    style={{
+                      top: `${inputLabelOffset}px`,
+                      visibility: `${(this.state.focusedInput === 'kaddishAlone' || this.state.kaddishAlone) ? "hidden" : "visible"}`
+                    }}
+                    disableAnimation={true}
+                  >
+                    {select}
+                  </InputLabel>
+                  <Select
+                    labelId="add-shul-kaddish-alone-label"
+                    id="add-shul-kaddish-alone-select"
+                    value={this.state.kaddishAlone}
+                    onChange={(e) => {this.handleSelectInput(e, 'kaddishAlone')}}
+                    onFocus={(e) => {this.setFocusedInput(e, 'kaddishAlone')}}
+                    onBlur ={(e) => {this.setFocusedInput(e, null)}}
+                    className={classes.select}
+                  >
+                    <MenuItem dense value="yes">{yes}</MenuItem>
+                    <MenuItem dense value="no">{no}</MenuItem>
+                    <MenuItem dense value="unsure">{unsure}</MenuItem>
+                    <MenuItem dense value="alwaysMan">{manAlwaysKaddish}</MenuItem>
+                  </Select>
+                </FormControl>
+              </span>
+            </div>
 
-            </FormControl>
-
-            <Typography variant="h6" component="h2" gutterBottom className={classes.questionHeader}>
-              {childcare}
-            </Typography>
-            <FormControl component="fieldset" className={classes.formControl + " " + classes.generalQuestionBox}>
-              <Typography variant="body1" component="h2" gutterBottom className={classes.questionText}>
+            <div className={classes.questionContainer}>
+              <span className={classes.questionText}>
                 {childcareQuestion}
-              </Typography>
-              <Select value={this.state.childcare || ""} onChange={(e) => {this.handleSelectInput(e, 'childcare')}} displayEmpty className={classes.singleSelect}>
-                <MenuItem dense value="">
-                  <em>{select}</em>
-                </MenuItem>
-                <MenuItem dense value="yes">{yes}</MenuItem>
-                <MenuItem dense value="no">{no}</MenuItem>
-                <MenuItem dense value="unsure">{unsure}</MenuItem>
-              </Select>
+              </span>
+              <div className={classes.inputBuffer}></div>
+              <span className={classes.inputContainer}>
+                <span className={classes.textBuffer}>
+                  {childcareQuestion}:
+                </span>
+                <FormControl className={classes.textSelectFormControl} size="small" >
+                  <InputLabel id="add-shul-childcare-label"
+                    style={{
+                      top: `${inputLabelOffset}px`,
+                      visibility: `${(this.state.focusedInput === 'childcare' || this.state.childcare) ? "hidden" : "visible"}`
+                    }}
+                    disableAnimation={true}
+                  >
+                    {select}
+                  </InputLabel>
+                  <Select
+                    labelId="add-shul-childcare-label"
+                    id="add-shul-childcare-select"
+                    value={this.state.childcare}
+                    onChange={(e) => {this.handleSelectInput(e, 'childcare')}}
+                    onFocus={(e) => {this.setFocusedInput(e, 'childcare')}}
+                    onBlur ={(e) => {this.setFocusedInput(e, null)}}
+                    className={classes.select}
+                  >
+                    <MenuItem dense value="yes">{yes}</MenuItem>
+                    <MenuItem dense value="no">{no}</MenuItem>
+                    <MenuItem dense value="unsure">{unsure}</MenuItem>
+                  </Select>
+                </FormControl>
+              </span>
+            </div>
 
-            </FormControl>
+          </div>
 
-          </FormControl>
 
           <Typography variant="h4" component="h2" className={classes.sectionHeader} style={{marginTop: '30px'}}>
             {rooms}
           </Typography>
+
           {roomSections}
 
-          <div className={classes.heroButtons}>
+          <div className={classes.heroButtonsContainer}>
 
-            <Button variant="outlined" color="primary" size="large" className={classes.homeButtons} onClick={(e) => {this.addRoom(e)}}>
+            <Button variant="contained" color="secondary" size="large" className={classes.heroButton} onClick={(e) => {this.addRoom(e)}}>
               <i className="fas fa-plus"></i> &nbsp; {addRoom}
             </Button>
 
-            <Button variant="contained" color="primary" size="large" className={classes.homeButtons}>
+            <Button variant="contained" color="secondary" size="large" className={classes.heroButton}>
               <i className="fas fa-paper-plane"></i> &nbsp; {submit}
             </Button>
 
