@@ -40,7 +40,7 @@ const styles = theme => ({
     borderRadius: '7px',
   },
   questionText:{
-    fontWeight: 200,
+    fontWeight: 400,
     fontSize: '16px',
     float: 'left',
     marginTop: '16px',
