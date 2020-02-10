@@ -597,9 +597,32 @@ class AddShul extends Component {
   async submit(e){
     var url = `${process.env.REACT_APP_EZNASHDB_API}shuls/create`
 
+    var rooms = [];
+    this.state.roomNames.map((roomName, key) => {
+      var room = {
+        name: this.state.roomNames[key],
+        size: this.state.roomSizes[key],
+        isCentered: this.state.isCenteredVals[key],
+        isSameFloorSide: this.state.isSameFloorSideVals[key],
+        isSameFloorBack: this.state.isSameFloorBackVals[key],
+        isSameFloorElevated: this.state.isSameFloorElevatedVals[key],
+        isSameFloorLevel: this.state.isSameFloorLevelVals[key],
+        isBalconySide: this.state.isBalconySideVals[key],
+        isBalconyBack: this.state.isBalconyBackVals[key],
+        isOnlyMen: this.state.isOnlyMenVals[key],
+        isMixedSeating: this.state.isMixedSeatingVals[key],
+        visAudScore: this.state.visAudVals[key],
+      }
+      rooms.push(room)
+    })
+
+
+
     const options = {
       url: url,
-      form: {
+      json: true,
+      method: 'post',
+      body: {
         name: this.state.shulName,
         nussach: this.state.nussach,
         denom: this.state.denomination,
@@ -610,13 +633,14 @@ class AddShul extends Component {
         kaddishWithMen: this.state.kaddishWithMen,
         kaddishAlone: this.state.kaddishAlone,
         childcare: this.state.childcare,
+        rooms: rooms
       }
     };
-
-    request.post(options,
+    
+    request(options,
 
       (err, res, body) => {
-        var parsedBody = JSON.parse(res.body);
+        var parsedBody = res.body;
         if(res.statusCode === 500){
           console.log("SUBMISSION ERROR (see below):");
           window.alert("Submission error. See console for error info");
@@ -818,11 +842,11 @@ class AddShul extends Component {
                 <MenuItem dense value="">
                   <em>{select}</em>
                 </MenuItem>
-                <MenuItem dense value="XS">{muchSmaller}</MenuItem>
-                <MenuItem dense value="S">{somewhatSmaller}</MenuItem>
-                <MenuItem dense value="M">{sameSize}</MenuItem>
-                <MenuItem dense value="L">{larger}</MenuItem>
-                <MenuItem dense value="unsure">{unsure}</MenuItem>
+                <MenuItem dense value={1}>{muchSmaller}</MenuItem>
+                <MenuItem dense value={2}>{somewhatSmaller}</MenuItem>
+                <MenuItem dense value={3}>{sameSize}</MenuItem>
+                <MenuItem dense value={4}>{larger}</MenuItem>
+                <MenuItem dense value={0}>{unsure}</MenuItem>
               </Select>
             </FormControl>
           </span>
@@ -859,12 +883,12 @@ class AddShul extends Component {
                 <MenuItem dense value="">
                   <em>{select}</em>
                 </MenuItem>
-                <MenuItem dense value="1">{"1 - " + difficult}</MenuItem>
-                <MenuItem dense value="2">{"2"}</MenuItem>
-                <MenuItem dense value="3">{"3"}</MenuItem>
-                <MenuItem dense value="4">{"4"}</MenuItem>
-                <MenuItem dense value="5">{"5 - " + easy}</MenuItem>
-                <MenuItem dense value="unsure">{unsure}</MenuItem>
+                <MenuItem dense value={1}>{"1 - " + difficult}</MenuItem>
+                <MenuItem dense value={2}>{"2"}</MenuItem>
+                <MenuItem dense value={3}>{"3"}</MenuItem>
+                <MenuItem dense value={4}>{"4"}</MenuItem>
+                <MenuItem dense value={5}>{"5 - " + easy}</MenuItem>
+                <MenuItem dense value={0}>{unsure}</MenuItem>
               </Select>
             </FormControl>
           </span>

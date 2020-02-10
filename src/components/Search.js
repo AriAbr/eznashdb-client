@@ -63,6 +63,31 @@ class Search extends Component {
     return icon;
   }
 
+  getRoomsTable(roomsArr){
+    const roomName = this.props.translate("roomName");
+    
+    return <table style={{margin: "auto"}} className="search-results-table">
+    <thead>
+    <tr style={{background: '#b5b5b5'}}>
+      <th>
+        {roomName}
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+      {roomsArr.map((room, key) => {
+        return <>
+          <tr key={key}>
+            <td>
+              {room.name}
+            </td>
+          </tr>
+        </>
+      })}
+    </tbody>
+  </table>
+  }
+
   componentDidMount(){
     this.getAllShuls();
   }
@@ -84,6 +109,7 @@ class Search extends Component {
     const kaddish = this.props.translate("kaddish");
     const withMen = this.props.translate("withMen");
     const alone = this.props.translate("alone");
+    const rooms = this.props.translate("rooms");
 
     return (
       <div>
@@ -130,8 +156,9 @@ class Search extends Component {
             </thead>
             <tbody>
               {this.state.shuls.map((shul, key) => {
-                return <tr key={key}>
-                    <td style={{padding: "0px"}}>
+                return <>
+                  <tr key={key}>
+                    <td style={{padding: "0px"}} rowSpan={2}>
                       <IconButton onClick={(e) => {this.deleteShul(shul.id)}}
                         classes={{
                           root: "delete-shul-button-root"
@@ -165,6 +192,12 @@ class Search extends Component {
                       {this.getIconsFromNumbers(shul.childcare)}
                     </td>
                   </tr>
+                  <tr key={key*2}>
+                    <td colSpan={8}>
+                      {this.getRoomsTable(shul.rooms)}
+                    </td>
+                  </tr>
+                </>
               })}
             </tbody>
           </table>
