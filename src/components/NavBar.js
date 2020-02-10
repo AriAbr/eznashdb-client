@@ -73,6 +73,7 @@ class NavBar extends Component {
     const logIn = this.props.translate("logIn");
     const home = this.props.translate("home");
     const addShul = this.props.translate("addShul");
+    const search = this.props.translate("search");
 
     var navButtonClassName = this.props.activeLanguage && this.props.activeLanguage.code === 'en' ? classes.navButton : classes.navButton + " " + classes.navButtonHeb;
     var drawerLinkClassName = this.props.activeLanguage && this.props.activeLanguage.code === 'en' ? classes.drawerLink : classes.drawerLink + " " + classes.drawerLinkHeb;
@@ -90,6 +91,10 @@ class NavBar extends Component {
 
               <Link to={`/`} className="navbar-link">
                 <Button color="inherit" className={navButtonClassName}>{home}</Button>
+              </Link>
+
+              <Link to={`/search`} className="navbar-link">
+                <Button color="inherit" className={navButtonClassName}>{search}</Button>
               </Link>
 
               <Link to={`/add-shul`} className="navbar-link">
@@ -125,6 +130,11 @@ class NavBar extends Component {
           <Link to={`/`} className={drawerLinkClassName} onClick={() => {this.onDrawerSelection()}}>
             <ListItem button>
               {home.toUpperCase()}
+            </ListItem>
+          </Link>
+          <Link to={`/search`} className={drawerLinkClassName} onClick={() => {this.onDrawerSelection()}}>
+            <ListItem button>
+              {search.toUpperCase()}
             </ListItem>
           </Link>
           <Link to={`/add-shul`} className={drawerLinkClassName} onClick={() => {this.onDrawerSelection()}}>

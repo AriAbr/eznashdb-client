@@ -55,9 +55,11 @@ class Home extends Component {
               </Typography>
               <div className={classes.heroButtons}>
 
-                <Button variant="contained" color="primary" size="large" className={classes.homeButtons}>
-                  <i className="fas fa-search"></i> {search}
-                </Button>
+                <Link to={`/search`} className="navbar-link">
+                  <Button variant="contained" color="primary" size="large" className={classes.homeButtons}>
+                    <i className="fas fa-search"></i> {search}
+                  </Button>
+                </Link>
 
                 <Link to={`/add-shul`} className="navbar-link">
                   <Button variant="outlined" color="primary" size="large" className={classes.homeButtons}>

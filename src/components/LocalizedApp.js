@@ -5,10 +5,12 @@ import '../css/NavBar.css';
 import '../css/LanguageControls.css';
 import '../css/Home.css';
 import '../css/AddShul.css';
+import '../css/Search.css';
 import NavBar from './NavBar';
 import Home from './Home';
 import APITest from './APITest';
 import AddShul from './AddShul';
+import Search from './Search';
 import { withLocalize } from "react-localize-redux";
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { create } from 'jss';
@@ -70,6 +72,11 @@ class LocalizedApp extends Component {
                 <Route
                   exact path="/"
                   render={(props) => <Home {...props}
+                  />}
+                />
+                <Route
+                  path="/search"
+                  render={(props) => <Search {...props}
                   />}
                 />
                 <Route

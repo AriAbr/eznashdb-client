@@ -1,0 +1,8 @@
+.search-results-table{
+  border-collapse: collapse;
+}
+
+.search-results-table td, .search-results-table th{
+  border: 2px solid lightgray;
+  padding: 5px;
+}
