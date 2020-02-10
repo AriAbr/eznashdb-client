@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { withLocalize } from "react-localize-redux";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from 'prop-types';
-import { Typography } from '@material-ui/core';
+import { Typography, IconButton } from '@material-ui/core';
 const request = require("request");
 
 const styles = theme => ({
@@ -32,6 +32,19 @@ class Search extends Component {
         console.log(res)
       }
     });
+  }
+
+  deleteShul(shulId){
+    const options = {
+      url: `${process.env.REACT_APP_EZNASHDB_API}shuls/destroy`,
+      form: {
+        id: shulId,
+      }
+    };
+
+    request.post(options, (err, res, body) => {
+      this.getAllShuls()
+    })
   }
 
   getIconsFromNumbers(num){
@@ -79,6 +92,9 @@ class Search extends Component {
             <thead>
             <tr>
               <th>
+
+              </th>
+              <th>
                 {shulName}
               </th>
               <th>
@@ -113,6 +129,15 @@ class Search extends Component {
             <tbody>
               {this.state.shuls.map((shul, key) => {
                 return <tr key={key}>
+                    <td style={{padding: "0px"}}>
+                      <IconButton onClick={(e) => {this.deleteShul(shul.id)}}
+                        classes={{
+                          root: "delete-shul-button-root"
+                        }}
+                      >
+                        <i className="fas fa-trash delete-shul-button-icon"></i>
+                      </IconButton>
+                    </td>
                     <td>
                       {shul.name}
                     </td>
