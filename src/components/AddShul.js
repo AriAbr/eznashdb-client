@@ -6,6 +6,7 @@ import { Button, FormControl, InputLabel, Select, MenuItem, Paper, Typography, D
   TableBody, TextField, FormControlLabel, FormGroup, Checkbox, Dialog, DialogTitle, DialogContent,
   DialogContentText} from '@material-ui/core';
 import * as israelCities from '../data/israel-cities';
+const request = require("request");
 
 
 const csc = require('countrycitystatejson')
@@ -593,6 +594,40 @@ class AddShul extends Component {
     })
   }
 
+  async submit(e){
+    var url = `${process.env.REACT_APP_EZNASHDB_API}shuls/create`
+
+    const options = {
+      url: url,
+      form: {
+        name: this.state.shulName,
+        nussach: this.state.nussach,
+        denom: this.state.denomination,
+        country: this.state.selCountry,
+        region: this.state.selRegion,
+        city: this.state.selCity,
+        femLead: this.state.femaleLeadership,
+        kaddishWithMen: this.state.kaddishWithMen,
+        kaddishAlone: this.state.kaddishAlone,
+        childcare: this.state.childcare,
+      }
+    };
+
+    request.post(options,
+
+      (err, res, body) => {
+        var parsedBody = JSON.parse(res.body);
+        if(res.statusCode === 500){
+          console.log("SUBMISSION ERROR (see below):");
+          window.alert("Submission error. See console for error info");
+        } else {
+          window.alert("Submission success! See console for submitted info");
+        }
+        console.log(parsedBody);
+      }
+    );
+  }
+
   componentDidMount(){
     this.getIsraelRegions();
     var countries = csc.getCountries();
@@ -703,8 +738,6 @@ class AddShul extends Component {
     const regionsDisabled = this.state.selCountry === "";
     const citiesDisabled = this.state.selRegion === "";
 
-    const { duplicatesQuestionHeight } = this.state;
-
     var roomNameToDelete = "";
     if(typeof(this.state.roomToDelete) === "number"){
       roomNameToDelete = this.state.roomNames[this.state.roomToDelete];
@@ -720,7 +753,7 @@ class AddShul extends Component {
 
         </Typography>
         <Button color="default" size="small" onClick={(e) => {this.openDeleteRoomDialog(e, key)}} disabled={this.state.roomNames.length <= 1}>
-          <i class="fas fa-trash"></i> &nbsp; {deleteTranslated}
+          <i className="fas fa-trash"></i> &nbsp; {deleteTranslated}
         </Button>
 
       </div>
@@ -1090,7 +1123,7 @@ class AddShul extends Component {
                   <InputLabel id="add-shul-female-leadership-label"
                     style={{
                       top: `${inputLabelOffset}px`,
-                      visibility: `${(this.state.focusedInput === 'femaleLeadership' || this.state.femaleLeadership) ? "hidden" : "visible"}`
+                      visibility: `${(this.state.focusedInput === 'femaleLeadership' || typeof(this.state.femaleLeadership) === 'number') ? "hidden" : "visible"}`
                     }}
                     disableAnimation={true}
                   >
@@ -1105,9 +1138,9 @@ class AddShul extends Component {
                     onBlur ={(e) => {this.setFocusedInput(e, null)}}
                     className={classes.select}
                   >
-                    <MenuItem dense value="yes">{yes}</MenuItem>
-                    <MenuItem dense value="no">{no}</MenuItem>
-                    <MenuItem dense value="unsure">{unsure}</MenuItem>
+                    <MenuItem dense value={1}>{yes}</MenuItem>
+                    <MenuItem dense value={2}>{no}</MenuItem>
+                    <MenuItem dense value={0}>{unsure}</MenuItem>
                   </Select>
                 </FormControl>
               </span>
@@ -1126,7 +1159,7 @@ class AddShul extends Component {
                   <InputLabel id="add-shul-kaddish-with-men-label"
                     style={{
                       top: `${inputLabelOffset}px`,
-                      visibility: `${(this.state.focusedInput === 'kaddishWithMen' || this.state.kaddishWithMen) ? "hidden" : "visible"}`
+                      visibility: `${(this.state.focusedInput === 'kaddishWithMen' || typeof(this.state.kaddishWithMen) === 'number') ? "hidden" : "visible"}`
                     }}
                     disableAnimation={true}
                   >
@@ -1141,9 +1174,9 @@ class AddShul extends Component {
                     onBlur ={(e) => {this.setFocusedInput(e, null)}}
                     className={classes.select}
                   >
-                    <MenuItem dense value="yes">{yes}</MenuItem>
-                    <MenuItem dense value="no">{no}</MenuItem>
-                    <MenuItem dense value="unsure">{unsure}</MenuItem>
+                    <MenuItem dense value={1}>{yes}</MenuItem>
+                    <MenuItem dense value={2}>{no}</MenuItem>
+                    <MenuItem dense value={0}>{unsure}</MenuItem>
                   </Select>
                 </FormControl>
               </span>
@@ -1162,7 +1195,7 @@ class AddShul extends Component {
                   <InputLabel id="add-shul-kaddish-alone-label"
                     style={{
                       top: `${inputLabelOffset}px`,
-                      visibility: `${(this.state.focusedInput === 'kaddishAlone' || this.state.kaddishAlone) ? "hidden" : "visible"}`
+                      visibility: `${(this.state.focusedInput === 'kaddishAlone' || typeof(this.state.kaddishAlone) === "number") ? "hidden" : "visible"}`
                     }}
                     disableAnimation={true}
                   >
@@ -1177,10 +1210,10 @@ class AddShul extends Component {
                     onBlur ={(e) => {this.setFocusedInput(e, null)}}
                     className={classes.select}
                   >
-                    <MenuItem dense value="yes">{yes}</MenuItem>
-                    <MenuItem dense value="no">{no}</MenuItem>
-                    <MenuItem dense value="unsure">{unsure}</MenuItem>
-                    <MenuItem dense value="alwaysMan">{manAlwaysKaddish}</MenuItem>
+                    <MenuItem dense value={1}>{yes}</MenuItem>
+                    <MenuItem dense value={2}>{no}</MenuItem>
+                    <MenuItem dense value={0}>{unsure}</MenuItem>
+                    <MenuItem dense value={3}>{manAlwaysKaddish}</MenuItem>
                   </Select>
                 </FormControl>
               </span>
@@ -1199,7 +1232,7 @@ class AddShul extends Component {
                   <InputLabel id="add-shul-childcare-label"
                     style={{
                       top: `${inputLabelOffset}px`,
-                      visibility: `${(this.state.focusedInput === 'childcare' || this.state.childcare) ? "hidden" : "visible"}`
+                      visibility: `${(this.state.focusedInput === 'childcare' || typeof(this.state.childcare) === "number") ? "hidden" : "visible"}`
                     }}
                     disableAnimation={true}
                   >
@@ -1214,9 +1247,9 @@ class AddShul extends Component {
                     onBlur ={(e) => {this.setFocusedInput(e, null)}}
                     className={classes.select}
                   >
-                    <MenuItem dense value="yes">{yes}</MenuItem>
-                    <MenuItem dense value="no">{no}</MenuItem>
-                    <MenuItem dense value="unsure">{unsure}</MenuItem>
+                    <MenuItem dense value={1}>{yes}</MenuItem>
+                    <MenuItem dense value={2}>{no}</MenuItem>
+                    <MenuItem dense value={0}>{unsure}</MenuItem>
                   </Select>
                 </FormControl>
               </span>
@@ -1237,7 +1270,7 @@ class AddShul extends Component {
               <i className="fas fa-plus"></i> &nbsp; {addRoom}
             </Button>
 
-            <Button variant="contained" color="secondary" size="large" className={classes.heroButton}>
+            <Button variant="contained" color="secondary" size="large" className={classes.heroButton} onClick={(e) => {this.submit(e)}}>
               <i className="fas fa-paper-plane"></i> &nbsp; {submit}
             </Button>
 
