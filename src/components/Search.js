@@ -63,14 +63,35 @@ class Search extends Component {
     return icon;
   }
 
+  getSizeIcon(num){
+    var icon = num;
+
+    if(num === 0){
+      icon = <i className="fas fa-question"></i>;
+    } else if (num === 1){
+      icon = "XS"
+    } else if (num === 2){
+      icon = "S"
+    } else if (num === 3){
+      icon = "M"
+    } else if (num === 4){
+      icon = "L"
+    }    
+    return icon;
+  }
+
   getRoomsTable(roomsArr){
     const roomName = this.props.translate("roomName");
+    const size = this.props.translate("size");
     
     return <table style={{margin: "auto"}} className="search-results-table">
     <thead>
     <tr style={{background: '#b5b5b5'}}>
       <th>
         {roomName}
+      </th>
+      <th>
+        {size}
       </th>
     </tr>
     </thead>
@@ -80,6 +101,9 @@ class Search extends Component {
           <tr key={key}>
             <td>
               {room.name}
+            </td>
+            <td>
+              {this.getSizeIcon(room.size)}
             </td>
           </tr>
         </>

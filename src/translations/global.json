@@ -38,6 +38,7 @@
   "rooms": ["Rooms", "חדרים"],
   "roomName": ["Room Name", "שם החדר"],
   "sizeQuestion": ["How large is the women's section relative to the men's section?", "כמה גדול עזרת הנשים ביחס לעזרת הגברים?"],
+  "size": ["Size", "גודל"],
   "muchSmaller": ["Much smaller", "קטן בהרבה"],
   "somewhatSmaller": ["Somewhat smaller", "קצת יותר קטן"],
   "sameSize": ["Same size", "אותו גודל"],
