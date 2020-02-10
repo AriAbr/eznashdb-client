@@ -81,6 +81,9 @@ class Search extends Component {
     const kaddishWithMen = this.props.translate("kaddishWithMen");
     const kaddishAlone = this.props.translate("kaddishAlone");
     const childcare = this.props.translate("childcare");
+    const kaddish = this.props.translate("kaddish");
+    const withMen = this.props.translate("withMen");
+    const alone = this.props.translate("alone");
 
     return (
       <div>
@@ -90,39 +93,38 @@ class Search extends Component {
           </Typography>
           <table style={{margin: "auto"}} className="search-results-table">
             <thead>
-            <tr>
-              <th>
+            <tr style={{background: '#b5b5b5'}}>
+              <th rowSpan={2}>
 
               </th>
-              <th>
+              <th rowSpan={2}>
                 {shulName}
               </th>
-              <th>
+              <th rowSpan={2}>
                 {nussach}
               </th>
-              <th>
+              <th rowSpan={2}>
                 {denomination}
               </th>
-              <th>
-                {country}
-              </th>
-              <th>
-                {stateOrRegion}
-              </th>
-              <th>
+              <th rowSpan={2}>
                 {city}
               </th>
-              <th>
+              <th rowSpan={2} style={{maxWidth: "100px"}}>
                 {femaleLeadership}
               </th>
-              <th>
-                {kaddishWithMen}
+              <th colSpan={2}>
+                {kaddish}
               </th>
-              <th>
-                {kaddishAlone}
-              </th>
-              <th>
+              <th rowSpan={2}>
                 {childcare}
+              </th>
+            </tr>
+            <tr style={{background: "#c8c8c8"}}>
+              <th style={{fontWeight: "normal"}}>
+                {withMen}
+              </th>
+              <th style={{fontWeight: "normal"}}>
+                {alone}
               </th>
             </tr>
             </thead>
@@ -148,13 +150,7 @@ class Search extends Component {
                       {shul.denom}
                     </td>
                     <td>
-                      {shul.country}
-                    </td>
-                    <td>
-                      {shul.region}
-                    </td>
-                    <td>
-                      {shul.city}
+                      {shul.city}, {shul.region}, {shul.country}
                     </td>
                     <td>
                       {this.getIconsFromNumbers(shul.femLead)}
