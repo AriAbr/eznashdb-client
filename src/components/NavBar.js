@@ -41,6 +41,10 @@ const styles = theme => ({
     textAlign: 'left',
     textOverflow: 'ellipsis',
   },
+  titleLink: {
+    color: "white",
+    textDecoration: "none"
+  },
   drawer: {
     width: '200px'
   }
@@ -83,7 +87,9 @@ class NavBar extends Component {
         <AppBar position="fixed">
           <Toolbar>
             <Typography variant="h6" className={classes.title}>
-              <Translate id="appTitle" />
+              <Link to={`/`} className={classes.titleLink} onClick={() => {this.onDrawerSelection()}}>
+                <Translate id="appTitle" />
+              </Link>
             </Typography>
 
             <div className="navbar-controls">
