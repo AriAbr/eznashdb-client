@@ -56,6 +56,7 @@
   "onlyMens": ["Only men's section", "רק עזרת גברים"],
   "mixedSeating": ["Mixed seating", "ישיבה מעורבת"],
   "visAudQuestion": ["How easy is it to see and hear from the women's section?", "כמה קל לראות ולשמוע מעזרת הנשים?"],
+  "visAud": ["Visibility/Audibility", "ראות/שמיעות"],
   "difficult": ["Difficult", "קשה"],
   "easy": ["Easy", "קל"],
   "addRoom": ["Add another room", "הוסף/י חדר נוסף"],

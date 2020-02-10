@@ -80,9 +80,27 @@ class Search extends Component {
     return icon;
   }
 
+  getVisAudIcon(num){
+    var icon = [];
+
+    if(num === 0){
+      icon = <i className="fas fa-question"></i>;
+    } else {
+      for(let i = 0; i < 5; i++){
+        if(i<num){
+          icon.push(<i className="fas fa-star"></i>)
+        } else {
+          icon.push(<i className="far fa-star"></i>)
+        }
+      }
+    }
+    return icon;
+  }
+
   getRoomsTable(roomsArr){
     const roomName = this.props.translate("roomName");
     const size = this.props.translate("size");
+    const visAud = this.props.translate("visAud");
     
     return <table style={{margin: "auto"}} className="search-results-table">
     <thead>
@@ -92,6 +110,9 @@ class Search extends Component {
       </th>
       <th>
         {size}
+      </th>
+      <th>
+        {visAud}
       </th>
     </tr>
     </thead>
@@ -104,6 +125,9 @@ class Search extends Component {
             </td>
             <td>
               {this.getSizeIcon(room.size)}
+            </td>
+            <td>
+              {this.getVisAudIcon(room.visAudScore)}
             </td>
           </tr>
         </>
