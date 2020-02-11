@@ -14,3 +14,16 @@
 .delete-shul-button-root{
   padding: 5px !important
 }
+
+.search-results-rooms-table td, .search-results-rooms-table th{
+  border-color: #cfcfcf !important;
+}
+
+.search-results-placement-table td, .search-results-placement-table th{
+  border-color: #dfe3f9 !important;
+}
+
+.search-results-container{
+  max-width: 100%;
+  overflow: auto;
+}

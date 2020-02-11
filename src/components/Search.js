@@ -3,7 +3,7 @@ import { withLocalize } from "react-localize-redux";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from 'prop-types';
 import LoadingOverlay from 'react-loading-overlay';
-import { Typography, IconButton } from '@material-ui/core';
+import { Typography, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, } from '@material-ui/core';
 const request = require("request");
 
 const styles = theme => ({
@@ -152,41 +152,29 @@ class Search extends Component {
     }
 
     var cellContents = <>
-      
-      <table style={{margin: "auto"}} className="search-results-table">
-        <tbody>
+
+      <Table size="small" aria-label="a dense table" style={{background: "#c0caff"}} className="search-results-placement-table">
+        <TableBody>
           {sameFloor.length > 0 && 
-            <tr>
-              <td>
-                {sameFloorTR}
-              </td>
-              <td>
-                {sameFloor.join(", ")}
-              </td>
-            </tr>
+            <TableRow>
+              <TableCell align="center">{sameFloorTR}</TableCell>
+              <TableCell align="center">{sameFloor.join(", ")}</TableCell>
+            </TableRow>
           }
           {balcony.length > 0 && 
-            <tr>
-              <td>
-                {balconyTR}
-              </td>
-              <td>
-                {balcony.join(", ")}
-              </td>
-            </tr>
+            <TableRow>
+              <TableCell align="center">{balconyTR}</TableCell>
+              <TableCell align="center">{balcony.join(", ")}</TableCell>
+            </TableRow>
           }
           {noWomSec.length > 0 && 
-            <tr>
-              <td>
-                {noWomSecTR}
-              </td>
-              <td>
-                {noWomSec.join(", ")}
-              </td>
-            </tr>
+            <TableRow>
+              <TableCell align="center">{noWomSecTR}</TableCell>
+              <TableCell align="center">{noWomSec.join(", ")}</TableCell>
+            </TableRow>
           }
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </>;
 
     return cellContents;
@@ -198,44 +186,26 @@ class Search extends Component {
     const visAud = this.props.translate("visAud");
     const placement = this.props.translate("placement");
     
-    return <table style={{margin: "auto"}} className="search-results-table">
-    <thead>
-    <tr style={{background: '#b5b5b5'}}>
-      <th>
-        {roomName}
-      </th>
-      <th>
-        {size}
-      </th>
-      <th>
-        {visAud}
-      </th>
-      <th>
-        {placement}
-      </th>
-    </tr>
-    </thead>
-    <tbody>
-      {roomsArr.map((room, key) => {
-        return <>
-          <tr key={key}>
-            <td>
-              {room.name}
-            </td>
-            <td>
-              {this.getSizeIcon(room.size)}
-            </td>
-            <td>
-              {this.getVisAudIcon(room.visAudScore)}
-            </td>
-            <td>
-              {this.getPlacementCell(room)}
-            </td>
-          </tr>
-        </>
-      })}
-    </tbody>
-  </table>
+    return <Table size="small" aria-label="a dense table" className="search-results-rooms-table">
+        <TableHead>
+          <TableRow>
+            <TableCell align="center">{roomName}</TableCell>
+            <TableCell align="center">{size}</TableCell>
+            <TableCell align="center">{visAud}</TableCell>
+            <TableCell align="center">{placement}</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {roomsArr.map((room, key) => (
+            <TableRow key={key}>
+              <TableCell align="center">{room.name}</TableCell>
+              <TableCell align="center">{this.getSizeIcon(room.size)}</TableCell>
+              <TableCell align="center">{this.getVisAudIcon(room.visAudScore)}</TableCell>
+              <TableCell align="center">{this.getPlacementCell(room)}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
   }
 
   componentDidMount(){
@@ -264,60 +234,40 @@ class Search extends Component {
     return (
       <div>
 
-          <Typography variant="h2" component="h2" gutterBottom className={classes.mainHeader}>
-            {search}
-          </Typography>
-          <LoadingOverlay
-            active={this.state.isLoadingResults}
-            spinner
-            text='Loading your content...'
-            style={{
-              maxWidth: "fit-content",
-              margin: "auto"
-            }}
-          >
-            <table style={{margin: "auto"}} className="search-results-table">
-              <thead>
-                <tr style={{background: '#b5b5b5'}}>
-                <th rowSpan={2}>
-
-                </th>
-                <th rowSpan={2}>
-                  {shulName}
-                </th>
-                <th rowSpan={2}>
-                  {nussach}
-                </th>
-                <th rowSpan={2}>
-                  {denomination}
-                </th>
-                <th rowSpan={2}>
-                  {city}
-                </th>
-                <th rowSpan={2} style={{maxWidth: "100px"}}>
-                  {femaleLeadership}
-                </th>
-                <th colSpan={2}>
-                  {kaddish}
-                </th>
-                <th rowSpan={2}>
-                  {childcare}
-                </th>
-              </tr>
-              <tr style={{background: "#c8c8c8"}}>
-                <th style={{fontWeight: "normal"}}>
-                  {withMen}
-                </th>
-                <th style={{fontWeight: "normal"}}>
-                  {alone}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.state.shuls.map((shul, key) => {
-                return <>
-                  <tr key={key}>
-                    <td style={{padding: "0px"}} rowSpan={2}>
+        <Typography variant="h2" component="h2" gutterBottom className={classes.mainHeader}>
+          {search}
+        </Typography>
+        <LoadingOverlay
+          active={this.state.isLoadingResults}
+          spinner
+          text='Loading your content...'
+          style={{
+            maxWidth: "fit-content",
+            margin: "auto"
+          }}
+        >
+          <div className="search-results-container">
+            <Table size="small" aria-label="a dense table">
+              <TableHead>
+                <TableRow>
+                  <TableCell rowSpan={2}></TableCell>
+                  <TableCell align="center" rowSpan={2}>{shulName}</TableCell>
+                  <TableCell align="center" rowSpan={2}>{nussach}</TableCell>
+                  <TableCell align="center" rowSpan={2}>{denomination}</TableCell>
+                  <TableCell align="center" rowSpan={2}>{city}</TableCell>
+                  <TableCell align="center" rowSpan={2}>{femaleLeadership}</TableCell>
+                  <TableCell align="center" colSpan={2}>{kaddish}</TableCell>
+                  <TableCell align="center" rowSpan={2}>{childcare}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell align="center">{withMen}</TableCell>
+                  <TableCell align="center">{alone}</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {this.state.shuls.map((shul, key) => (<>
+                  <TableRow key={key}>
+                    <TableCell align="center" rowSpan={2}>
                       <IconButton onClick={(e) => {this.deleteShul(shul.id)}}
                         classes={{
                           root: "delete-shul-button-root"
@@ -325,41 +275,23 @@ class Search extends Component {
                       >
                         <i className="fas fa-trash delete-shul-button-icon"></i>
                       </IconButton>
-                    </td>
-                    <td>
-                      {shul.name}
-                    </td>
-                    <td>
-                      {shul.nussach}
-                    </td>
-                    <td>
-                      {shul.denom}
-                    </td>
-                    <td>
-                      {shul.city}, {shul.region}, {shul.country}
-                    </td>
-                    <td>
-                      {this.getIconsFromNumbers(shul.femLead)}
-                    </td>
-                    <td>
-                      {this.getIconsFromNumbers(shul.kaddishWithMen)}
-                    </td>
-                    <td>
-                      {this.getIconsFromNumbers(shul.kaddishAlone)}
-                    </td>
-                    <td>
-                      {this.getIconsFromNumbers(shul.childcare)}
-                    </td>
-                  </tr>
-                  <tr key={key*2}>
-                    <td colSpan={8}>
-                      {this.getRoomsTable(shul.rooms)}
-                    </td>
-                  </tr>
-                </>
-              })}
-            </tbody>
-          </table>
+                    </TableCell>
+                    <TableCell align="center">{shul.name}</TableCell>
+                    <TableCell align="center">{shul.nussach}</TableCell>
+                    <TableCell align="center">{shul.denom}</TableCell>
+                    <TableCell align="center">{shul.city}</TableCell>
+                    <TableCell align="center">{this.getIconsFromNumbers(shul.femLead)}</TableCell>
+                    <TableCell align="center">{this.getIconsFromNumbers(shul.kaddishWithMen)}</TableCell>
+                    <TableCell align="center">{this.getIconsFromNumbers(shul.kaddishAlone)}</TableCell>
+                    <TableCell align="center">{this.getIconsFromNumbers(shul.childcare)}</TableCell>
+                  </TableRow>
+                  <TableRow key={key*2} style={{background: "#dfe3f9"}}>
+                    <TableCell align="center" colSpan={8}>{this.getRoomsTable(shul.rooms)}</TableCell>
+                  </TableRow>
+                </>))}
+              </TableBody>
+            </Table>
+          </div>
         </LoadingOverlay>
       </div>
     );
