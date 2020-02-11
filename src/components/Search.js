@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { withLocalize } from "react-localize-redux";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from 'prop-types';
+import LoadingOverlay from 'react-loading-overlay';
 import { Typography, IconButton } from '@material-ui/core';
 const request = require("request");
 
@@ -14,24 +15,32 @@ class Search extends Component {
     super(props);
     this.state = {
       shuls: [],
+      isLoadingResults: false
     };
   }
 
 
 
   getAllShuls(){
-    request.get(`${process.env.REACT_APP_EZNASHDB_API}shuls/getAll`, (err, res, body) => {
-      if(res && res.statusCode === 200){
-        var shuls = JSON.parse(res.body)
-        console.log(shuls)
-        this.setState({
-          shuls: shuls
-        })
-      } else {
-        window.alert("server error. see console for more info")
-        console.log(res)
-      }
-    });
+    this.setState({isLoadingResults: true}, () => {
+      request.get(`${process.env.REACT_APP_EZNASHDB_API}shuls/getAll`, (err, res, body) => {
+        if(res && res.statusCode === 200){
+          var shuls = JSON.parse(res.body)
+          console.log(shuls)
+          this.setState({
+            shuls: shuls,
+            isLoadingResults: false
+          })
+        } else {
+          this.setState({
+            isLoadingResults: false,
+          }, () => {
+            window.alert("server error. see console for more info")
+            console.log(res)
+          })
+        }
+      });
+    })
   }
 
   deleteShul(shulId){
@@ -258,42 +267,51 @@ class Search extends Component {
           <Typography variant="h2" component="h2" gutterBottom className={classes.mainHeader}>
             {search}
           </Typography>
-          <table style={{margin: "auto"}} className="search-results-table">
-            <thead>
-            <tr style={{background: '#b5b5b5'}}>
-              <th rowSpan={2}>
+          <LoadingOverlay
+            active={this.state.isLoadingResults}
+            spinner
+            text='Loading your content...'
+            style={{
+              maxWidth: "fit-content",
+              margin: "auto"
+            }}
+          >
+            <table style={{margin: "auto"}} className="search-results-table">
+              <thead>
+                <tr style={{background: '#b5b5b5'}}>
+                <th rowSpan={2}>
 
-              </th>
-              <th rowSpan={2}>
-                {shulName}
-              </th>
-              <th rowSpan={2}>
-                {nussach}
-              </th>
-              <th rowSpan={2}>
-                {denomination}
-              </th>
-              <th rowSpan={2}>
-                {city}
-              </th>
-              <th rowSpan={2} style={{maxWidth: "100px"}}>
-                {femaleLeadership}
-              </th>
-              <th colSpan={2}>
-                {kaddish}
-              </th>
-              <th rowSpan={2}>
-                {childcare}
-              </th>
-            </tr>
-            <tr style={{background: "#c8c8c8"}}>
-              <th style={{fontWeight: "normal"}}>
-                {withMen}
-              </th>
-              <th style={{fontWeight: "normal"}}>
-                {alone}
-              </th>
-            </tr>
+                </th>
+                <th rowSpan={2}>
+                  {shulName}
+                </th>
+                <th rowSpan={2}>
+                  {nussach}
+                </th>
+                <th rowSpan={2}>
+                  {denomination}
+                </th>
+                <th rowSpan={2}>
+                  {city}
+                </th>
+                <th rowSpan={2} style={{maxWidth: "100px"}}>
+                  {femaleLeadership}
+                </th>
+                <th colSpan={2}>
+                  {kaddish}
+                </th>
+                <th rowSpan={2}>
+                  {childcare}
+                </th>
+              </tr>
+              <tr style={{background: "#c8c8c8"}}>
+                <th style={{fontWeight: "normal"}}>
+                  {withMen}
+                </th>
+                <th style={{fontWeight: "normal"}}>
+                  {alone}
+                </th>
+              </tr>
             </thead>
             <tbody>
               {this.state.shuls.map((shul, key) => {
@@ -342,7 +360,7 @@ class Search extends Component {
               })}
             </tbody>
           </table>
-
+        </LoadingOverlay>
       </div>
     );
   }
