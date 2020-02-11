@@ -96,11 +96,98 @@ class Search extends Component {
     }
     return icon;
   }
+  getPlacementCell(room){
+    const sameFloorTR = this.props.translate("sameFloorShort");
+    const balconyTR = this.props.translate("balcony");
+    const noWomSecTR = this.props.translate("noWomensSection");
+    const centeredTR = this.props.translate("centered");
+    const sideTR = this.props.translate("side");
+    const backTR = this.props.translate("back");
+    const elevatedTR = this.props.translate("elevated");
+    const notElevatedTR = this.props.translate("levelWithMens");
+    const onlyMenTR = this.props.translate("onlyMens");
+    const mixedSeatingTR = this.props.translate("mixedSeating");
+    
+    var sameFloor = [];
+    var balcony = [];
+    var noWomSec = [];
+
+    if(room.isCentered){
+      sameFloor.push(centeredTR)
+    }
+    if(room.isSameFloorSide){
+      sameFloor.push(sideTR)
+    }
+    if(room.isSameFloorBack){
+      sameFloor.push(backTR)
+    }
+    if(room.isSameFloorElevated){
+      sameFloor.push(elevatedTR)
+    }
+    if(room.isSameFloorLevel){
+      sameFloor.push(notElevatedTR)
+    }
+
+    if(room.isBalconySide){
+      balcony.push(sideTR)
+    }
+    if(room.isBalconyBack){
+      balcony.push(backTR)
+    }
+
+    if(room.isOnlyMen){
+      noWomSec.push(onlyMenTR)
+    }
+    if(room.isMixedSeating){
+      noWomSec.push(mixedSeatingTR)
+    }
+
+    var cellContents = <>
+      
+      <table style={{margin: "auto"}} className="search-results-table">
+        <tbody>
+          {sameFloor.length > 0 && 
+            <tr>
+              <td>
+                {sameFloorTR}
+              </td>
+              <td>
+                {sameFloor.join(", ")}
+              </td>
+            </tr>
+          }
+          {balcony.length > 0 && 
+            <tr>
+              <td>
+                {balconyTR}
+              </td>
+              <td>
+                {balcony.join(", ")}
+              </td>
+            </tr>
+          }
+          {noWomSec.length > 0 && 
+            <tr>
+              <td>
+                {noWomSecTR}
+              </td>
+              <td>
+                {noWomSec.join(", ")}
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </>;
+
+    return cellContents;
+  }
 
   getRoomsTable(roomsArr){
     const roomName = this.props.translate("roomName");
     const size = this.props.translate("size");
     const visAud = this.props.translate("visAud");
+    const placement = this.props.translate("placement");
     
     return <table style={{margin: "auto"}} className="search-results-table">
     <thead>
@@ -113,6 +200,9 @@ class Search extends Component {
       </th>
       <th>
         {visAud}
+      </th>
+      <th>
+        {placement}
       </th>
     </tr>
     </thead>
@@ -128,6 +218,9 @@ class Search extends Component {
             </td>
             <td>
               {this.getVisAudIcon(room.visAudScore)}
+            </td>
+            <td>
+              {this.getPlacementCell(room)}
             </td>
           </tr>
         </>

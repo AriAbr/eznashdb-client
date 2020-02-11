@@ -711,7 +711,7 @@ class AddShul extends Component {
     const sameFloor = this.props.translate("sameFloor");
     const balcony = this.props.translate("balcony");
     const noWomensSection = this.props.translate("noWomensSection");
-    const centered = this.props.translate("centered");
+    const centeredMechitza = this.props.translate("centeredMechitza");
     const side = this.props.translate("side");
     const back = this.props.translate("back");
     const elevated = this.props.translate("elevated");
@@ -908,7 +908,7 @@ class AddShul extends Component {
               <FormGroup>
                 <FormControlLabel
                   control={<Checkbox checked={this.state.isCenteredVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}}value={"centered"}  color="primary" size="small"/>}
-                  label={centered}
+                  label={centeredMechitza}
                   className={classes.formControlLabel}
                 />
                 <FormControlLabel
