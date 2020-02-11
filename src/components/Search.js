@@ -7,7 +7,9 @@ import { Typography, IconButton, Table, TableBody, TableCell, TableContainer, Ta
 const request = require("request");
 
 const styles = theme => ({
-
+  tableTextCell: {
+    textAlign: "left"
+  }
 });
 
 class Search extends Component {
@@ -106,6 +108,8 @@ class Search extends Component {
     return icon;
   }
   getPlacementCell(room){
+    const { classes } = this.props;
+
     const sameFloorTR = this.props.translate("sameFloorShort");
     const balconyTR = this.props.translate("balcony");
     const noWomSecTR = this.props.translate("noWomensSection");
@@ -153,24 +157,24 @@ class Search extends Component {
 
     var cellContents = <>
 
-      <Table size="small" aria-label="a dense table" style={{background: "#c0caff"}} className="search-results-placement-table">
+      <Table size="small" aria-label="a dense table" className="search-results-placement-table">
         <TableBody>
           {sameFloor.length > 0 && 
             <TableRow>
-              <TableCell align="center">{sameFloorTR}</TableCell>
-              <TableCell align="center">{sameFloor.join(", ")}</TableCell>
+              <TableCell align="center" className={classes.tableTextCell}>{sameFloorTR}</TableCell>
+              <TableCell align="center" className={classes.tableTextCell}>{sameFloor.join(", ")}</TableCell>
             </TableRow>
           }
           {balcony.length > 0 && 
             <TableRow>
-              <TableCell align="center">{balconyTR}</TableCell>
-              <TableCell align="center">{balcony.join(", ")}</TableCell>
+              <TableCell align="center" className={classes.tableTextCell}>{balconyTR}</TableCell>
+              <TableCell align="center" className={classes.tableTextCell}>{balcony.join(", ")}</TableCell>
             </TableRow>
           }
           {noWomSec.length > 0 && 
             <TableRow>
-              <TableCell align="center">{noWomSecTR}</TableCell>
-              <TableCell align="center">{noWomSec.join(", ")}</TableCell>
+              <TableCell align="center" className={classes.tableTextCell}>{noWomSecTR}</TableCell>
+              <TableCell align="center" className={classes.tableTextCell}>{noWomSec.join(", ")}</TableCell>
             </TableRow>
           }
         </TableBody>
@@ -181,6 +185,7 @@ class Search extends Component {
   }
 
   getRoomsTable(roomsArr){
+    const { classes } = this.props;
     const roomName = this.props.translate("roomName");
     const size = this.props.translate("size");
     const visAud = this.props.translate("visAud");
@@ -189,19 +194,19 @@ class Search extends Component {
     return <Table size="small" aria-label="a dense table" className="search-results-rooms-table">
         <TableHead>
           <TableRow>
-            <TableCell align="center">{roomName}</TableCell>
-            <TableCell align="center">{size}</TableCell>
-            <TableCell align="center">{visAud}</TableCell>
-            <TableCell align="center">{placement}</TableCell>
+            <TableCell align="center" className={classes.tableTextCell}>{roomName}</TableCell>
+            <TableCell align="center" className={classes.tableTextCell}>{size}</TableCell>
+            <TableCell align="center" className={classes.tableTextCell}>{visAud}</TableCell>
+            <TableCell align="center" className={classes.tableTextCell}>{placement}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {roomsArr.map((room, key) => (
             <TableRow key={key}>
-              <TableCell align="center">{room.name}</TableCell>
-              <TableCell align="center">{this.getSizeIcon(room.size)}</TableCell>
-              <TableCell align="center">{this.getVisAudIcon(room.visAudScore)}</TableCell>
-              <TableCell align="center">{this.getPlacementCell(room)}</TableCell>
+              <TableCell align="center" className={classes.tableTextCell}>{room.name}</TableCell>
+              <TableCell align="center" className={classes.tableTextCell}>{this.getSizeIcon(room.size)}</TableCell>
+              <TableCell align="center" className={classes.tableTextCell}>{this.getVisAudIcon(room.visAudScore)}</TableCell>
+              <TableCell align="center" className={classes.tableTextCell}>{this.getPlacementCell(room)}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -240,7 +245,7 @@ class Search extends Component {
         <LoadingOverlay
           active={this.state.isLoadingResults}
           spinner
-          text='Loading your content...'
+          text={null}
           style={{
             maxWidth: "fit-content",
             margin: "auto"
@@ -249,25 +254,25 @@ class Search extends Component {
           <div className="search-results-container">
             <Table size="small" aria-label="a dense table">
               <TableHead>
-                <TableRow>
+                <TableRow style={{background: "#c0caff"}}>
                   <TableCell rowSpan={2}></TableCell>
-                  <TableCell align="center" rowSpan={2}>{shulName}</TableCell>
-                  <TableCell align="center" rowSpan={2}>{nussach}</TableCell>
-                  <TableCell align="center" rowSpan={2}>{denomination}</TableCell>
-                  <TableCell align="center" rowSpan={2}>{city}</TableCell>
+                  <TableCell align="center" rowSpan={2} className={classes.tableTextCell}>{shulName}</TableCell>
+                  <TableCell align="center" rowSpan={2} className={classes.tableTextCell}>{nussach}</TableCell>
+                  <TableCell align="center" rowSpan={2} className={classes.tableTextCell}>{denomination}</TableCell>
+                  <TableCell align="center" rowSpan={2} className={classes.tableTextCell}>{city}</TableCell>
                   <TableCell align="center" rowSpan={2}>{femaleLeadership}</TableCell>
                   <TableCell align="center" colSpan={2}>{kaddish}</TableCell>
                   <TableCell align="center" rowSpan={2}>{childcare}</TableCell>
                 </TableRow>
-                <TableRow>
+                <TableRow style={{background: "#c0caff"}}>
                   <TableCell align="center">{withMen}</TableCell>
                   <TableCell align="center">{alone}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {this.state.shuls.map((shul, key) => (<>
-                  <TableRow key={key}>
-                    <TableCell align="center" rowSpan={2}>
+                  <TableRow key={key} style={{background: "#dfe3f9"}}>
+                    <TableCell align="center" rowSpan={2} style={{background: "white"}}>
                       <IconButton onClick={(e) => {this.deleteShul(shul.id)}}
                         classes={{
                           root: "delete-shul-button-root"
@@ -276,17 +281,19 @@ class Search extends Component {
                         <i className="fas fa-trash delete-shul-button-icon"></i>
                       </IconButton>
                     </TableCell>
-                    <TableCell align="center">{shul.name}</TableCell>
-                    <TableCell align="center">{shul.nussach}</TableCell>
-                    <TableCell align="center">{shul.denom}</TableCell>
-                    <TableCell align="center">{shul.city}</TableCell>
+                    <TableCell align="center" className={classes.tableTextCell}>{shul.name}</TableCell>
+                    <TableCell align="center" className={classes.tableTextCell}>{shul.nussach}</TableCell>
+                    <TableCell align="center" className={classes.tableTextCell}>{shul.denom}</TableCell>
+                    <TableCell align="center" className={classes.tableTextCell}>
+                      {shul.city}, {shul.region}, {shul.country}
+                    </TableCell>
                     <TableCell align="center">{this.getIconsFromNumbers(shul.femLead)}</TableCell>
                     <TableCell align="center">{this.getIconsFromNumbers(shul.kaddishWithMen)}</TableCell>
                     <TableCell align="center">{this.getIconsFromNumbers(shul.kaddishAlone)}</TableCell>
                     <TableCell align="center">{this.getIconsFromNumbers(shul.childcare)}</TableCell>
                   </TableRow>
-                  <TableRow key={key*2} style={{background: "#dfe3f9"}}>
-                    <TableCell align="center" colSpan={8}>{this.getRoomsTable(shul.rooms)}</TableCell>
+                  <TableRow key={key*2} style={{background: "white"}}>
+                    <TableCell align="center" colSpan={8} className="results-rooms-cell">{this.getRoomsTable(shul.rooms)}</TableCell>
                   </TableRow>
                 </>))}
               </TableBody>

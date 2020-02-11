@@ -16,14 +16,20 @@
 }
 
 .search-results-rooms-table td, .search-results-rooms-table th{
-  border-color: #cfcfcf !important;
+  background: #f0f0f0 !important;
 }
 
 .search-results-placement-table td, .search-results-placement-table th{
-  border-color: #dfe3f9 !important;
+  background: #dddddd !important;
 }
 
 .search-results-container{
   max-width: 100%;
   overflow: auto;
+}
+
+.results-rooms-cell{
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-bottom: 0 !important;
 }
