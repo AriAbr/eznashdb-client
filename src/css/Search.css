@@ -16,20 +16,46 @@
 }
 
 .search-results-rooms-table td, .search-results-rooms-table th{
-  background: #f0f0f0 !important;
+  background: #fcfcfc !important;
 }
 
 .search-results-placement-table td, .search-results-placement-table th{
   background: #dddddd !important;
+  background: #f0f0f0 !important;
 }
 
 .search-results-container{
-  max-width: 100%;
+  max-width: fit-content;
+  margin: auto;
   overflow: auto;
+  max-height: calc(100vh - 217px);
 }
 
 .results-rooms-cell{
   padding-left: 0 !important;
   padding-right: 0 !important;
   padding-bottom: 0 !important;
+  padding-top: 3px !important;
+}
+
+.results-table{
+  margin: auto;
+  table-layout: fixed;
+  width: 970px !important;
+}
+
+.results-table th{
+  background-color: #c0caff;
+}
+
+.results-header-floor-cell{
+  border-bottom: 2px solid #b2b2b2 !important;
+}
+
+.results-table-header-subcell{
+  top: 36px !important;
+}
+
+.results-header-super-cell{
+  border-bottom: 1px solid rgb(224, 224, 224) !important;
 }

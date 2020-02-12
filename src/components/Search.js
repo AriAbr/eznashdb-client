@@ -8,7 +8,11 @@ const request = require("request");
 
 const styles = theme => ({
   tableTextCell: {
-    textAlign: "left"
+    textAlign: "left",
+  },
+  roomTableCell: {
+    textAlign: "left",
+    verticalAlign: "top"
   }
 });
 
@@ -113,7 +117,7 @@ class Search extends Component {
     const sameFloorTR = this.props.translate("sameFloorShort");
     const balconyTR = this.props.translate("balcony");
     const noWomSecTR = this.props.translate("noWomensSection");
-    const centeredTR = this.props.translate("centered");
+    const centeredTR = this.props.translate("centeredMechitza");
     const sideTR = this.props.translate("side");
     const backTR = this.props.translate("back");
     const elevatedTR = this.props.translate("elevated");
@@ -161,19 +165,19 @@ class Search extends Component {
         <TableBody>
           {sameFloor.length > 0 && 
             <TableRow>
-              <TableCell align="center" className={classes.tableTextCell}>{sameFloorTR}</TableCell>
+              <TableCell align="center" style={{width: '80px'}} className={classes.tableTextCell}>{sameFloorTR}</TableCell>
               <TableCell align="center" className={classes.tableTextCell}>{sameFloor.join(", ")}</TableCell>
             </TableRow>
           }
           {balcony.length > 0 && 
             <TableRow>
-              <TableCell align="center" className={classes.tableTextCell}>{balconyTR}</TableCell>
+              <TableCell align="center" style={{width: '80px'}} className={classes.tableTextCell}>{balconyTR}</TableCell>
               <TableCell align="center" className={classes.tableTextCell}>{balcony.join(", ")}</TableCell>
             </TableRow>
           }
           {noWomSec.length > 0 && 
             <TableRow>
-              <TableCell align="center" className={classes.tableTextCell}>{noWomSecTR}</TableCell>
+              <TableCell align="center" style={{width: '80px'}} className={classes.tableTextCell}>{noWomSecTR}</TableCell>
               <TableCell align="center" className={classes.tableTextCell}>{noWomSec.join(", ")}</TableCell>
             </TableRow>
           }
@@ -194,19 +198,19 @@ class Search extends Component {
     return <Table size="small" aria-label="a dense table" className="search-results-rooms-table">
         <TableHead>
           <TableRow>
-            <TableCell align="center" className={classes.tableTextCell}>{roomName}</TableCell>
-            <TableCell align="center" className={classes.tableTextCell}>{size}</TableCell>
-            <TableCell align="center" className={classes.tableTextCell}>{visAud}</TableCell>
+            <TableCell align="center" style={{whiteSpace: 'nowrap', width: '100px'}} className={classes.tableTextCell}>{roomName}</TableCell>
+            <TableCell align="center" style={{maxWidth: '15px', width: '15px'}} className={classes.tableTextCell}>{size}</TableCell>
+            <TableCell align="center" style={{width: '80px'}} className={classes.tableTextCell}>{visAud}</TableCell>
             <TableCell align="center" className={classes.tableTextCell}>{placement}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {roomsArr.map((room, key) => (
             <TableRow key={key}>
-              <TableCell align="center" className={classes.tableTextCell}>{room.name}</TableCell>
-              <TableCell align="center" className={classes.tableTextCell}>{this.getSizeIcon(room.size)}</TableCell>
-              <TableCell align="center" className={classes.tableTextCell}>{this.getVisAudIcon(room.visAudScore)}</TableCell>
-              <TableCell align="center" className={classes.tableTextCell}>{this.getPlacementCell(room)}</TableCell>
+              <TableCell align="center" className={classes.roomTableCell}>{room.name}</TableCell>
+              <TableCell align="center" className={classes.roomTableCell}>{this.getSizeIcon(room.size)}</TableCell>
+              <TableCell align="center" className={classes.roomTableCell}>{this.getVisAudIcon(room.visAudScore)}</TableCell>
+              <TableCell align="center" className={classes.roomTableCell} style={{padding: '5px 0 5px 16px'}} >{this.getPlacementCell(room)}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -252,27 +256,27 @@ class Search extends Component {
           }}
         >
           <div className="search-results-container">
-            <Table size="small" aria-label="a dense table">
+            <Table stickyHeader size="small" aria-label="a dense table" className="results-table">
               <TableHead>
                 <TableRow style={{background: "#c0caff"}}>
-                  <TableCell rowSpan={2}></TableCell>
-                  <TableCell align="center" rowSpan={2} className={classes.tableTextCell}>{shulName}</TableCell>
-                  <TableCell align="center" rowSpan={2} className={classes.tableTextCell}>{nussach}</TableCell>
-                  <TableCell align="center" rowSpan={2} className={classes.tableTextCell}>{denomination}</TableCell>
-                  <TableCell align="center" rowSpan={2} className={classes.tableTextCell}>{city}</TableCell>
-                  <TableCell align="center" rowSpan={2}>{femaleLeadership}</TableCell>
-                  <TableCell align="center" colSpan={2}>{kaddish}</TableCell>
-                  <TableCell align="center" rowSpan={2}>{childcare}</TableCell>
+                  <TableCell rowSpan={2} style={{width: '15px', minWidth: '15px'}}className="results-header-floor-cell"></TableCell>
+                  <TableCell align="center" rowSpan={2} style={{width: '115px', minWidth: '115px', maxWidth: '115px'}} className={classes.tableTextCell + " results-header-floor-cell"}>{shulName}</TableCell>
+                  <TableCell align="center" rowSpan={2} style={{width: '70px', minWidth: '70px'}} className={classes.tableTextCell + " results-header-floor-cell"}>{nussach}</TableCell>
+                  <TableCell align="center" rowSpan={2} style={{width: '95px'}} className={classes.tableTextCell + " results-header-floor-cell"}>{denomination}</TableCell>
+                  <TableCell align="center" rowSpan={2} style={{width: '100px', minWidth: '100px'}} className={classes.tableTextCell + " results-header-floor-cell"}>{city}</TableCell>
+                  <TableCell align="center" rowSpan={2} className="results-header-floor-cell" style={{width: '60px'}}>{femaleLeadership}</TableCell>
+                  <TableCell align="center" colSpan={2} className="results-header-super-cell">{kaddish}</TableCell>
+                  <TableCell align="center" rowSpan={2} className="results-header-floor-cell" style={{width: '65px'}}>{childcare}</TableCell>
                 </TableRow>
                 <TableRow style={{background: "#c0caff"}}>
-                  <TableCell align="center">{withMen}</TableCell>
-                  <TableCell align="center">{alone}</TableCell>
+                  <TableCell className="results-table-header-subcell results-header-floor-cell" align="center" style={{width: '65px', whiteSpace: 'nowrap'}}>{withMen}</TableCell>
+                  <TableCell className="results-table-header-subcell results-header-floor-cell" align="center"  style={{width: '40px'}}>{alone}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {this.state.shuls.map((shul, key) => (<>
                   <TableRow key={key} style={{background: "#dfe3f9"}}>
-                    <TableCell align="center" rowSpan={2} style={{background: "white"}}>
+                    <TableCell align="center" rowSpan={2} style={{background: "white", maxWidth: '20px', width: '20px'}}>
                       <IconButton onClick={(e) => {this.deleteShul(shul.id)}}
                         classes={{
                           root: "delete-shul-button-root"
