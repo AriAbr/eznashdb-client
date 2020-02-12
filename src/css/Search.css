@@ -29,6 +29,7 @@
   margin: auto;
   overflow: auto;
   max-height: calc(100vh - 217px);
+  padding: .5px;
 }
 
 .results-rooms-cell{
