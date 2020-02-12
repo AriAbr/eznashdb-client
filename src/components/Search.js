@@ -246,16 +246,13 @@ class Search extends Component {
         <Typography variant="h2" component="h2" gutterBottom className={classes.mainHeader}>
           {search}
         </Typography>
-        <LoadingOverlay
-          active={this.state.isLoadingResults}
-          spinner
-          text={null}
-          style={{
-            maxWidth: "fit-content",
-            margin: "auto"
-          }}
-        >
-          <div className="search-results-container">
+        <div className="search-results-container">
+          <LoadingOverlay
+            active={this.state.isLoadingResults}
+            spinner
+            text={null}
+            style={{ }}
+          >
             <Table stickyHeader size="small" aria-label="a dense table" className="results-table">
               <TableHead>
                 <TableRow style={{background: "#c0caff"}}>
@@ -302,8 +299,9 @@ class Search extends Component {
                 </>))}
               </TableBody>
             </Table>
-          </div>
-        </LoadingOverlay>
+          </LoadingOverlay>
+        </div>
+
       </div>
     );
   }
