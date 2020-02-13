@@ -3,7 +3,8 @@ import { withLocalize } from "react-localize-redux";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from 'prop-types';
 import LoadingOverlay from 'react-loading-overlay';
-import { Typography, IconButton, Table, TableBody, TableCell, TableHead, TableRow, } from '@material-ui/core';
+import { Typography, IconButton, Table, TableBody, TableCell, TableHead, TableRow, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, 
+  Button } from '@material-ui/core';
 const request = require("request");
 
 const styles = theme => ({
@@ -12,12 +13,13 @@ const styles = theme => ({
   },
   roomTableCell: {
     textAlign: "left",
-    verticalAlign: "top"
+    verticalAlign: "top",
+    paddingTop: '8px',
   },
   placementCell:{
     textAlign: "left",
     verticalAlign: "top",
-    padding: "5px 0px 5px 16px !important"
+    padding: "2px 0px 2px 16px !important"
   },
   centeredCell: {
     paddingRight: "16px !important",
@@ -30,8 +32,12 @@ class Search extends Component {
     super(props);
     this.state = {
       shuls: [],
-      isLoadingResults: false
+      isLoadingResults: false,
+      confirmDeleteIsOpen: false,
+      shulToDelete: null,
     };
+
+    this.closeConfirmDelete = this.closeConfirmDelete.bind(this)
   }
 
 
@@ -58,17 +64,34 @@ class Search extends Component {
     })
   }
 
-  deleteShul(shulId){
-    const options = {
-      url: `${process.env.REACT_APP_EZNASHDB_API}shuls/destroy`,
-      form: {
-        id: shulId,
-      }
-    };
-
-    request.post(options, (err, res, body) => {
-      this.getAllShuls()
+  openConfirmDelete(shul){
+    this.setState({
+      shulToDelete: shul,
+      confirmDeleteIsOpen: true
     })
+  }
+
+  closeConfirmDelete(){
+    this.setState({
+      shulToDelete: null,
+      confirmDeleteIsOpen: false
+    })
+  }
+
+  deleteShul(shul){
+    if(shul){
+      const options = {
+        url: `${process.env.REACT_APP_EZNASHDB_API}shuls/destroy`,
+        form: {
+          id: shul.id,
+        }
+      };
+  
+      request.post(options, (err, res, body) => {
+        this.getAllShuls();
+      })
+    }
+    this.closeConfirmDelete();
   }
 
   searchOnGoogleMaps(shul){
@@ -266,6 +289,10 @@ class Search extends Component {
     const deleteTR = this.props.translate("delete");
     const editTR = this.props.translate("edit");
     const searchGoogleMaps = this.props.translate("searchGoogleMaps");
+    const areYouSure = this.props.translate("areYouSure");
+    const recordWillBeRemoved = this.props.translate("recordWillBeRemoved");
+    const cancel = this.props.translate("cancel");
+    const confirm = this.props.translate("confirm");
     
     return (
       <div>
@@ -285,9 +312,9 @@ class Search extends Component {
                 <TableRow style={{background: "#c0caff"}}>
                   <TableCell rowSpan={2} style={{width: '15px', minWidth: '15px'}}className="results-header-floor-cell"></TableCell>
                   <TableCell align="center" rowSpan={2} style={{width: '115px', minWidth: '115px', maxWidth: '115px'}} className={classes.tableTextCell + " results-header-floor-cell"}>{shulName}</TableCell>
+                  <TableCell align="center" rowSpan={2} style={{width: '100px', minWidth: '100px'}} className={classes.tableTextCell + " results-header-floor-cell"}>{city}</TableCell>
                   <TableCell align="center" rowSpan={2} style={{width: '70px', minWidth: '70px'}} className={classes.tableTextCell + " results-header-floor-cell"}>{nussach}</TableCell>
                   <TableCell align="center" rowSpan={2} style={{width: '95px'}} className={classes.tableTextCell + " results-header-floor-cell"}>{denomination}</TableCell>
-                  <TableCell align="center" rowSpan={2} style={{width: '100px', minWidth: '100px'}} className={classes.tableTextCell + " results-header-floor-cell"}>{city}</TableCell>
                   <TableCell align="center" rowSpan={2} className={classes.centeredCell + " results-header-floor-cell"} style={{width: '76px'}}>{femaleLeadership}</TableCell>
                   <TableCell align="center" colSpan={2} className={classes.centeredCell + " results-header-super-cell"}style={{width: '140px', padding: '2px 0 0 0'}}>{kaddish}</TableCell>
                   <TableCell align="center" rowSpan={2} className={classes.centeredCell + " results-header-floor-cell"} style={{width: '65px'}}>{childcare}</TableCell>
@@ -318,7 +345,7 @@ class Search extends Component {
                       >
                         <i className="fas fa-edit shul-action-button-icon"></i>
                       </IconButton>
-                      <IconButton onClick={(e) => {this.deleteShul(shul.id)}}
+                      <IconButton onClick={(e) => {this.openConfirmDelete(shul)}}
                         classes={{
                           root: "shul-action-button-root"
                         }}
@@ -328,11 +355,11 @@ class Search extends Component {
                       </IconButton>
                     </TableCell>
                     <TableCell align="center" className={classes.tableTextCell}>{shul.name}</TableCell>
-                    <TableCell align="center" className={classes.tableTextCell}>{shul.nussach}</TableCell>
-                    <TableCell align="center" className={classes.tableTextCell}>{shul.denom}</TableCell>
                     <TableCell align="center" className={classes.tableTextCell}>
                       {shul.city}, {shul.region}, {shul.country}
                     </TableCell>
+                    <TableCell align="center" className={classes.tableTextCell}>{shul.nussach}</TableCell>
+                    <TableCell align="center" className={classes.tableTextCell}>{shul.denom}</TableCell>
                     <TableCell align="center" className={classes.centeredCell}>{this.getIconsFromNumbers(shul.femLead)}</TableCell>
                     <TableCell align="center" className={classes.centeredCell}>{this.getIconsFromNumbers(shul.kaddishWithMen)}</TableCell>
                     <TableCell align="center" className={classes.centeredCell}>{this.getIconsFromNumbers(shul.kaddishAlone)}</TableCell>
@@ -346,6 +373,29 @@ class Search extends Component {
             </Table>
           </LoadingOverlay>
         </div>
+
+        <Dialog
+          open={this.state.confirmDeleteIsOpen}
+          onClose={this.closeConfirmDelete}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{areYouSure}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              {recordWillBeRemoved} <br /><br />
+              {this.state.shulToDelete && `${this.state.shulToDelete.name}, ${this.state.shulToDelete.city}, ${this.state.shulToDelete.region}, ${this.state.shulToDelete.country}`}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.closeConfirmDelete} color="primary">
+              {cancel}
+            </Button>
+            <Button onClick={() => this.deleteShul(this.state.shulToDelete)} color="primary" autoFocus>
+              {confirm}
+            </Button>
+          </DialogActions>
+        </Dialog>
 
       </div>
     );

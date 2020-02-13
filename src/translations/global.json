@@ -67,8 +67,10 @@
   "areYouSure": ["Are you sure?", "האם את/ה בטוח/ה?"],
   "willBeDeleted": ["will be deleted.", "יימחק."],
   "deleteRoom": ["Delete Room", "מחק/י חדר"],
-  "cancel": ["Cancel", "בטל/י"],
+  "cancel": ["Cancel", "ביטול"],
+  "confirm": ["Confirm", "אישור"],
   "select": ["Select", "בחר/י"],
   "edit": ["Edit", "ערוך/י"],
-  "searchGoogleMaps": ["Search on Google Maps", "חפש/י בGoogle Maps"]
+  "searchGoogleMaps": ["Search on Google Maps", "חפש/י בGoogle Maps"],
+  "recordWillBeRemoved": ["The following record will be removed from the database. Once completed, this cannot be undone:", "הרשומה הבאה תוסר ממסד הנתונים. לאחר השלמתו, לא ניתן לבטל פעולה זו:"]
 }
