@@ -264,6 +264,7 @@ class Search extends Component {
     const withMen = this.props.translate("withMen");
     const alone = this.props.translate("alone");
     const deleteTR = this.props.translate("delete");
+    const editTR = this.props.translate("edit");
     const searchGoogleMaps = this.props.translate("searchGoogleMaps");
     
     return (
@@ -307,6 +308,15 @@ class Search extends Component {
                         title={searchGoogleMaps}
                       >
                         <i className="fas fa-map-marker-alt shul-action-button-icon"></i>
+                      </IconButton>
+                      <IconButton onClick={(e) => {this.editShul(shul)}}
+                        classes={{
+                          root: "shul-action-button-root"
+                        }}
+                        title={editTR}
+                        disabled={true}
+                      >
+                        <i className="fas fa-edit shul-action-button-icon"></i>
                       </IconButton>
                       <IconButton onClick={(e) => {this.deleteShul(shul.id)}}
                         classes={{

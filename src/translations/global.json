@@ -69,5 +69,6 @@
   "deleteRoom": ["Delete Room", "מחק/י חדר"],
   "cancel": ["Cancel", "בטל/י"],
   "select": ["Select", "בחר/י"],
+  "edit": ["Edit", "ערוך/י"],
   "searchGoogleMaps": ["Search on Google Maps", "חפש/י בGoogle Maps"]
 }
