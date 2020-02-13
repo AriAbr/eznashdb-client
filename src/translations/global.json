@@ -68,5 +68,6 @@
   "willBeDeleted": ["will be deleted.", "יימחק."],
   "deleteRoom": ["Delete Room", "מחק/י חדר"],
   "cancel": ["Cancel", "בטל/י"],
-  "select": ["Select", "בחר/י"]
+  "select": ["Select", "בחר/י"],
+  "searchGoogleMaps": ["Search on Google Maps", "חפש/י בGoogle Maps"]
 }

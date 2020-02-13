@@ -7,12 +7,14 @@
   padding: 5px;
 }
 
-.delete-shul-button-icon{
+.shul-action-button-icon{
   font-size: 16px;
 }
 
-.delete-shul-button-root{
-  padding: 5px !important
+.shul-action-button-root{
+  padding: 5px !important;
+  width: 26px !important;
+  height: 26px !important;
 }
 
 .search-results-rooms-table td, .search-results-rooms-table th{
@@ -59,4 +61,13 @@
 
 .results-header-super-cell{
   border-bottom: 1px solid rgb(224, 224, 224) !important;
+}
+
+.shul-actions-cell{
+  background: white !important;
+  max-width: 20px !important;
+  width: 20px !important;
+  padding: 5px !important;
+  padding-top: 15px !important;
+  vertical-align: top !important;
 }

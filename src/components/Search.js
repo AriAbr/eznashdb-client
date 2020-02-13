@@ -3,7 +3,7 @@ import { withLocalize } from "react-localize-redux";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from 'prop-types';
 import LoadingOverlay from 'react-loading-overlay';
-import { Typography, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, } from '@material-ui/core';
+import { Typography, IconButton, Table, TableBody, TableCell, TableHead, TableRow, } from '@material-ui/core';
 const request = require("request");
 
 const styles = theme => ({
@@ -67,6 +67,28 @@ class Search extends Component {
     })
   }
 
+  searchOnGoogleMaps(shul){
+    var url = "https://www.google.com/maps/search/?api=1&query=";
+    var searchParams = `${shul.name}`
+    if(shul.city !== "N/A"){
+      searchParams += `, ${shul.city}`
+    }
+    if(shul.region !== "N/A"){
+      searchParams += `, ${shul.region}`
+    }
+    searchParams += `, ${shul.country}`
+    var mapObj = { // replacing chracters for url
+       " ":"+",
+       ",":"%2C",
+    };
+    searchParams = searchParams.replace(/ |,/gi, function(matched){
+      return mapObj[matched];
+    });
+
+    url += searchParams;
+    window.open(url, '_blank');
+  }
+
   getIconsFromNumbers(num){
     var icon = num;
 
@@ -108,9 +130,9 @@ class Search extends Component {
     } else {
       for(let i = 0; i < 5; i++){
         if(i<num){
-          icon.push(<i className="fas fa-star"></i>)
+          icon.push(<i key={i} className="fas fa-star"></i>)
         } else {
-          icon.push(<i className="far fa-star"></i>)
+          icon.push(<i key={i} className="far fa-star"></i>)
         }
       }
     }
@@ -164,9 +186,7 @@ class Search extends Component {
       noWomSec.push(mixedSeatingTR)
     }
 
-    var cellContents = <>
-
-      <Table size="small" aria-label="a dense table" className="search-results-placement-table">
+    var cellContents = <Table size="small" aria-label="a dense table" className="search-results-placement-table">
         <TableBody>
           {sameFloor.length > 0 && 
             <TableRow>
@@ -188,7 +208,7 @@ class Search extends Component {
           }
         </TableBody>
       </Table>
-    </>;
+    ;
 
     return cellContents;
   }
@@ -230,21 +250,18 @@ class Search extends Component {
     const { classes } = this.props;
 
     const search = this.props.translate("search");
-    const country = this.props.translate("country");
-    const stateOrRegion = this.props.translate("stateOrRegion");
     const city = this.props.translate("city");
     const shulName = this.props.translate("shulName");
     const nussach = this.props.translate("nussach");
     const denomination = this.props.translate("denomination");
     const femaleLeadership = this.props.translate("femaleLeadership");
-    const kaddishWithMen = this.props.translate("kaddishWithMen");
-    const kaddishAlone = this.props.translate("kaddishAlone");
     const childcare = this.props.translate("childcare");
     const kaddish = this.props.translate("kaddish");
     const withMen = this.props.translate("withMen");
     const alone = this.props.translate("alone");
-    const rooms = this.props.translate("rooms");
-
+    const deleteTR = this.props.translate("delete");
+    const searchGoogleMaps = this.props.translate("searchGoogleMaps");
+    
     return (
       <div>
 
@@ -276,15 +293,24 @@ class Search extends Component {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {this.state.shuls.map((shul, key) => (<>
+                {this.state.shuls.map((shul, key) => ([
                   <TableRow key={key} style={{background: "#dfe3f9"}}>
-                    <TableCell align="center" rowSpan={2} style={{background: "white", maxWidth: '20px', width: '20px'}}>
+                    <TableCell align="center" rowSpan={2} className="shul-actions-cell">
+                      <IconButton onClick={(e) => {this.searchOnGoogleMaps(shul)}}
+                        classes={{
+                          root: "shul-action-button-root"
+                        }}
+                        title={searchGoogleMaps}
+                      >
+                        <i className="fas fa-map-marker-alt shul-action-button-icon"></i>
+                      </IconButton>
                       <IconButton onClick={(e) => {this.deleteShul(shul.id)}}
                         classes={{
-                          root: "delete-shul-button-root"
+                          root: "shul-action-button-root"
                         }}
+                        title={deleteTR}
                       >
-                        <i className="fas fa-trash delete-shul-button-icon"></i>
+                        <i className="fas fa-trash shul-action-button-icon"></i>
                       </IconButton>
                     </TableCell>
                     <TableCell align="center" className={classes.tableTextCell}>{shul.name}</TableCell>
@@ -297,11 +323,11 @@ class Search extends Component {
                     <TableCell align="center">{this.getIconsFromNumbers(shul.kaddishWithMen)}</TableCell>
                     <TableCell align="center">{this.getIconsFromNumbers(shul.kaddishAlone)}</TableCell>
                     <TableCell align="center">{this.getIconsFromNumbers(shul.childcare)}</TableCell>
-                  </TableRow>
-                  <TableRow key={key*2} style={{background: "white"}}>
+                  </TableRow>,
+                  <TableRow key={this.state.shuls.length + key} style={{background: "white"}}>
                     <TableCell align="center" colSpan={8} className="results-rooms-cell">{this.getRoomsTable(shul.rooms)}</TableCell>
                   </TableRow>
-                </>))}
+                ]))}
               </TableBody>
             </Table>
           </LoadingOverlay>

@@ -598,25 +598,23 @@ class AddShul extends Component {
     var url = `${process.env.REACT_APP_EZNASHDB_API}shuls/create`
 
     var rooms = [];
-    this.state.roomNames.map((roomName, key) => {
+    for(let i = 0; i < this.state.roomNames.length; i++){
       var room = {
-        name: this.state.roomNames[key],
-        size: this.state.roomSizes[key],
-        isCentered: this.state.isCenteredVals[key],
-        isSameFloorSide: this.state.isSameFloorSideVals[key],
-        isSameFloorBack: this.state.isSameFloorBackVals[key],
-        isSameFloorElevated: this.state.isSameFloorElevatedVals[key],
-        isSameFloorLevel: this.state.isSameFloorLevelVals[key],
-        isBalconySide: this.state.isBalconySideVals[key],
-        isBalconyBack: this.state.isBalconyBackVals[key],
-        isOnlyMen: this.state.isOnlyMenVals[key],
-        isMixedSeating: this.state.isMixedSeatingVals[key],
-        visAudScore: this.state.visAudVals[key],
+        name: this.state.roomNames[i],
+        size: this.state.roomSizes[i],
+        isCentered: this.state.isCenteredVals[i],
+        isSameFloorSide: this.state.isSameFloorSideVals[i],
+        isSameFloorBack: this.state.isSameFloorBackVals[i],
+        isSameFloorElevated: this.state.isSameFloorElevatedVals[i],
+        isSameFloorLevel: this.state.isSameFloorLevelVals[i],
+        isBalconySide: this.state.isBalconySideVals[i],
+        isBalconyBack: this.state.isBalconyBackVals[i],
+        isOnlyMen: this.state.isOnlyMenVals[i],
+        isMixedSeating: this.state.isMixedSeatingVals[i],
+        visAudScore: this.state.visAudVals[i],
       }
       rooms.push(room)
-    })
-
-
+    }
 
     const options = {
       url: url,
