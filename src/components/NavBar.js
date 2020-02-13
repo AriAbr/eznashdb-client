@@ -17,14 +17,15 @@ const styles = theme => ({
     marginLeft: theme.spacing(2),
   },
   navButton: {
-    fontWeight: 500,
+    fontWeight: 400,
+    minWidth: 0
   },
   navButtonHeb: {
     fontSize: '16px',
     lineHeight: '24.5px',
   },
   drawerLink: {
-    fontWeight: 500,
+    fontWeight: 400,
     textDecoration: 'none !important',
     color: '#757575',
     fontSize: '18px',
@@ -46,7 +47,7 @@ const styles = theme => ({
     textDecoration: "none"
   },
   drawer: {
-    width: '200px'
+    width: '200px',
   }
 });
 
@@ -85,15 +86,15 @@ class NavBar extends Component {
     return (
       <div className={classes.root}>
         <AppBar position="fixed">
-          <Toolbar>
-            <Typography variant="h6" className={classes.title}>
+          <Toolbar variant="dense">
+            <Typography variant="body1" className={classes.title}>
               <Link to={`/`} className={classes.titleLink} onClick={() => {this.onDrawerSelection()}}>
                 <Translate id="appTitle" />
               </Link>
             </Typography>
 
             <div className="navbar-controls">
-              <LanguageControls />
+              <LanguageControls fontSize={14}/>
 
               <Link to={`/`} className="navbar-link">
                 <Button color="inherit" className={navButtonClassName}>{home}</Button>
@@ -158,7 +159,7 @@ class NavBar extends Component {
           </ListItem>
           <Divider />
           <ListItem style={{display: 'block'}}>
-            <LanguageControls style={{margin: "auto", color: "black !important"}} parent='drawer' />
+            <LanguageControls style={{margin: "auto", color: "black !important"}} parent='drawer' fontSize={18} />
           </ListItem>
 
         </Drawer>

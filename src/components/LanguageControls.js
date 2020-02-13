@@ -20,7 +20,10 @@ const styles = theme => ({
   select: {
     color: 'white',
     fontFamily: 'inherit',
-    fontWeight: 500,
+    fontWeight: 400,
+    marginTop: '2px',
+    paddingTop: '2px',
+    paddingBottom: '4px',
   },
   drawerSelect: {
     color: '#757575 !important'
@@ -124,6 +127,7 @@ class LanguageControls extends Component {
             classes={{
               select: selectClassName,
             }}
+            style={{fontSize: `${this.props.fontSize}px`}}
           >
             <MenuItem value={"en"} >
               <img src="/usa-flag.png" alt="USA flag" className="language-flag-icon" />&nbsp;EN
