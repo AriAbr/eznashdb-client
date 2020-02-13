@@ -124,7 +124,7 @@ class NavBar extends Component {
         </AppBar>
 
         <Drawer
-          anchor='right'
+          anchor='left'
           open={this.state.drawerIsOpen}
           variant='temporary'
           onClose={(e) => {this.toggleDrawer(e, false)}}
