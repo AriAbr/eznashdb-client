@@ -13,6 +13,11 @@ const styles = theme => ({
   roomTableCell: {
     textAlign: "left",
     verticalAlign: "top"
+  },
+  placementCell:{
+    textAlign: "left",
+    verticalAlign: "top",
+    padding: "5px 0px 5px 16px !important"
   }
 });
 
@@ -210,7 +215,7 @@ class Search extends Component {
               <TableCell align="center" className={classes.roomTableCell}>{room.name}</TableCell>
               <TableCell align="center" className={classes.roomTableCell}>{this.getSizeIcon(room.size)}</TableCell>
               <TableCell align="center" className={classes.roomTableCell}>{this.getVisAudIcon(room.visAudScore)}</TableCell>
-              <TableCell align="center" className={classes.roomTableCell} style={{padding: '5px 0 5px 16px'}} >{this.getPlacementCell(room)}</TableCell>
+              <TableCell align="center" className={classes.placementCell}>{this.getPlacementCell(room)}</TableCell>
             </TableRow>
           ))}
         </TableBody>
