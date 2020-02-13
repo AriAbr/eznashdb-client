@@ -30,7 +30,7 @@
   max-width: fit-content;
   margin: auto;
   overflow: auto;
-  max-height: calc(100vh - 217px);
+  max-height: calc(100vh - 218px);
   padding: .5px;
 }
 
@@ -43,8 +43,9 @@
 
 .results-table{
   margin: auto;
-  table-layout: fixed;
-  width: 970px !important;
+  width: 980px !important;
+  max-width: 980px !important;
+  min-width: 980px !important;
 }
 
 .results-table th{
@@ -56,11 +57,15 @@
 }
 
 .results-table-header-subcell{
-  top: 36px !important;
+  top: 29px !important;
+  padding-top: 0px !important;
+  padding-bottom: 2px !important;
 }
 
 .results-header-super-cell{
   border-bottom: 1px solid rgb(224, 224, 224) !important;
+  padding-top: 2px !important;
+  padding-bottom: 0px !important;
 }
 
 .shul-actions-cell{

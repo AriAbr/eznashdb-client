@@ -18,6 +18,10 @@ const styles = theme => ({
     textAlign: "left",
     verticalAlign: "top",
     padding: "5px 0px 5px 16px !important"
+  },
+  centeredCell: {
+    paddingRight: "16px !important",
+    paddingLeft: "16px !important"
   }
 });
 
@@ -283,13 +287,13 @@ class Search extends Component {
                   <TableCell align="center" rowSpan={2} style={{width: '70px', minWidth: '70px'}} className={classes.tableTextCell + " results-header-floor-cell"}>{nussach}</TableCell>
                   <TableCell align="center" rowSpan={2} style={{width: '95px'}} className={classes.tableTextCell + " results-header-floor-cell"}>{denomination}</TableCell>
                   <TableCell align="center" rowSpan={2} style={{width: '100px', minWidth: '100px'}} className={classes.tableTextCell + " results-header-floor-cell"}>{city}</TableCell>
-                  <TableCell align="center" rowSpan={2} className="results-header-floor-cell" style={{width: '60px'}}>{femaleLeadership}</TableCell>
-                  <TableCell align="center" colSpan={2} className="results-header-super-cell">{kaddish}</TableCell>
-                  <TableCell align="center" rowSpan={2} className="results-header-floor-cell" style={{width: '65px'}}>{childcare}</TableCell>
+                  <TableCell align="center" rowSpan={2} className={classes.centeredCell + " results-header-floor-cell"} style={{width: '76px'}}>{femaleLeadership}</TableCell>
+                  <TableCell align="center" colSpan={2} className={classes.centeredCell + " results-header-super-cell"}style={{width: '140px', padding: '2px 0 0 0'}}>{kaddish}</TableCell>
+                  <TableCell align="center" rowSpan={2} className={classes.centeredCell + " results-header-floor-cell"} style={{width: '65px'}}>{childcare}</TableCell>
                 </TableRow>
                 <TableRow style={{background: "#c0caff"}}>
-                  <TableCell className="results-table-header-subcell results-header-floor-cell" align="center" style={{width: '65px', whiteSpace: 'nowrap'}}>{withMen}</TableCell>
-                  <TableCell className="results-table-header-subcell results-header-floor-cell" align="center"  style={{width: '40px'}}>{alone}</TableCell>
+                  <TableCell className={classes.centeredCell + " results-table-header-subcell results-header-floor-cell"} align="center" style={{width: '65px', whiteSpace: 'nowrap'}}>{withMen}</TableCell>
+                  <TableCell className={classes.centeredCell + " results-table-header-subcell results-header-floor-cell"} align="center"  style={{width: '40px'}}>{alone}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -319,10 +323,10 @@ class Search extends Component {
                     <TableCell align="center" className={classes.tableTextCell}>
                       {shul.city}, {shul.region}, {shul.country}
                     </TableCell>
-                    <TableCell align="center">{this.getIconsFromNumbers(shul.femLead)}</TableCell>
-                    <TableCell align="center">{this.getIconsFromNumbers(shul.kaddishWithMen)}</TableCell>
-                    <TableCell align="center">{this.getIconsFromNumbers(shul.kaddishAlone)}</TableCell>
-                    <TableCell align="center">{this.getIconsFromNumbers(shul.childcare)}</TableCell>
+                    <TableCell align="center" className={classes.centeredCell}>{this.getIconsFromNumbers(shul.femLead)}</TableCell>
+                    <TableCell align="center" className={classes.centeredCell}>{this.getIconsFromNumbers(shul.kaddishWithMen)}</TableCell>
+                    <TableCell align="center" className={classes.centeredCell}>{this.getIconsFromNumbers(shul.kaddishAlone)}</TableCell>
+                    <TableCell align="center" className={classes.centeredCell}>{this.getIconsFromNumbers(shul.childcare)}</TableCell>
                   </TableRow>,
                   <TableRow key={this.state.shuls.length + key} style={{background: "white"}}>
                     <TableCell align="center" colSpan={8} className="results-rooms-cell">{this.getRoomsTable(shul.rooms)}</TableCell>
