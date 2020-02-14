@@ -51,13 +51,13 @@ class LocalizedApp extends Component {
         ].join(','),
       },
       palette: {
-        secondary: {
-          main: "#cee9f2",
+        // secondary: {
+          // main: "#cee9f2",
           // light: "#ff4081",
           // main: "#f50057",
           // dark: "#c51162",
           // contrastText: "#fff",
-        }
+        // }
       }
     });
 

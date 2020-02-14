@@ -1288,11 +1288,11 @@ class AddShul extends Component {
 
           <div className={classes.heroButtonsContainer}>
 
-            <Button variant="contained" color="secondary" size="large" className={classes.heroButton} onClick={(e) => {this.addRoom(e)}}>
+            <Button variant="outlined" color="primary" size="large" className={classes.heroButton} onClick={(e) => {this.addRoom(e)}}>
               <i className="fas fa-plus"></i> &nbsp; {addRoom}
             </Button>
 
-            <Button variant="contained" color="secondary" size="large" className={classes.heroButton} onClick={(e) => {this.submit(e)}}>
+            <Button variant="outlined" color="primary" size="large" className={classes.heroButton} onClick={(e) => {this.submit(e)}}>
               <i className="fas fa-paper-plane"></i> &nbsp; {submit}
             </Button>
 
