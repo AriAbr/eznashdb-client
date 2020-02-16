@@ -28,6 +28,7 @@
 
 .search-results-container{
   width: fit-content;
+  max-width: 100%;
   margin: auto;
   overflow: auto;
   min-height: calc(100vh - 222px);
