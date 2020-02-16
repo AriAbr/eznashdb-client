@@ -1,0 +1,15 @@
+#mapid {
+    height: 500px;
+    width: 981px;
+    margin: auto;
+    max-width: 100%;
+    margin-bottom: 20px;
+}
+
+.mapPage .leaflet-container{
+    height: 100%;
+}
+
+.map-marker-popup-link{
+    cursor: pointer;
+}
