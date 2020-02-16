@@ -124,9 +124,11 @@ class Map extends Component {
           <LeafletMap center={mapCenter} zoom={2} worldCopyJump={true}>
             {/* for more TileLayer options see https://leaflet-extras.github.io/leaflet-providers/preview/ */}
             <TileLayer
-              url={`https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}{r}.png`}
-              attribution={`<a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia</a>`}
+              url={`https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png`}
+              attribution={`Tiles courtesy of <a href="http://openstreetmap.se/" target="_blank">OpenStreetMap Sweden</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors`}
             />
+
+
             {markers}
           </LeafletMap>
         </div>
