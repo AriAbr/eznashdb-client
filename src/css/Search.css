@@ -27,11 +27,14 @@
 }
 
 .search-results-container{
-  max-width: fit-content;
+  width: fit-content;
   margin: auto;
   overflow: auto;
-  max-height: calc(100vh - 218px);
-  padding: .5px;
+  min-height: calc(100vh - 222px);
+  background-color: white;
+  border: 1px solid #b2b2b2;
+  height: 500px;
+  padding-bottom: .5px;
 }
 
 .results-rooms-cell{
@@ -43,17 +46,17 @@
 
 .results-table{
   margin: auto;
-  width: 980px !important;
-  max-width: 980px !important;
-  min-width: 980px !important;
+  width: 981px !important;
+  max-width: 981px !important;
+  min-width: 981px !important;
 }
 
 .results-table th{
-  background-color: #c0caff;
+  background-color: #94d6ff;
 }
 
 .results-header-floor-cell{
-  border-bottom: 2px solid #b2b2b2 !important;
+  border-bottom: 1px solid #b2b2b2 !important;
 }
 
 .results-table-header-subcell{
@@ -63,7 +66,7 @@
 }
 
 .results-header-super-cell{
-  border-bottom: 1px solid rgb(224, 224, 224) !important;
+  border-bottom: 1px solid white !important;
   padding-top: 2px !important;
   padding-bottom: 0px !important;
 }
@@ -75,4 +78,8 @@
   padding: 5px !important;
   padding-top: 15px !important;
   vertical-align: top !important;
+}
+
+.search-results-container ._loading_overlay_wrapper{
+  height: 100%;
 }

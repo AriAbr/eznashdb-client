@@ -2,10 +2,9 @@ import React, {Component} from 'react';
 import { withLocalize } from "react-localize-redux";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from 'prop-types';
-import LoadingOverlay from 'react-loading-overlay';
-import { Typography, IconButton, Table, TableBody, TableCell, TableHead, TableRow, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, 
-  Button } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import SearchResultsTable from './SearchResultsTable';
+import LoadingOverlay from 'react-loading-overlay';
 
 const request = require("request");
 
@@ -60,13 +59,22 @@ class Search extends Component {
         <Typography variant="h2" component="h2" gutterBottom className={classes.mainHeader}>
           {search}
         </Typography>
-
-        <SearchResultsTable 
-          shuls={this.state.shuls}
-          afterDelete={() => {this.getAllShuls()}}
-          enableActions={true}
-          isLoadingResults={this.state.isLoadingResults}
-        />
+        <div className="search-results-container">
+          <LoadingOverlay
+            active={this.state.isLoadingResults}
+            spinner
+            text={null}
+            style={{ }}
+          >
+            <SearchResultsTable 
+              shuls={this.state.shuls}
+              afterDelete={() => {this.getAllShuls()}}
+              enableActions={true}
+              isStickyHeader={true}
+            />
+          </LoadingOverlay>
+        </div>
+        
       </div>
     );
   }

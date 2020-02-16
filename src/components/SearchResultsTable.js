@@ -2,8 +2,7 @@ import React, {Component} from 'react';
 import { withLocalize } from "react-localize-redux";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from 'prop-types';
-import LoadingOverlay from 'react-loading-overlay';
-import { Typography, IconButton, Table, TableBody, TableCell, TableHead, TableRow, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, 
+import { IconButton, Table, TableBody, TableCell, TableHead, TableRow, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, 
   Button } from '@material-ui/core';
 import SingleResultTable from './SearchResultsTable';
 const request = require("request");
@@ -273,16 +272,10 @@ class SearchResultsTable extends Component {
     return (
       <div>
 
-        <div className="search-results-container">
-          <LoadingOverlay
-            active={this.props.isLoadingResults}
-            spinner
-            text={null}
-            style={{ }}
-          >
-            <Table stickyHeader size="small" aria-label="a dense table" className="results-table">
+
+            <Table stickyHeader={this.props.isStickyHeader} size="small" aria-label="a dense table" className="results-table">
               <TableHead>
-                <TableRow style={{background: "#c0caff"}}>
+                <TableRow>
                   {this.props.enableActions &&
                     <TableCell rowSpan={2} style={{width: '15px', minWidth: '15px'}}className="results-header-floor-cell"></TableCell>
                   }
@@ -294,14 +287,14 @@ class SearchResultsTable extends Component {
                   <TableCell align="center" colSpan={2} className={classes.centeredCell + " results-header-super-cell"}style={{width: '140px', padding: '2px 0 0 0'}}>{kaddish}</TableCell>
                   <TableCell align="center" rowSpan={2} className={classes.centeredCell + " results-header-floor-cell"} style={{width: '65px'}}>{childcare}</TableCell>
                 </TableRow>
-                <TableRow style={{background: "#c0caff"}}>
+                <TableRow>
                   <TableCell className={classes.centeredCell + " results-table-header-subcell results-header-floor-cell"} align="center" style={{width: '65px', whiteSpace: 'nowrap'}}>{withMen}</TableCell>
                   <TableCell className={classes.centeredCell + " results-table-header-subcell results-header-floor-cell"} align="center"  style={{width: '40px'}}>{alone}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {this.props.shuls.map((shul, key) => ([
-                  <TableRow key={key} style={{background: "#dfe3f9"}}>
+                  <TableRow key={key} style={{background: "#d1edff"}}>
                     {this.props.enableActions &&
                       <TableCell align="center" rowSpan={2} className="shul-actions-cell">
                         <IconButton onClick={(e) => {this.searchOnGoogleMaps(shul)}}
@@ -348,8 +341,7 @@ class SearchResultsTable extends Component {
                 ]))}
               </TableBody>
             </Table>
-          </LoadingOverlay>
-        </div>
+
         {this.props.enableActions &&
           <Dialog
             open={this.state.confirmDeleteIsOpen}
@@ -367,6 +359,7 @@ class SearchResultsTable extends Component {
                   shuls={[this.state.shulToDelete]}
                   afterDelete={() => {return false}}
                   enableActions={false}
+                  isStickyHeader={false}
                 />
               </DialogContentText>
             </DialogContent>
