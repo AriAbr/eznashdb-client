@@ -9,7 +9,7 @@ import * as israelCities from '../data/israel-cities';
 const request = require("request");
 
 
-const csc = require('countrycitystatejson')
+const ccs = require('countrycitystatejson')
 
 
 const styles = theme => ({
@@ -491,7 +491,7 @@ class AddShul extends Component {
   }
 
   getGeneralRegions(countryCode){ // reformatting general regions to match Israel regions
-    var regions = csc.getStatesByShort(countryCode).sort();
+    var regions = ccs.getStatesByShort(countryCode).sort();
     var formattedRegions = [];
     for (let i = 0; i < regions.length; i++){
       var regionName = regions[i]
@@ -549,7 +549,7 @@ class AddShul extends Component {
   }
 
   getGeneralCities(countryCode, region){
-    var cities = csc.getCities(countryCode, region);
+    var cities = ccs.getCities(countryCode, region);
     var formattedCities = [];
     for (let i = 0; i < cities.length; i++){
       var cityName = cities[i]
@@ -652,7 +652,7 @@ class AddShul extends Component {
 
   componentDidMount(){
     this.getIsraelRegions();
-    var countries = csc.getCountries();
+    var countries = ccs.getCountries();
     var sortedCountries = countries.sort((a, b) => a.name.localeCompare(b.name));
     this.setState({
       countries: sortedCountries

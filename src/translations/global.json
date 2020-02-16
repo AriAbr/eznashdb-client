@@ -73,5 +73,6 @@
   "edit": ["Edit", "ערוך/י"],
   "searchGoogleMaps": ["Search on Google Maps", "חפש/י בGoogle Maps"],
   "deleteThisShul": ["Delete this shul?", "למחוק את בית הכנסת הזה?"],
-  "recordWillBeRemoved": ["The following record will be removed from the database. Once completed, this cannot be undone:", "הרשומה הבאה תוסר ממסד הנתונים. לאחר השלמתו, לא ניתן לבטל פעולה זו:"]
+  "recordWillBeRemoved": ["The following record will be removed from the database. Once completed, this cannot be undone:", "הרשומה הבאה תוסר ממסד הנתונים. לאחר השלמתו, לא ניתן לבטל פעולה זו:"],
+  "map": ["Map", "מפה"]
 }
