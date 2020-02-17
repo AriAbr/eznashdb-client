@@ -13,3 +13,7 @@
 .map-marker-popup-link{
     cursor: pointer;
 }
+
+.leaflet-control-layers-base{ /* layers options in map */
+    text-align: left;
+}

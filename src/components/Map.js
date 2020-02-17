@@ -6,7 +6,7 @@ import { Typography } from '@material-ui/core';
 import SearchResultsTable from './SearchResultsTable';
 import LoadingOverlay from 'react-loading-overlay';
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
-import { Marker, Popup, Map as LeafletMap, TileLayer } from 'react-leaflet';
+import { Marker, Popup, Map as LeafletMap, TileLayer, LayersControl } from 'react-leaflet';
 
 const provider = new OpenStreetMapProvider();
 
@@ -123,12 +123,20 @@ class Map extends Component {
 
           <LeafletMap center={mapCenter} zoom={2} worldCopyJump={true}>
             {/* for more TileLayer options see https://leaflet-extras.github.io/leaflet-providers/preview/ */}
-            <TileLayer
-              url={`https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png`}
-              attribution={`Tiles courtesy of <a href="http://openstreetmap.se/" target="_blank">OpenStreetMap Sweden</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors`}
-            />
-
-
+            <LayersControl position="topright">
+              <LayersControl.BaseLayer name="TomTom" checked>
+                <TileLayer
+                  url={`https://api.tomtom.com/map/1/tile/basic/main/{z}/{x}/{y}.png?view=Unified&key=${process.env.REACT_APP_TOMTOM_API}`}
+                  attribution={`<a href="https://developer.tomtom.com/">TomTom</a>`}
+                />
+              </LayersControl.BaseLayer>
+              <LayersControl.BaseLayer name="Wikimedia">
+                <TileLayer
+                  attribution='<a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia</a>'
+                  url="https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}{r}.png"
+                />
+              </LayersControl.BaseLayer>
+            </LayersControl>
             {markers}
           </LeafletMap>
         </div>
