@@ -7,14 +7,16 @@ import SearchResultsTable from './SearchResultsTable';
 import LoadingOverlay from 'react-loading-overlay';
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import { Marker, Popup, Map as LeafletMap, TileLayer, LayersControl } from 'react-leaflet';
+import * as israelCities from '../data/israel-cities';
 const ccs = require('countrycitystatejson')
 const provider = new OpenStreetMapProvider();
 
 const request = require("request");
 
 const styles = theme => ({
-  mainHeader: {
-
+  markerPopopContents: {
+    direction: 'ltr',
+    textAlign: 'left'
   },
 });
 
@@ -93,7 +95,6 @@ class Map extends Component {
               latLon = await provider.search({ query: parsedLocation });
             }
             mapData[currLocation].latLon = latLon
-            console.log(mapData[currLocation].latLon)
           }
           this.setState({
             mapData: mapData,
@@ -110,42 +111,6 @@ class Map extends Component {
           })
         }
       });
-  
-  
-  
-      // const addressArr = [
-      //   "Teaneck, New Jersey, US",
-      //   "Jerusalem, Israel",
-      //   "Aland",
-      // ]
-      // var latLons = [];
-      // for (let i = 0; i < addressArr.length; i++) {
-      //   var currAddress = addressArr[i];
-      //   const results = await provider.search({ query: currAddress });
-      //   latLons.push(results)
-      // }
-      // this.setState({latLons: latLons}, () => {
-        // //create map
-        // this.map = L.map('mapid', {
-        //   center: [19.973348786110613, 6.855468750000001],
-        //   zoom: 2,
-        //   layers: [
-        //     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-        //       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        //     }),
-        //   ],
-        //   worldCopyJump: true,
-        // });
-        // // add markers
-        // this.markers = [];
-        // const fakeThis = this;
-        // for(let i = 0; i < this.state.latLons.length; i++){
-        //   const currLatLon = this.state.latLons[i]
-        //   const position = [parseFloat(currLatLon[0].y), parseFloat(currLatLon[0].x)];
-        //   const marker = L.marker(position).addTo(this.map).bindPopup(`<span onclick="() => {${fakeThis.onMarkerPopupLinkClick}}">A pretty CSS3 popup.<br />Easily customizable.</span>`);
-        //   this.markers.push(marker)
-        // }
-      // })
     })
 
   }
@@ -155,25 +120,56 @@ class Map extends Component {
     this.getLatLons();
   }
 
+  getFullPlaceName(locationData){
+    const isHebrew = (this.props.activeLanguage && this.props.activeLanguage.code === "he");
+    if(isHebrew && locationData.countryCode === "IL"){
+      const engCity = locationData.city;
+      const cities = israelCities.default;
+      var cityData = cities.find(city => {
+        return city["english_name"] === engCity.toUpperCase();
+      })
+      const hebCity = cityData.name
+      return `${hebCity}, ישראל`
+    } else {
+      const country = ccs.getCountryInfoByShort(locationData.countryCode).name;
+      var parsedLocationArr = [];
+      if(locationData.city !== "N/A"){
+        parsedLocationArr.push(locationData.city)
+      }
+      if(locationData.region !== "N/A" && country !== "Israel"){
+        parsedLocationArr.push(locationData.region)
+      }
+      parsedLocationArr.push(country)
+      const locationStr = parsedLocationArr.join(", ")
+      return locationStr;
+    }
+  }
+
   render() {
     const { classes } = this.props;
 
     const isHebrew = (this.props.activeLanguage && this.props.activeLanguage.code === "he");
 
     const map = this.props.translate("map");
+    const shulTR = this.props.translate("shul");
+    const shulsTR = this.props.translate("shuls");
+    const searchTR = this.props.translate("search");
     const markers = [];
     const locations = Object.keys(this.state.mapData);
     for(let i = 0; i < locations.length; i++){
       const key = i;
-      const currlocation = locations[i]
-      const latLon = this.state.mapData[currlocation].latLon;
+      const currlocation = locations[i];
+      const locationData = this.state.mapData[currlocation];
+      const latLon = locationData.latLon;
       const position = [parseFloat(latLon[0].y), parseFloat(latLon[0].x)]
-      const shulCountString = this.state.mapData[currlocation].shulCount === 1 ? `1 Shul` : `${this.state.mapData[currlocation].shulCount} Shuls`;
+      const shulCountString = locationData.shulCount === 1 ? `1 ${shulTR}` : `${locationData.shulCount} ${shulsTR}`;
+      const locationStr = this.getFullPlaceName(locationData)
       const marker = <Marker position={position} key={key} riseOnHover>
                       <Popup onMouseEnter={() => {this.onMarkerPopupLinkClick()}}>
-                        <strong>{currlocation}</strong> <br/>
-
-                        {shulCountString} | <a className="map-marker-popup-link" onClick={() => {this.onMarkerPopupLinkClick()}}>clickable</a>
+                        <div className={classes.markerPopopContents}>
+                          <strong>{locationStr}</strong> <br/>
+                          {shulCountString} | <a className="map-marker-popup-link" onClick={() => {this.onMarkerPopupLinkClick()}}>{searchTR}</a>
+                        </div>
                       </Popup>
                     </Marker>
       markers.push(marker)
