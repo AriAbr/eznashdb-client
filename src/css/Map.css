@@ -1,9 +1,10 @@
 #mapid {
     height: 500px;
-    width: 981px;
+    width: 999px;
     margin: auto;
     max-width: 100%;
     margin-bottom: 20px;
+    border: 1px solid #c6c6c6;
 }
 
 .mapPage .leaflet-container{
@@ -16,4 +17,11 @@
 
 .leaflet-control-layers-base{ /* layers options in map */
     text-align: left;
+    direction: ltr;
+}
+
+.map-laoding-overlay-container{
+    max-width: 100%;
+    width: fit-content;
+    margin: auto;
 }

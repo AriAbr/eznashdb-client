@@ -30,7 +30,8 @@
   width: fit-content;
   max-width: 100%;
   margin: auto;
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: scroll;
   min-height: calc(100vh - 222px);
   background-color: white;
   border: 1px solid #b2b2b2;

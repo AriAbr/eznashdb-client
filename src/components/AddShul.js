@@ -8,7 +8,6 @@ import { Button, FormControl, InputLabel, Select, MenuItem, Paper, Typography, D
 import * as israelCities from '../data/israel-cities';
 const request = require("request");
 
-
 const ccs = require('countrycitystatejson')
 
 
@@ -536,8 +535,8 @@ class AddShul extends Component {
     var regionCities = [];
     for(let i = 0; i < allCities.length; i++){
       var currCity = allCities[i];
-      var cityRegion = currCity["lishka_he"]
-      if(cityRegion === region){
+      var cityRegion = currCity["lishka_en"]
+      if(cityRegion === region.toUpperCase()){
         var cityData = {
           "en": this.getFormattedIsraelName(currCity["english_name"]),
           "he": currCity["name"]
@@ -616,6 +615,8 @@ class AddShul extends Component {
       rooms.push(room)
     }
 
+    const country = this.state.selCountry === "IL-HE" ? "IL" : this.state.selCountry;
+
     const options = {
       url: url,
       json: true,
@@ -624,7 +625,7 @@ class AddShul extends Component {
         name: this.state.shulName,
         nussach: this.state.nussach,
         denom: this.state.denomination,
-        country: this.state.selCountry,
+        country: country,
         region: this.state.selRegion,
         city: this.state.selCity,
         femLead: this.state.femaleLeadership,
@@ -752,10 +753,10 @@ class AddShul extends Component {
     }
 
     const regions = sortedRegions.map((region, key) => {
-      return <MenuItem value={region["he"]} key={key} dense={true}>{isHebrew ? region["he"] : region["en"]}</MenuItem>
+      return <MenuItem value={region["en"]} key={key} dense={true}>{isHebrew ? region["he"] : region["en"]}</MenuItem>
     });
     const cities = sortedCities.map((city, key) => {
-      return <MenuItem value={city["he"]} key={key} dense={true}>{isHebrew ? city["he"] : city["en"]}</MenuItem>
+      return <MenuItem value={city["en"]} key={key} dense={true}>{isHebrew ? city["he"] : city["en"]}</MenuItem>
     });
     const regionsDisabled = this.state.selCountry === "";
     const citiesDisabled = this.state.selRegion === "";
