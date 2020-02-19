@@ -54,11 +54,38 @@ class Map extends Component {
     })
   }
 
-  onMarkerPopupLinkClick(){
-    alert("clicked!")
+  searchFromMarker(locationData){
+    this.setState({ isLoadingResults: true }, () => {
+      const options = {
+        url: `${process.env.REACT_APP_EZNASHDB_API}shuls/searchByLocation`,
+        form: {
+          country: locationData.countryCode,
+          region: locationData.region,
+          city: locationData.city,
+        }
+      };
+  
+      request.post(options, (err, res, body) => {
+        if(res && res.statusCode === 200){
+          var shuls = JSON.parse(res.body)
+          console.log(shuls)
+          this.setState({
+            shuls: shuls,
+            isLoadingResults: false
+          })
+        } else {
+          this.setState({
+            isLoadingResults: false,
+          }, () => {
+            window.alert("server error. see console for more info")
+            console.log(res)
+          })
+        }
+      });
+    })
   }
 
-  async getLatLons(){ // used to be createMap()
+  async getMapData(){ // used to be createMap()
     //get latLons
 
     this.setState({ isLoadingMap: true}, async () => {
@@ -112,12 +139,11 @@ class Map extends Component {
         }
       });
     })
-
   }
 
   componentDidMount(){
-    this.getAllShuls();
-    this.getLatLons();
+    // this.getAllShuls();
+    this.getMapData();
   }
 
   getFullPlaceName(locationData){
@@ -168,7 +194,7 @@ class Map extends Component {
                       <Popup onMouseEnter={() => {this.onMarkerPopupLinkClick()}}>
                         <div className={classes.markerPopopContents}>
                           <strong>{locationStr}</strong> <br/>
-                          {shulCountString} | <a className="map-marker-popup-link" onClick={() => {this.onMarkerPopupLinkClick()}}>{searchTR}</a>
+                          {shulCountString} | <a className="map-marker-popup-link" onClick={() => {this.searchFromMarker(locationData)}}><i class="fas fa-search"></i> {searchTR}</a>
                         </div>
                       </Popup>
                     </Marker>
