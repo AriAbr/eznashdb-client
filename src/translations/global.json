@@ -9,7 +9,7 @@
   "country": ["Country", "ארץ"],
   "stateOrRegion": ["State/Region", "מדינה/אזור"],
   "city": ["City", "עיר"],
-  "checkIfShulListed": ["Check if your shul is already listed:", "בדוק/י אם בית הכנסת שלך כבר רשום:"],
+  "isYourShulListed": ["Is your shul is already listed?", "האם בית הכנסת שלך מופיע כבר?"],
   "viewEdit": ["View / Edit", "תצוגה / עריכה"],
   "shulNotListed": ["Shul not listed (Continue)", "בית הכנסת לא רשום (המשך)"],
   "generalInfo": ["General Info", "מידע כללי"],

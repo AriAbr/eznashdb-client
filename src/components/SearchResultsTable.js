@@ -293,7 +293,7 @@ class SearchResultsTable extends Component {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {this.props.shuls.map((shul, key) => ([
+                {this.props.shuls && this.props.shuls.map((shul, key) => ([
                   <TableRow key={key} style={{background: "#d1edff"}}>
                     {this.props.enableActions &&
                       <TableCell align="center" rowSpan={2} className="shul-actions-cell">

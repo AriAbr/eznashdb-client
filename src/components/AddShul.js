@@ -6,6 +6,9 @@ import { Button, FormControl, InputLabel, Select, MenuItem, Paper, Typography, D
   TableBody, TextField, FormControlLabel, FormGroup, Checkbox, Dialog, DialogTitle, DialogContent,
   DialogContentText} from '@material-ui/core';
 import * as israelCities from '../data/israel-cities';
+import SearchResultsTable from './SearchResultsTable';
+import LoadingOverlay from 'react-loading-overlay';
+
 const request = require("request");
 
 const ccs = require('countrycitystatejson')
@@ -153,15 +156,8 @@ class AddShul extends Component {
       selRegion: "",
       cities: [],
       selCity: "",
+      shulsInSelectedCity: [],
       duplicatesDialogIsOpen: false,
-      duplicatesQuestionDialogIsOpen: false,
-      savedShulRows: [ //saving dummy data here for now
-        {"name": "Keter Torah"},
-        {"name": "Rinat"},
-        {"name": "Bnai Yeshurun"},
-        {"name": "Beth Aaron"},
-        {"name": "Netivot Shalom"},
-      ],
       shulName: "",
       nussach: "",
       denomination: "",
@@ -184,6 +180,7 @@ class AddShul extends Component {
       deleteDialogIsOpen: false,
       roomToDelete: null,
       focusedInput: null,
+      hasCheckedForDuplicates: false,
     };
   }
 
@@ -402,15 +399,54 @@ class AddShul extends Component {
     }
   }
 
-  openDuplicatesQuestion(){
-    this.setState({
-      duplicatesQuestionDialogIsOpen: true,
+  checkForDuplicates(){
+    this.setState({ isCheckingForDuplicates: true }, () => {
+      const options = {
+        url: `${process.env.REACT_APP_EZNASHDB_API}shuls/searchByLocation`,
+        form: {
+          country: this.state.selCountry,
+          region: this.state.selRegion,
+          city: this.state.selCity,
+        }
+      };
+  
+      request.post(options, (err, res, body) => {
+        if(res && res.statusCode === 200){
+          var shuls = JSON.parse(res.body)
+          this.setState({
+            shulsInSelectedCity: shuls,
+            isCheckingForDuplicates: false,
+          }, () => {
+            if(shuls.length > 0){
+              this.openDuplicatesDialog()
+            } else {
+              this.setState({
+                hasCheckedForDuplicates: true
+              })
+            }
+          })
+        } else {
+          this.setState({
+            isCheckingForDuplicates: false,
+          }, () => {
+            window.alert("server error. see console for more info")
+            console.log(res)
+          })
+        }
+      });
     })
   }
 
-  closeDuplicatesQuestion(){
+  openDuplicatesDialog(){
     this.setState({
-      duplicatesQuestionDialogIsOpen: false,
+      duplicatesDialogIsOpen: true,
+    })
+  }
+
+  closeDuplicatesDialog(){
+    this.setState({
+      duplicatesDialogIsOpen: false,
+      hasCheckedForDuplicates: true
     })
   }
 
@@ -477,7 +513,7 @@ class AddShul extends Component {
     this.setState({
       selCity: city,
     }, () => {
-      this.openDuplicatesQuestion();
+      this.checkForDuplicates();
     })
   }
 
@@ -651,6 +687,56 @@ class AddShul extends Component {
     );
   }
 
+  getLoadingDuplicatesText(){
+    if(this.state.selCity){
+      const isHebrew = this.props.activeLanguage && this.props.activeLanguage.code === "he";
+
+      var countryName;
+      const checkingForShulsInTR = this.props.translate("checkingForShulsIn");
+      var countryCode = this.state.selCountry === "IL-HE" ? "IL" : this.state.selCountry;
+      if(isHebrew && countryCode === "IL"){
+        countryName = "ישראל"
+      } else {
+        countryName = ccs.getCountryByShort(countryCode).name;
+      }
+
+      var regionName = this.state.selRegion;
+      if(isHebrew && countryCode === "IL"){
+        const regions = this.getIsraelRegions();
+        const regionData = regions.find(region => {
+          return region.en === regionName;
+        })
+        regionName = regionData.he
+      }
+
+      var cityName = this.state.selCity;
+      if(isHebrew && countryCode === "IL"){
+        const cities = israelCities.default;
+        const cityData = cities.find(city => {
+          return city.english_name === cityName.toUpperCase();
+        })
+        cityName = cityData.name;
+      }
+
+      var locationArr = [];
+      if(cityName !== "N/A"){
+        locationArr.push(cityName)
+      }
+      if(regionName !== "N/A"){
+        locationArr.push(regionName)
+      }
+      locationArr.push(countryName)
+      const locationStr = locationArr.join(", ")
+      
+      var retVal = `Checking for shuls already listed in ${locationStr}`;
+      if(isHebrew){
+        retVal = `מחפש בתי כנסת ב${locationStr} שכבר רשומים`;
+      }
+  
+      return retVal;
+    }
+  }
+
   componentDidMount(){
     this.getIsraelRegions();
     var countries = ccs.getCountries();
@@ -683,7 +769,7 @@ class AddShul extends Component {
     const city = this.props.translate("city");
     const location = this.props.translate("location");
     const identification = this.props.translate("identification");
-    const checkIfShulListed = this.props.translate("checkIfShulListed");
+    const isYourShulListed = this.props.translate("isYourShulListed");
     const viewEdit = this.props.translate("viewEdit");
     const shulNotListed = this.props.translate("shulNotListed");
     const generalInfo = this.props.translate("generalInfo");
@@ -729,7 +815,11 @@ class AddShul extends Component {
     const cancel = this.props.translate("cancel");
     const select = this.props.translate("select");
 
+
+    var loadingDuplicatesText = this.getLoadingDuplicatesText()
+    
     const isHebrew = (this.props.activeLanguage && this.props.activeLanguage.code === "he");
+    const {hasCheckedForDuplicates} = this.state
 
     var sortedRegions = this.state.regions.sort((a, b) => a["en"].localeCompare(b["en"]));
     var sortedCities = this.state.cities.sort((a, b) => a["en"].localeCompare(b["en"]));
@@ -793,6 +883,7 @@ class AddShul extends Component {
             </span>
             <FormControl className={classes.textSelectFormControl} size="small" >
               <TextField id={`room-${key}-name-input`} label={roomName} size='small'
+                disabled={!hasCheckedForDuplicates}
                 onChange={(e) => {this.handleTextInput(e,  'roomName', key)}} value={this.state.roomNames[key]}
                 onFocus={(e) => {this.setFocusedInput(e, `roomName${key}`)}}
                 onBlur ={(e) => {this.setFocusedInput(e, null)}}
@@ -837,6 +928,7 @@ class AddShul extends Component {
                 onFocus={(e) => {this.setFocusedInput(e, `womSecSize${key}`)}}
                 onBlur ={(e) => {this.setFocusedInput(e, null)}}
                 className={classes.select}
+                disabled={!hasCheckedForDuplicates}
               >
                 <MenuItem dense value="">
                   <em>{select}</em>
@@ -878,6 +970,7 @@ class AddShul extends Component {
                 onFocus={(e) => {this.setFocusedInput(e, `visAud${key}`)}}
                 onBlur ={(e) => {this.setFocusedInput(e, null)}}
                 className={classes.select}
+                disabled={!hasCheckedForDuplicates}
               >
                 <MenuItem dense value="">
                   <em>{select}</em>
@@ -906,17 +999,17 @@ class AddShul extends Component {
               </Typography>
               <FormGroup>
                 <FormControlLabel
-                  control={<Checkbox checked={this.state.isCenteredVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}}value={"centered"}  color="primary" size="small"/>}
+                  control={<Checkbox checked={this.state.isCenteredVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}}value={"centered"}  color="primary" size="small" disabled={!hasCheckedForDuplicates}/>}
                   label={centeredMechitza}
                   className={classes.formControlLabel}
                 />
                 <FormControlLabel
-                  control={<Checkbox checked={this.state.isSameFloorSideVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"sameFloorSide"}  color="primary" size="small"/>}
+                  control={<Checkbox checked={this.state.isSameFloorSideVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"sameFloorSide"}  color="primary" size="small" disabled={!hasCheckedForDuplicates}/>}
                   label={side}
                   className={classes.formControlLabel}
                 />
                 <FormControlLabel
-                  control={<Checkbox checked={this.state.isSameFloorBackVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"sameFloorBack"}  color="primary" size="small"/>}
+                  control={<Checkbox checked={this.state.isSameFloorBackVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"sameFloorBack"}  color="primary" size="small" disabled={!hasCheckedForDuplicates}/>}
                   label={back}
                   className={classes.formControlLabel}
                 />
@@ -928,12 +1021,12 @@ class AddShul extends Component {
               </Typography>
               <FormGroup>
                 <FormControlLabel
-                  control={<Checkbox checked={this.state.isSameFloorElevatedVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"sameFloorElevated"}  color="primary" size="small"/>}
+                  control={<Checkbox checked={this.state.isSameFloorElevatedVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"sameFloorElevated"}  color="primary" size="small" disabled={!hasCheckedForDuplicates}/>}
                   label={elevated}
                   className={classes.formControlLabel}
                 />
                 <FormControlLabel
-                  control={<Checkbox checked={this.state.isSameFloorLevelVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"sameFloorLevel"}  color="primary" size="small"/>}
+                  control={<Checkbox checked={this.state.isSameFloorLevelVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"sameFloorLevel"}  color="primary" size="small" disabled={!hasCheckedForDuplicates}/>}
                   label={levelWithMens} 
                   className={classes.formControlLabel}
                 />
@@ -945,12 +1038,12 @@ class AddShul extends Component {
               </Typography>
               <FormGroup>
                 <FormControlLabel
-                  control={<Checkbox checked={this.state.isBalconySideVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"balconySide"}  color="primary" size="small"/>}
+                  control={<Checkbox checked={this.state.isBalconySideVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"balconySide"}  color="primary" size="small" disabled={!hasCheckedForDuplicates}/>}
                   label={side}
                   className={classes.formControlLabel}
                 />
                 <FormControlLabel
-                  control={<Checkbox checked={this.state.isBalconyBackVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"balconyBack"}  color="primary" size="small"/>}
+                  control={<Checkbox checked={this.state.isBalconyBackVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"balconyBack"}  color="primary" size="small" disabled={!hasCheckedForDuplicates}/>}
                   label={back}
                   className={classes.formControlLabel}
                 />
@@ -962,12 +1055,12 @@ class AddShul extends Component {
               </Typography>
               <FormGroup>
                 <FormControlLabel
-                  control={<Checkbox checked={this.state.isOnlyMenVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"onlyMen"}  color="primary" size="small"/>}
+                  control={<Checkbox checked={this.state.isOnlyMenVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"onlyMen"}  color="primary" size="small" disabled={!hasCheckedForDuplicates}/>}
                   label={onlyMens}
                   className={classes.formControlLabel}
                 />
                 <FormControlLabel
-                  control={<Checkbox checked={this.state.isMixedSeatingVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"mixedSeating"}  color="primary" size="small"/>}
+                  control={<Checkbox checked={this.state.isMixedSeatingVals[key]} onChange={(e) => {this.handleCheckboxInput(e, key)}} value={"mixedSeating"}  color="primary" size="small" disabled={!hasCheckedForDuplicates}/>}
                   label={mixedSeating}
                   className={classes.formControlLabel}
                 />
@@ -981,326 +1074,339 @@ class AddShul extends Component {
 
     return (
       <div>
+        <div style={{width: 'fit-content', margin: 'auto'}}>
+          <LoadingOverlay
+            active={this.state.isCheckingForDuplicates}
+            spinner
+            text={loadingDuplicatesText}
+            style={{ }}
+          >
+            <Paper className={classes.paper} id="add-shul-paper" elevation={0} square>
+              <Typography variant="h2" component="h2" gutterBottom className={classes.mainHeader}>
+                {addShul}
+              </Typography>
+              <Typography variant="h4" component="h2" gutterBottom className={classes.sectionHeader}>
+                {generalInfo}
+              </Typography>
 
-        <Paper className={classes.paper} id="add-shul-paper" elevation={0} square>
-          <Typography variant="h2" component="h2" gutterBottom className={classes.mainHeader}>
-            {addShul}
-          </Typography>
-          <Typography variant="h4" component="h2" gutterBottom className={classes.sectionHeader}>
-            {generalInfo}
-          </Typography>
+              <div className={classes.questionGroupContainer}>
 
-          <div className={classes.questionGroupContainer}>
+              <div className={classes.questionContainer}>
+                  <span className={classes.questionText}>
+                    {location}:
+                  </span>
+                  <div className={classes.inputBuffer}></div>
+                  <div className={classes.inputBuffer}></div>
+                  <div className={classes.inputBuffer}></div>
+                  <span className={classes.inputContainer}>
+                    <span className={classes.textBuffer}>
+                      {location}:
+                    </span>
+                    <FormControl className={classes.textSelectFormControl} size="small" >
+                      <InputLabel id="add-shul-country-label"
+                        style={
+                          { top: `${(this.state.focusedInput === 'country' || this.state.selCountry) ? "0" : inputLabelOffset}px` }
+                        }
+                        disableAnimation={true}
+                      >
+                        {country}
+                      </InputLabel>
+                      <Select
+                        labelId="add-shul-country-label"
+                        id="add-shul-country-select"
+                        value={this.state.selCountry}
+                        onChange={(e) => {this.handleCountrySelect(e)}}
+                        onFocus={(e) => {this.setFocusedInput(e, 'country')}}
+                        onBlur ={(e) => {this.setFocusedInput(e, null)}}
+                        className={classes.select}
+                      >
+                        {countries}
+                      </Select>
+                    </FormControl>
+                    <FormControl className={classes.textSelectFormControl} size="small" >
+                      <InputLabel id="add-shul-region-label"
+                        style={
+                          { top: `${(this.state.focusedInput === 'region' || this.state.selRegion) ? "0" : inputLabelOffset}px` }
+                        }
+                        disableAnimation={true}
+                      >
+                        {stateOrRegion}
+                      </InputLabel>
+                      <Select
+                        labelId="add-shul-region-label"
+                        id="add-shul-region-select"
+                        value={this.state.selRegion}
+                        onChange={(e) => {this.handleRegionSelect(e)}}
+                        onFocus={(e) => {this.setFocusedInput(e, 'region')}}
+                        onBlur ={(e) => {this.setFocusedInput(e, null)}}
+                        className={classes.select}
+                        disabled={regionsDisabled}
+                      >
+                        {regions}
+                      </Select>
+                    </FormControl>
+                    <FormControl className={classes.textSelectFormControl} size="small" >
+                      <InputLabel id="add-shul-city-label"
+                        style={
+                          { top: `${(this.state.focusedInput === 'city' || this.state.selCity) ? "0" : inputLabelOffset}px` }
+                        }
+                        disableAnimation={true}
+                      >
+                        {city}
+                      </InputLabel>
+                      <Select
+                        labelId="add-shul-city-label"
+                        id="add-shul-city-select"
+                        value={this.state.selCity}
+                        onChange={(e) => {this.handleCitySelect(e)}}
+                        onFocus={(e) => {this.setFocusedInput(e, 'city')}}
+                        onBlur ={(e) => {this.setFocusedInput(e, null)}}
+                        className={classes.select}
+                        disabled={citiesDisabled}
+                      >
+                        {cities}
+                      </Select>
+                    </FormControl>
+                  </span>
+                </div>
 
-            <div className={classes.questionContainer}>
-              <span className={classes.questionText}>
-                {identification}:
-              </span>
-              <div className={classes.inputBuffer}></div>
-              <div className={classes.inputBuffer}></div>
-              <div className={classes.inputBuffer}></div>
-              <span className={classes.inputContainer}>
-                <span className={classes.textBuffer}>
-                  {identification}:
-                </span>
-                <FormControl className={classes.textSelectFormControl} size="small" >
-                  <TextField id="shul-name-input" label={shulName} required size='small' 
-                    onChange={(e) => {this.handleTextInput(e, 'shulName')}} value={this.state.shulName} 
-                    onFocus={(e) => {this.setFocusedInput(e, 'shulName')}}
-                    onBlur ={(e) => {this.setFocusedInput(e, null)}}
-                    InputProps={{
-                      className: classes.textField,
-                    }}
-                    InputLabelProps={{
-                      style: {
-                        ...(!(this.state.focusedInput === 'shulName' || this.state.shulName) && { top: `${inputLabelOffset}px` }),
-                      },
-                      disableAnimation: true
-                    }}
-                  />
-                </FormControl>
-                <FormControl className={classes.textSelectFormControl} size="small" >
-                  <TextField id="nussach-input" label={nussach} size='small'
-                    onChange={(e) => {this.handleTextInput(e, 'nussach')}} value={this.state.nussach}
-                    onFocus={(e) => {this.setFocusedInput(e, 'nussach')}}
-                    onBlur ={(e) => {this.setFocusedInput(e, null)}}
-                    InputProps={{
-                      className: classes.textField
-                    }}
-                    InputLabelProps={{
-                      style: {
-                        ...(!(this.state.focusedInput === 'nussach' || this.state.nussach) && { top: `${inputLabelOffset}px` }),
-                      },
-                      disableAnimation: true
-                    }}
-                  />
-                </FormControl>
-                <FormControl className={classes.textSelectFormControl} size="small" >
-                  <TextField id="denomination-input" label={denomination} size='small'
-                    onChange={(e) => {this.handleTextInput(e, 'denomination')}} value={this.state.denomination}
-                    onFocus={(e) => {this.setFocusedInput(e, 'denomination')}}
-                    onBlur ={(e) => {this.setFocusedInput(e, null)}}
-                    InputProps={{
-                      className: classes.textField
-                    }}
-                    InputLabelProps={{
-                      style: {
-                        ...(!(this.state.focusedInput === 'denomination' || this.state.denomination) && { top: `${inputLabelOffset}px` }),
-                      },
-                      disableAnimation: true
-                    }}
-                  />
-                </FormControl>
-              </span>
-            </div>
+                <div className={classes.questionContainer}>
+                  <span className={classes.questionText}>
+                    {identification}:
+                  </span>
+                  <div className={classes.inputBuffer}></div>
+                  <div className={classes.inputBuffer}></div>
+                  <div className={classes.inputBuffer}></div>
+                  <span className={classes.inputContainer}>
+                    <span className={classes.textBuffer}>
+                      {identification}:
+                    </span>
+                    <FormControl className={classes.textSelectFormControl} size="small" >
+                      <TextField id="shul-name-input" label={shulName} required size='small' 
+                        disabled={!hasCheckedForDuplicates}
+                        onChange={(e) => {this.handleTextInput(e, 'shulName')}} value={this.state.shulName} 
+                        onFocus={(e) => {this.setFocusedInput(e, 'shulName')}}
+                        onBlur ={(e) => {this.setFocusedInput(e, null)}}
+                        InputProps={{
+                          className: classes.textField,
+                        }}
+                        InputLabelProps={{
+                          style: {
+                            ...(!(this.state.focusedInput === 'shulName' || this.state.shulName) && { top: `${inputLabelOffset}px` }),
+                          },
+                          disableAnimation: true
+                        }}
+                      />
+                    </FormControl>
+                    <FormControl className={classes.textSelectFormControl} size="small" >
+                      <TextField id="nussach-input" label={nussach} size='small'
+                        disabled={!hasCheckedForDuplicates}
+                        onChange={(e) => {this.handleTextInput(e, 'nussach')}} value={this.state.nussach}
+                        onFocus={(e) => {this.setFocusedInput(e, 'nussach')}}
+                        onBlur ={(e) => {this.setFocusedInput(e, null)}}
+                        InputProps={{
+                          className: classes.textField
+                        }}
+                        InputLabelProps={{
+                          style: {
+                            ...(!(this.state.focusedInput === 'nussach' || this.state.nussach) && { top: `${inputLabelOffset}px` }),
+                          },
+                          disableAnimation: true
+                        }}
+                      />
+                    </FormControl>
+                    <FormControl className={classes.textSelectFormControl} size="small" >
+                      <TextField id="denomination-input" label={denomination} size='small'
+                        disabled={!hasCheckedForDuplicates}
+                        onChange={(e) => {this.handleTextInput(e, 'denomination')}} value={this.state.denomination}
+                        onFocus={(e) => {this.setFocusedInput(e, 'denomination')}}
+                        onBlur ={(e) => {this.setFocusedInput(e, null)}}
+                        InputProps={{
+                          className: classes.textField
+                        }}
+                        InputLabelProps={{
+                          style: {
+                            ...(!(this.state.focusedInput === 'denomination' || this.state.denomination) && { top: `${inputLabelOffset}px` }),
+                          },
+                          disableAnimation: true
+                        }}
+                      />
+                    </FormControl>
+                  </span>
+                </div>
 
-            <div className={classes.questionContainer}>
-              <span className={classes.questionText}>
-                {location}:
-              </span>
-              <div className={classes.inputBuffer}></div>
-              <div className={classes.inputBuffer}></div>
-              <div className={classes.inputBuffer}></div>
-              <span className={classes.inputContainer}>
-                <span className={classes.textBuffer}>
-                  {location}:
-                </span>
-                <FormControl className={classes.textSelectFormControl} size="small" >
-                  <InputLabel id="add-shul-country-label"
-                    style={
-                      { top: `${(this.state.focusedInput === 'country' || this.state.selCountry) ? "0" : inputLabelOffset}px` }
-                    }
-                    disableAnimation={true}
-                  >
-                    {country}
-                  </InputLabel>
-                  <Select
-                    labelId="add-shul-country-label"
-                    id="add-shul-country-select"
-                    value={this.state.selCountry}
-                    onChange={(e) => {this.handleCountrySelect(e)}}
-                    onFocus={(e) => {this.setFocusedInput(e, 'country')}}
-                    onBlur ={(e) => {this.setFocusedInput(e, null)}}
-                    className={classes.select}
-                  >
-                    {countries}
-                  </Select>
-                </FormControl>
-                <FormControl className={classes.textSelectFormControl} size="small" >
-                  <InputLabel id="add-shul-region-label"
-                    style={
-                      { top: `${(this.state.focusedInput === 'region' || this.state.selRegion) ? "0" : inputLabelOffset}px` }
-                    }
-                    disableAnimation={true}
-                  >
-                    {stateOrRegion}
-                  </InputLabel>
-                  <Select
-                    labelId="add-shul-region-label"
-                    id="add-shul-region-select"
-                    value={this.state.selRegion}
-                    onChange={(e) => {this.handleRegionSelect(e)}}
-                    onFocus={(e) => {this.setFocusedInput(e, 'region')}}
-                    onBlur ={(e) => {this.setFocusedInput(e, null)}}
-                    className={classes.select}
-                    disabled={regionsDisabled}
-                  >
-                    {regions}
-                  </Select>
-                </FormControl>
-                <FormControl className={classes.textSelectFormControl} size="small" >
-                  <InputLabel id="add-shul-city-label"
-                    style={
-                      { top: `${(this.state.focusedInput === 'city' || this.state.selCity) ? "0" : inputLabelOffset}px` }
-                    }
-                    disableAnimation={true}
-                  >
-                    {city}
-                  </InputLabel>
-                  <Select
-                    labelId="add-shul-city-label"
-                    id="add-shul-city-select"
-                    value={this.state.selCity}
-                    onChange={(e) => {this.handleCitySelect(e)}}
-                    onFocus={(e) => {this.setFocusedInput(e, 'city')}}
-                    onBlur ={(e) => {this.setFocusedInput(e, null)}}
-                    className={classes.select}
-                    disabled={citiesDisabled}
-                  >
-                    {cities}
-                  </Select>
-                </FormControl>
-              </span>
-            </div>
+                <div className={classes.questionContainer}>
+                  <span className={classes.questionText}>
+                    {femaleLeadershipQuestion}
+                  </span>
+                  <div className={classes.inputBuffer}></div>
+                  <span className={classes.inputContainer}>
+                    <span className={classes.textBuffer}>
+                      {femaleLeadershipQuestion}:
+                    </span>
+                    <FormControl className={classes.textSelectFormControl} size="small" >
+                      <InputLabel id="add-shul-female-leadership-label"
+                        style={{
+                          top: `${inputLabelOffset}px`,
+                          visibility: `${(this.state.focusedInput === 'femaleLeadership' || typeof(this.state.femaleLeadership) === 'number') ? "hidden" : "visible"}`
+                        }}
+                        disableAnimation={true}
+                      >
+                        {select}
+                      </InputLabel>
+                      <Select
+                        labelId="add-shul-female-leadership-label"
+                        id="add-shul-female-leadership-select"
+                        value={this.state.femaleLeadership}
+                        onChange={(e) => {this.handleSelectInput(e, 'femaleLeadership')}}
+                        onFocus={(e) => {this.setFocusedInput(e, 'femaleLeadership')}}
+                        onBlur ={(e) => {this.setFocusedInput(e, null)}}
+                        className={classes.select}
+                        disabled={!hasCheckedForDuplicates}
+                      >
+                        <MenuItem dense value={1}>{yes}</MenuItem>
+                        <MenuItem dense value={2}>{no}</MenuItem>
+                        <MenuItem dense value={0}>{unsure}</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </span>
+                </div>
 
-            <div className={classes.questionContainer}>
-              <span className={classes.questionText}>
-                {femaleLeadershipQuestion}
-              </span>
-              <div className={classes.inputBuffer}></div>
-              <span className={classes.inputContainer}>
-                <span className={classes.textBuffer}>
-                  {femaleLeadershipQuestion}:
-                </span>
-                <FormControl className={classes.textSelectFormControl} size="small" >
-                  <InputLabel id="add-shul-female-leadership-label"
-                    style={{
-                      top: `${inputLabelOffset}px`,
-                      visibility: `${(this.state.focusedInput === 'femaleLeadership' || typeof(this.state.femaleLeadership) === 'number') ? "hidden" : "visible"}`
-                    }}
-                    disableAnimation={true}
-                  >
-                    {select}
-                  </InputLabel>
-                  <Select
-                    labelId="add-shul-female-leadership-label"
-                    id="add-shul-female-leadership-select"
-                    value={this.state.femaleLeadership}
-                    onChange={(e) => {this.handleSelectInput(e, 'femaleLeadership')}}
-                    onFocus={(e) => {this.setFocusedInput(e, 'femaleLeadership')}}
-                    onBlur ={(e) => {this.setFocusedInput(e, null)}}
-                    className={classes.select}
-                  >
-                    <MenuItem dense value={1}>{yes}</MenuItem>
-                    <MenuItem dense value={2}>{no}</MenuItem>
-                    <MenuItem dense value={0}>{unsure}</MenuItem>
-                  </Select>
-                </FormControl>
-              </span>
-            </div>
+                <div className={classes.questionContainer}>
+                  <span className={classes.questionText}>
+                    {kaddishWithMenQuestion}
+                  </span>
+                  <div className={classes.inputBuffer}></div>
+                  <span className={classes.inputContainer}>
+                    <span className={classes.textBuffer}>
+                      {kaddishWithMenQuestion}:
+                    </span>
+                    <FormControl className={classes.textSelectFormControl} size="small" >
+                      <InputLabel id="add-shul-kaddish-with-men-label"
+                        style={{
+                          top: `${inputLabelOffset}px`,
+                          visibility: `${(this.state.focusedInput === 'kaddishWithMen' || typeof(this.state.kaddishWithMen) === 'number') ? "hidden" : "visible"}`
+                        }}
+                        disableAnimation={true}
+                      >
+                        {select}
+                      </InputLabel>
+                      <Select
+                        labelId="add-shul-kaddish-with-men-label"
+                        id="add-shul-kaddish-with-men-select"
+                        value={this.state.kaddishWithMen}
+                        onChange={(e) => {this.handleSelectInput(e, 'kaddishWithMen')}}
+                        onFocus={(e) => {this.setFocusedInput(e, 'kaddishWithMen')}}
+                        onBlur ={(e) => {this.setFocusedInput(e, null)}}
+                        className={classes.select}
+                        disabled={!hasCheckedForDuplicates}
+                      >
+                        <MenuItem dense value={1}>{yes}</MenuItem>
+                        <MenuItem dense value={2}>{no}</MenuItem>
+                        <MenuItem dense value={0}>{unsure}</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </span>
+                </div>
 
-            <div className={classes.questionContainer}>
-              <span className={classes.questionText}>
-                {kaddishWithMenQuestion}
-              </span>
-              <div className={classes.inputBuffer}></div>
-              <span className={classes.inputContainer}>
-                <span className={classes.textBuffer}>
-                  {kaddishWithMenQuestion}:
-                </span>
-                <FormControl className={classes.textSelectFormControl} size="small" >
-                  <InputLabel id="add-shul-kaddish-with-men-label"
-                    style={{
-                      top: `${inputLabelOffset}px`,
-                      visibility: `${(this.state.focusedInput === 'kaddishWithMen' || typeof(this.state.kaddishWithMen) === 'number') ? "hidden" : "visible"}`
-                    }}
-                    disableAnimation={true}
-                  >
-                    {select}
-                  </InputLabel>
-                  <Select
-                    labelId="add-shul-kaddish-with-men-label"
-                    id="add-shul-kaddish-with-men-select"
-                    value={this.state.kaddishWithMen}
-                    onChange={(e) => {this.handleSelectInput(e, 'kaddishWithMen')}}
-                    onFocus={(e) => {this.setFocusedInput(e, 'kaddishWithMen')}}
-                    onBlur ={(e) => {this.setFocusedInput(e, null)}}
-                    className={classes.select}
-                  >
-                    <MenuItem dense value={1}>{yes}</MenuItem>
-                    <MenuItem dense value={2}>{no}</MenuItem>
-                    <MenuItem dense value={0}>{unsure}</MenuItem>
-                  </Select>
-                </FormControl>
-              </span>
-            </div>
+                <div className={classes.questionContainer}>
+                  <span className={classes.questionText}>
+                    {kaddishAloneQuestion}
+                  </span>
+                  <div className={classes.inputBuffer}></div>
+                  <span className={classes.inputContainer}>
+                    <span className={classes.textBuffer}>
+                      {kaddishAloneQuestion}:
+                    </span>
+                    <FormControl className={classes.textSelectFormControl} size="small" >
+                      <InputLabel id="add-shul-kaddish-alone-label"
+                        style={{
+                          top: `${inputLabelOffset}px`,
+                          visibility: `${(this.state.focusedInput === 'kaddishAlone' || typeof(this.state.kaddishAlone) === "number") ? "hidden" : "visible"}`
+                        }}
+                        disableAnimation={true}
+                      >
+                        {select}
+                      </InputLabel>
+                      <Select
+                        labelId="add-shul-kaddish-alone-label"
+                        id="add-shul-kaddish-alone-select"
+                        value={this.state.kaddishAlone}
+                        onChange={(e) => {this.handleSelectInput(e, 'kaddishAlone')}}
+                        onFocus={(e) => {this.setFocusedInput(e, 'kaddishAlone')}}
+                        onBlur ={(e) => {this.setFocusedInput(e, null)}}
+                        className={classes.select}
+                        disabled={!hasCheckedForDuplicates}
+                      >
+                        <MenuItem dense value={1}>{yes}</MenuItem>
+                        <MenuItem dense value={2}>{no}</MenuItem>
+                        <MenuItem dense value={0}>{unsure}</MenuItem>
+                        <MenuItem dense value={3}>{manAlwaysKaddish}</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </span>
+                </div>
 
-            <div className={classes.questionContainer}>
-              <span className={classes.questionText}>
-                {kaddishAloneQuestion}
-              </span>
-              <div className={classes.inputBuffer}></div>
-              <span className={classes.inputContainer}>
-                <span className={classes.textBuffer}>
-                  {kaddishAloneQuestion}:
-                </span>
-                <FormControl className={classes.textSelectFormControl} size="small" >
-                  <InputLabel id="add-shul-kaddish-alone-label"
-                    style={{
-                      top: `${inputLabelOffset}px`,
-                      visibility: `${(this.state.focusedInput === 'kaddishAlone' || typeof(this.state.kaddishAlone) === "number") ? "hidden" : "visible"}`
-                    }}
-                    disableAnimation={true}
-                  >
-                    {select}
-                  </InputLabel>
-                  <Select
-                    labelId="add-shul-kaddish-alone-label"
-                    id="add-shul-kaddish-alone-select"
-                    value={this.state.kaddishAlone}
-                    onChange={(e) => {this.handleSelectInput(e, 'kaddishAlone')}}
-                    onFocus={(e) => {this.setFocusedInput(e, 'kaddishAlone')}}
-                    onBlur ={(e) => {this.setFocusedInput(e, null)}}
-                    className={classes.select}
-                  >
-                    <MenuItem dense value={1}>{yes}</MenuItem>
-                    <MenuItem dense value={2}>{no}</MenuItem>
-                    <MenuItem dense value={0}>{unsure}</MenuItem>
-                    <MenuItem dense value={3}>{manAlwaysKaddish}</MenuItem>
-                  </Select>
-                </FormControl>
-              </span>
-            </div>
+                <div className={classes.questionContainer}>
+                  <span className={classes.questionText}>
+                    {childcareQuestion}
+                  </span>
+                  <div className={classes.inputBuffer}></div>
+                  <span className={classes.inputContainer}>
+                    <span className={classes.textBuffer}>
+                      {childcareQuestion}:
+                    </span>
+                    <FormControl className={classes.textSelectFormControl} size="small" >
+                      <InputLabel id="add-shul-childcare-label"
+                        style={{
+                          top: `${inputLabelOffset}px`,
+                          visibility: `${(this.state.focusedInput === 'childcare' || typeof(this.state.childcare) === "number") ? "hidden" : "visible"}`
+                        }}
+                        disableAnimation={true}
+                      >
+                        {select}
+                      </InputLabel>
+                      <Select
+                        labelId="add-shul-childcare-label"
+                        id="add-shul-childcare-select"
+                        value={this.state.childcare}
+                        onChange={(e) => {this.handleSelectInput(e, 'childcare')}}
+                        onFocus={(e) => {this.setFocusedInput(e, 'childcare')}}
+                        onBlur ={(e) => {this.setFocusedInput(e, null)}}
+                        className={classes.select}
+                        disabled={!hasCheckedForDuplicates}
+                      >
+                        <MenuItem dense value={1}>{yes}</MenuItem>
+                        <MenuItem dense value={2}>{no}</MenuItem>
+                        <MenuItem dense value={0}>{unsure}</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </span>
+                </div>
 
-            <div className={classes.questionContainer}>
-              <span className={classes.questionText}>
-                {childcareQuestion}
-              </span>
-              <div className={classes.inputBuffer}></div>
-              <span className={classes.inputContainer}>
-                <span className={classes.textBuffer}>
-                  {childcareQuestion}:
-                </span>
-                <FormControl className={classes.textSelectFormControl} size="small" >
-                  <InputLabel id="add-shul-childcare-label"
-                    style={{
-                      top: `${inputLabelOffset}px`,
-                      visibility: `${(this.state.focusedInput === 'childcare' || typeof(this.state.childcare) === "number") ? "hidden" : "visible"}`
-                    }}
-                    disableAnimation={true}
-                  >
-                    {select}
-                  </InputLabel>
-                  <Select
-                    labelId="add-shul-childcare-label"
-                    id="add-shul-childcare-select"
-                    value={this.state.childcare}
-                    onChange={(e) => {this.handleSelectInput(e, 'childcare')}}
-                    onFocus={(e) => {this.setFocusedInput(e, 'childcare')}}
-                    onBlur ={(e) => {this.setFocusedInput(e, null)}}
-                    className={classes.select}
-                  >
-                    <MenuItem dense value={1}>{yes}</MenuItem>
-                    <MenuItem dense value={2}>{no}</MenuItem>
-                    <MenuItem dense value={0}>{unsure}</MenuItem>
-                  </Select>
-                </FormControl>
-              </span>
-            </div>
+              </div>
 
-          </div>
+                <Typography variant="h4" component="h2" className={classes.sectionHeader} style={{marginTop: '30px'}}>
+                  {rooms}
+                </Typography>
 
+                {roomSections}
+              <div className={classes.heroButtonsContainer}>
 
-          <Typography variant="h4" component="h2" className={classes.sectionHeader} style={{marginTop: '30px'}}>
-            {rooms}
-          </Typography>
+                <Button variant="outlined" color="primary" size="large" className={classes.heroButton} onClick={(e) => {this.addRoom(e)}} disabled={!hasCheckedForDuplicates}>
+                  <i className="fas fa-plus"></i> &nbsp; {addRoom}
+                </Button>
 
-          {roomSections}
+                <Button variant="outlined" color="primary" size="large" className={classes.heroButton} onClick={(e) => {this.submit(e)}} disabled={!hasCheckedForDuplicates}>
+                  <i className="fas fa-paper-plane"></i> &nbsp; {submit}
+                </Button>
 
-          <div className={classes.heroButtonsContainer}>
-
-            <Button variant="outlined" color="primary" size="large" className={classes.heroButton} onClick={(e) => {this.addRoom(e)}}>
-              <i className="fas fa-plus"></i> &nbsp; {addRoom}
-            </Button>
-
-            <Button variant="outlined" color="primary" size="large" className={classes.heroButton} onClick={(e) => {this.submit(e)}}>
-              <i className="fas fa-paper-plane"></i> &nbsp; {submit}
-            </Button>
-
-          </div>
+              </div>
 
 
-        </Paper>
+            </Paper>
+          </LoadingOverlay>
+        </div>
 
         <Dialog
           open={this.state.deleteDialogIsOpen}
@@ -1324,38 +1430,26 @@ class AddShul extends Component {
         </Dialog>
 
         <Dialog
-          open={this.state.duplicatesQuestionDialogIsOpen}
-          onClose={(e) => {this.closeDuplicatesQuestion()}}
+          open={this.state.duplicatesDialogIsOpen}
+          onClose={(e) => {this.closeDuplicatesDialog()}}
           aria-labelledby="check-for-duplicates-dialog"
+          maxWidth='xl'
         >
-          <DialogTitle id="check-for-duplicates-dialog">{checkIfShulListed}</DialogTitle>
+          <DialogTitle id="check-for-duplicates-dialog">{isYourShulListed}</DialogTitle>
           <DialogContent>
-            <DialogContentText>
-              <Table className={classes.table} aria-label="simple table" size="small" >
-                <TableBody>
-                  {this.state.savedShulRows.map(shul => (
-                    <TableRow key={shul.name}>
-                      <TableCell component="th" scope="row" className={classes.duplicateShulText}>
-                        {shul.name}
-                      </TableCell>
-                      <TableCell align="right">
-                        <Button variant="outlined" color="default" size="small" >
-                          {viewEdit}
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </DialogContentText>
+            <SearchResultsTable 
+              shuls={this.state.shulsInSelectedCity}
+              afterDelete={() => {this.getAllShuls()}}
+              enableActions={true}
+              isStickyHeader={true}
+            />
           </DialogContent>
           <DialogActions>
-            <Button variant="outlined" color="primary" size="medium" onClick={() => {this.closeDuplicatesQuestion()}} >
+            <Button variant="outlined" color="primary" size="medium" onClick={() => {this.closeDuplicatesDialog()}} >
               {shulNotListed}
             </Button>
           </DialogActions>
         </Dialog>
-
       </div>
     );
   }
