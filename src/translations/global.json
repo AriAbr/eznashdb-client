@@ -76,5 +76,6 @@
   "recordWillBeRemoved": ["The following record will be removed from the database. Once completed, this cannot be undone:", "הרשומה הבאה תוסר ממסד הנתונים. לאחר השלמתו, לא ניתן לבטל פעולה זו:"],
   "map": ["Map", "מפה"],
   "shul": ["Shul", "בית כנסת"],
-  "shuls": ["Shuls", "בתי כנסת"]
+  "shuls": ["Shuls", "בתי כנסת"],
+  "setFilters": ["Set Filters", "הגדרת פילטרים"]
 }

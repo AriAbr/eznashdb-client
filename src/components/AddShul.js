@@ -2,9 +2,8 @@ import React, {Component} from 'react';
 import { withLocalize } from "react-localize-redux";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from 'prop-types';
-import { Button, FormControl, InputLabel, Select, MenuItem, Paper, Typography, Divider, DialogActions, Table, TableRow, TableCell,
-  TableBody, TextField, FormControlLabel, FormGroup, Checkbox, Dialog, DialogTitle, DialogContent,
-  DialogContentText} from '@material-ui/core';
+import { Button, FormControl, InputLabel, Select, MenuItem, Paper, Typography, Divider, DialogActions, DialogContentText,
+  TextField, FormControlLabel, FormGroup, Checkbox, Dialog, DialogTitle, DialogContent } from '@material-ui/core';
 import * as israelCities from '../data/israel-cities';
 import SearchResultsTable from './SearchResultsTable';
 import LoadingOverlay from 'react-loading-overlay';
@@ -692,7 +691,6 @@ class AddShul extends Component {
       const isHebrew = this.props.activeLanguage && this.props.activeLanguage.code === "he";
 
       var countryName;
-      const checkingForShulsInTR = this.props.translate("checkingForShulsIn");
       var countryCode = this.state.selCountry === "IL-HE" ? "IL" : this.state.selCountry;
       if(isHebrew && countryCode === "IL"){
         countryName = "ישראל"
@@ -770,7 +768,6 @@ class AddShul extends Component {
     const location = this.props.translate("location");
     const identification = this.props.translate("identification");
     const isYourShulListed = this.props.translate("isYourShulListed");
-    const viewEdit = this.props.translate("viewEdit");
     const shulNotListed = this.props.translate("shulNotListed");
     const generalInfo = this.props.translate("generalInfo");
     const shulName = this.props.translate("shulName");

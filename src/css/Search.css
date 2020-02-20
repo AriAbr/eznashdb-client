@@ -32,10 +32,9 @@
   margin: auto;
   overflow-x: auto;
   overflow-y: scroll;
-  min-height: calc(100vh - 222px);
   background-color: white;
   border: 1px solid #b2b2b2;
-  height: 500px;
+  height: 550px;
   padding-bottom: .5px;
 }
 
@@ -84,4 +83,14 @@
 
 .search-results-container ._loading_overlay_wrapper{
   height: 100%;
+}
+
+.search-parameters-parent{
+  width: 999px;
+  max-width: 100%;
+  margin: auto;
+  margin-bottom: 10px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
 }

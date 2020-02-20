@@ -119,13 +119,13 @@ class SearchResultsTable extends Component {
     if(num === 0){
       icon = <i className="fas fa-question"></i>;
     } else if (num === 1){
-      icon = "XS"
+      icon = <strong>XS</strong>
     } else if (num === 2){
-      icon = "S"
+      icon = <strong>S</strong>
     } else if (num === 3){
-      icon = "M"
+      icon = <strong>M</strong>
     } else if (num === 4){
-      icon = "L"
+      icon = <strong>L</strong>
     }    
     return icon;
   }
