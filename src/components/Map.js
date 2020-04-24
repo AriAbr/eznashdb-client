@@ -194,6 +194,7 @@ class Map extends Component {
                       <Popup onMouseEnter={() => {this.onMarkerPopupLinkClick()}}>
                         <div className={classes.markerPopopContents}>
                           <strong>{locationStr}</strong> <br/>
+                          {/* eslint-disable-next-line */}
                           {shulCountString} | <a className="map-marker-popup-link" onClick={() => {this.searchFromMarker(locationData)}}><i class="fas fa-search"></i> {searchTR}</a>
                         </div>
                       </Popup>
