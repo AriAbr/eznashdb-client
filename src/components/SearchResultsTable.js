@@ -144,79 +144,91 @@ class SearchResultsTable extends Component {
         }
       }
     }
-    return icon;
+    return <span className="vis-aud-icon-parent">{icon}</span>;
   }
   getPlacementCell(room){
     const { classes } = this.props;
 
-    const sameFloorTR = this.props.translate("sameFloorShort");
-    const balconyTR = this.props.translate("balcony");
-    const noWomSecTR = this.props.translate("noWomensSection");
-    const centeredTR = this.props.translate("centeredMechitza");
-    const sideTR = this.props.translate("side");
-    const backTR = this.props.translate("back");
-    const elevatedTR = this.props.translate("elevated");
-    const notElevatedTR = this.props.translate("levelWithMens");
-    const onlyMenTR = this.props.translate("onlyMens");
-    const mixedSeatingTR = this.props.translate("mixedSeating");
-    
-    var sameFloor = [];
-    var balcony = [];
-    var noWomSec = [];
+    const hasPlacementData = (
+      room.isCentered || room.isSameFloorSide || room.isSameFloorElevated || room.isSameFloorLevel ||
+      room.isBalconySide || room.isBalconyBack || room.isOnlyMen || room.isMixedSeating
+    )
+    var cellContents;
 
-    if(room.isCentered){
-      sameFloor.push(centeredTR)
-    }
-    if(room.isSameFloorSide){
-      sameFloor.push(sideTR)
-    }
-    if(room.isSameFloorBack){
-      sameFloor.push(backTR)
-    }
-    if(room.isSameFloorElevated){
-      sameFloor.push(elevatedTR)
-    }
-    if(room.isSameFloorLevel){
-      sameFloor.push(notElevatedTR)
+    if(hasPlacementData){
+      const sameFloorTR = this.props.translate("sameFloorShort");
+      const balconyTR = this.props.translate("balcony");
+      const noWomSecTR = this.props.translate("noWomensSection");
+      const centeredTR = this.props.translate("centeredMechitza");
+      const sideTR = this.props.translate("side");
+      const backTR = this.props.translate("back");
+      const elevatedTR = this.props.translate("elevated");
+      const notElevatedTR = this.props.translate("levelWithMens");
+      const onlyMenTR = this.props.translate("onlyMens");
+      const mixedSeatingTR = this.props.translate("mixedSeating");
+      
+      var sameFloor = [];
+      var balcony = [];
+      var noWomSec = [];
+  
+      if(room.isCentered){
+        sameFloor.push(centeredTR)
+      }
+      if(room.isSameFloorSide){
+        sameFloor.push(sideTR)
+      }
+      if(room.isSameFloorBack){
+        sameFloor.push(backTR)
+      }
+      if(room.isSameFloorElevated){
+        sameFloor.push(elevatedTR)
+      }
+      if(room.isSameFloorLevel){
+        sameFloor.push(notElevatedTR)
+      }
+  
+      if(room.isBalconySide){
+        balcony.push(sideTR)
+      }
+      if(room.isBalconyBack){
+        balcony.push(backTR)
+      }
+  
+      if(room.isOnlyMen){
+        noWomSec.push(onlyMenTR)
+      }
+      if(room.isMixedSeating){
+        noWomSec.push(mixedSeatingTR)
+      }
+  
+      cellContents = <Table size="small" aria-label="a dense table" className="search-results-placement-table">
+          <TableBody>
+            {sameFloor.length > 0 && 
+              <TableRow>
+                <TableCell align="center" style={{width: '80px'}} className={classes.tableTextCell}>{sameFloorTR}</TableCell>
+                <TableCell align="center" className={classes.tableTextCell}>{sameFloor.join(", ")}</TableCell>
+              </TableRow>
+            }
+            {balcony.length > 0 && 
+              <TableRow>
+                <TableCell align="center" style={{width: '80px'}} className={classes.tableTextCell}>{balconyTR}</TableCell>
+                <TableCell align="center" className={classes.tableTextCell}>{balcony.join(", ")}</TableCell>
+              </TableRow>
+            }
+            {noWomSec.length > 0 && 
+              <TableRow>
+                <TableCell align="center" style={{width: '80px'}} className={classes.tableTextCell}>{noWomSecTR}</TableCell>
+                <TableCell align="center" className={classes.tableTextCell}>{noWomSec.join(", ")}</TableCell>
+              </TableRow>
+            }
+          </TableBody>
+        </Table>
+      ;
+    } else {
+      cellContents = <div className={classes.tableTextCell}><i className="fas fa-question"></i></div>;
     }
 
-    if(room.isBalconySide){
-      balcony.push(sideTR)
-    }
-    if(room.isBalconyBack){
-      balcony.push(backTR)
-    }
 
-    if(room.isOnlyMen){
-      noWomSec.push(onlyMenTR)
-    }
-    if(room.isMixedSeating){
-      noWomSec.push(mixedSeatingTR)
-    }
-
-    var cellContents = <Table size="small" aria-label="a dense table" className="search-results-placement-table">
-        <TableBody>
-          {sameFloor.length > 0 && 
-            <TableRow>
-              <TableCell align="center" style={{width: '80px'}} className={classes.tableTextCell}>{sameFloorTR}</TableCell>
-              <TableCell align="center" className={classes.tableTextCell}>{sameFloor.join(", ")}</TableCell>
-            </TableRow>
-          }
-          {balcony.length > 0 && 
-            <TableRow>
-              <TableCell align="center" style={{width: '80px'}} className={classes.tableTextCell}>{balconyTR}</TableCell>
-              <TableCell align="center" className={classes.tableTextCell}>{balcony.join(", ")}</TableCell>
-            </TableRow>
-          }
-          {noWomSec.length > 0 && 
-            <TableRow>
-              <TableCell align="center" style={{width: '80px'}} className={classes.tableTextCell}>{noWomSecTR}</TableCell>
-              <TableCell align="center" className={classes.tableTextCell}>{noWomSec.join(", ")}</TableCell>
-            </TableRow>
-          }
-        </TableBody>
-      </Table>
-    ;
 
     return cellContents;
   }

@@ -77,5 +77,6 @@
   "map": ["Map", "מפה"],
   "shul": ["Shul", "בית כנסת"],
   "shuls": ["Shuls", "בתי כנסת"],
-  "setFilters": ["Set Filters", "הגדרת פילטרים"]
+  "setFilters": ["Set Filters", "הגדרת פילטרים"],
+  "unknown": ["Unknown", "לא ידוע"]
 }

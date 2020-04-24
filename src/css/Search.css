@@ -72,6 +72,9 @@
   padding-bottom: 0px !important;
 }
 
+.vis-aud-icon-parent{
+  white-space: nowrap;
+}
 .shul-actions-cell{
   background: white !important;
   max-width: 20px !important;
@@ -93,4 +96,9 @@
   text-align: left;
   white-space: nowrap;
   overflow: hidden;
+}
+
+.search-single-filter-parent{
+  white-space: nowrap;
+  line-height: 2;
 }
