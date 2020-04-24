@@ -27,8 +27,7 @@ const styles = theme => ({
   },
   filtersParent: {
     maxWidth: '100%',
-    whiteSpace: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   }
 });
 
@@ -166,10 +165,10 @@ class Search extends Component {
             >
               <div className={classes.filtersParent}>
 
-                <span>
+                <div style={{whiteSpace: 'normal'}}>
 
 
-              <span className={classes.singleFilterParent + " search-single-filter-parent"}>
+              <div className={classes.singleFilterParent + " search-single-filter-parent"}>
                 <Typography display='inline' variant='subtitle2'>{femaleLeadership}:</Typography>&nbsp;
                 <ToggleButtonGroup size="small" value={this.state.filterData.femLead} onChange={(e, val) => {this.updateFilterToggleData(e, val, 'femLead')}}>
                   <ToggleButton key={1} value={1} className={classes.toggleButton}>
@@ -182,9 +181,9 @@ class Search extends Component {
                     {unknown}
                   </ToggleButton>
                 </ToggleButtonGroup>
-              </span>
+              </div>
 
-              <span className={classes.singleFilterParent + " search-single-filter-parent"}>
+              <div className={classes.singleFilterParent + " search-single-filter-parent"}>
                 <Typography display='inline' variant='subtitle2'>{kaddishAlone}:</Typography>&nbsp;
                 <ToggleButtonGroup size="small" value={this.state.filterData.kaddishAlone} onChange={(e, val) => {this.updateFilterToggleData(e, val, 'kaddishAlone')}}>
                   <ToggleButton key={1} value={1} className={classes.toggleButton}>
@@ -200,9 +199,9 @@ class Search extends Component {
                     {unknown}
                   </ToggleButton>
                 </ToggleButtonGroup>
-              </span>
+              </div>
 
-              <span className={classes.singleFilterParent + " search-single-filter-parent"}>
+              <div className={classes.singleFilterParent + " search-single-filter-parent"}>
                 <Typography display='inline' variant='subtitle2'>{kaddishWithMen}:</Typography>&nbsp;
                 <ToggleButtonGroup size="small" value={this.state.filterData.kaddishWithMen} onChange={(e, val) => {this.updateFilterToggleData(e, val, 'kaddishWithMen')}}>
                   <ToggleButton key={1} value={1} className={classes.toggleButton}>
@@ -215,9 +214,9 @@ class Search extends Component {
                     {unknown}
                   </ToggleButton>
                 </ToggleButtonGroup>
-              </span>
+              </div>
 
-              <span className={classes.singleFilterParent + " search-single-filter-parent"}>
+              <div className={classes.singleFilterParent + " search-single-filter-parent"}>
                 <Typography display='inline' variant='subtitle2'>{childcare}:</Typography>&nbsp;
                 <ToggleButtonGroup size="small" value={this.state.filterData.childcare} onChange={(e, val) => {this.updateFilterToggleData(e, val, 'childcare')}}>
                   <ToggleButton key={1} value={1} className={classes.toggleButton}>
@@ -230,8 +229,8 @@ class Search extends Component {
                     {unknown}
                   </ToggleButton>
                 </ToggleButtonGroup>
-              </span>
-              </span>
+              </div>
+              </div>
 
                 <Button onClick={this.searchByParams} variant="contained" color="primary" size="medium" style={{display: 'block', marginTop: '10px'}}><i className="fas fa-search"></i>&nbsp;{search}</Button>
               </div>

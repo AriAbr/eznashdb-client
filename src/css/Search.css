@@ -101,4 +101,5 @@
 .search-single-filter-parent{
   white-space: nowrap;
   line-height: 2;
+  display: inline-block;
 }
