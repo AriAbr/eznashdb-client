@@ -41,6 +41,8 @@ class Search extends Component {
       filterPanelIsOpen: false,
       filterData: {
         femLead: [],
+        kaddishAlone: [],
+        kaddishWithMen: [],
         childcare: []
       }
     };
@@ -78,11 +80,15 @@ class Search extends Component {
     this.setState({isLoadingResults: true}, () => {
       const options = {
         url: `${process.env.REACT_APP_EZNASHDB_API}shuls/searchByParams`,
-        form: {
-          femLead: this.state.filterData.femLead.join(" "),
-          childcare: this.state.filterData.childcare.join(" "),
-        }
+        form: {}
       };
+
+      var yesNoInputs = ["femLead", "kaddishWithMen", "kaddishAlone", "childcare"];
+      for(let i = 0; i < yesNoInputs.length; i++){
+        var currKey = yesNoInputs[i];
+        options.form[currKey] = this.state.filterData[currKey].join(" ")
+      }
+
       request.post(options, (err, res, body) => {
         if(res && res.statusCode === 200){
           var shuls = JSON.parse(res.body)
@@ -124,7 +130,10 @@ class Search extends Component {
     const no = this.props.translate("no");
     const unknown = this.props.translate("unknown");
     const femaleLeadership = this.props.translate("femaleLeadership");
+    const kaddishAlone = this.props.translate("kaddishAlone");
+    const kaddishWithMen = this.props.translate("kaddishWithMen");
     const childcare = this.props.translate("childcare");
+    const manAlwaysKaddish = this.props.translate("manAlwaysKaddish");
 
     const closedPanelOffset = isHebrew ? '94px' : '117px'
     
@@ -169,7 +178,40 @@ class Search extends Component {
                   <ToggleButton key={2} value={2} className={classes.toggleButton}>
                     {no}
                   </ToggleButton>
-                  <ToggleButton key={3} value={0} className={classes.toggleButton}>
+                  <ToggleButton key={0} value={0} className={classes.toggleButton}>
+                    {unknown}
+                  </ToggleButton>
+                </ToggleButtonGroup>
+              </span>
+
+              <span className={classes.singleFilterParent + " search-single-filter-parent"}>
+                <Typography display='inline' variant='subtitle2'>{kaddishAlone}:</Typography>&nbsp;
+                <ToggleButtonGroup size="small" value={this.state.filterData.kaddishAlone} onChange={(e, val) => {this.updateFilterToggleData(e, val, 'kaddishAlone')}}>
+                  <ToggleButton key={1} value={1} className={classes.toggleButton}>
+                    {yes}
+                  </ToggleButton>
+                  <ToggleButton key={2} value={2} className={classes.toggleButton}>
+                    {no}
+                  </ToggleButton>
+                  <ToggleButton key={3} value={3} className={classes.toggleButton}>
+                    {manAlwaysKaddish}
+                  </ToggleButton>
+                  <ToggleButton key={0} value={0} className={classes.toggleButton}>
+                    {unknown}
+                  </ToggleButton>
+                </ToggleButtonGroup>
+              </span>
+
+              <span className={classes.singleFilterParent + " search-single-filter-parent"}>
+                <Typography display='inline' variant='subtitle2'>{kaddishWithMen}:</Typography>&nbsp;
+                <ToggleButtonGroup size="small" value={this.state.filterData.kaddishWithMen} onChange={(e, val) => {this.updateFilterToggleData(e, val, 'kaddishWithMen')}}>
+                  <ToggleButton key={1} value={1} className={classes.toggleButton}>
+                    {yes}
+                  </ToggleButton>
+                  <ToggleButton key={2} value={2} className={classes.toggleButton}>
+                    {no}
+                  </ToggleButton>
+                  <ToggleButton key={0} value={0} className={classes.toggleButton}>
                     {unknown}
                   </ToggleButton>
                 </ToggleButtonGroup>
@@ -184,7 +226,7 @@ class Search extends Component {
                   <ToggleButton key={2} value={2} className={classes.toggleButton}>
                     {no}
                   </ToggleButton>
-                  <ToggleButton key={3} value={0} className={classes.toggleButton}>
+                  <ToggleButton key={0} value={0} className={classes.toggleButton}>
                     {unknown}
                   </ToggleButton>
                 </ToggleButtonGroup>
