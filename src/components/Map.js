@@ -220,10 +220,10 @@ class Map extends Component {
               <LeafletMap center={mapCenter} zoom={2} worldCopyJump={true} className={isHebrew ? "hebrew-map" : "english-map"}>
                 {/* for more TileLayer options see https://leaflet-extras.github.io/leaflet-providers/preview/ */}
                 <LayersControl position="topright">
-                  <LayersControl.BaseLayer name="TomTom" checked>
+                  <LayersControl.BaseLayer name="Stadia" checked>
                     <TileLayer
-                      url={`https://api.tomtom.com/map/1/tile/basic/main/{z}/{x}/{y}.png?view=Unified&key=${process.env.REACT_APP_TOMTOM_API}`}
-                      attribution={`<a href="https://developer.tomtom.com/">TomTom</a>`}
+                      attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+                      url="https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png"
                     />
                   </LayersControl.BaseLayer>
                   <LayersControl.BaseLayer name="Wikimedia">
