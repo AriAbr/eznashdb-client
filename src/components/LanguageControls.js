@@ -5,7 +5,6 @@ import globalTranslations from '../translations/global.json';
 import { FormControl, Select, MenuItem } from '@material-ui/core';
 import { withStyles } from "@material-ui/core/styles"
 import PropTypes from 'prop-types';
-import $ from 'jquery';
 
 const styles = theme => ({
   root: {
@@ -50,15 +49,15 @@ class LanguageControls extends Component {
 
   getDefaultLangCode(){
     var defaultLangCode = "en";
-    if(window.localStorage.ezNashDBLang){
-      defaultLangCode = window.localStorage.ezNashDBLang;
-    } else {
+    // if(window.localStorage.ezNashDBLang){
+    //   defaultLangCode = window.localStorage.ezNashDBLang;
+    // } else {
       if (this.getCountryCode() === "IL"){
         defaultLangCode = "he";
       } else {
         defaultLangCode = "en";
       }
-    }
+    // }
     return defaultLangCode;
   }
 
@@ -71,17 +70,19 @@ class LanguageControls extends Component {
   }
 
   getCountryCode() {
-      var countryCode = "";
-
-      $.ajax({
-        dataType: "json",
-        url: 'https://ipapi.co/json/',
-        async: false,
-      }).done(response => {
-        countryCode = response.country;
-      })
-
-      return countryCode;
+    fetch('https://ipapi.co/json/').then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((response) => {
+      return response.country;
+    })
+    .catch((error) => {
+      return "US"
+    });
   }
 
   componentDidUpdate(prevProps, prevState, snapshot){
