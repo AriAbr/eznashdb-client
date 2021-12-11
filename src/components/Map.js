@@ -127,6 +127,7 @@ class Map extends Component {
             mapData: mapData,
             isLoadingMap: false
           }, () => {
+            console.log("mapData state set:")
             console.log(this.state.mapData)
           })
         } else {
@@ -171,38 +172,47 @@ class Map extends Component {
     }
   }
 
+  locationsToMarkers() {
+    const shulTR = this.props.translate("shul");
+    const shulsTR = this.props.translate("shuls");
+    const searchTR = this.props.translate("search");
+    const { classes } = this.props;
+    
+    let markers = []
+    Object.entries(this.state.mapData).forEach(([locationName, locationData], index) => {
+      try {
+        const latLon = locationData.latLon;
+        const position = [parseFloat(latLon[0].y), parseFloat(latLon[0].x)]
+        const shulCountString = locationData.shulCount === 1 ? `1 ${shulTR}` : `${locationData.shulCount} ${shulsTR}`;
+        const locationStr = this.getFullPlaceName(locationData)
+        const marker = <Marker position={position} key={index} riseOnHover>
+                        <Popup onMouseEnter={() => {this.onMarkerPopupLinkClick()}}>
+                          <div className={classes.markerPopopContents}>
+                            <strong>{locationStr}</strong> <br/>
+                            {/* eslint-disable-next-line */}
+                            {shulCountString} | <a className="map-marker-popup-link" onClick={() => {this.searchFromMarker(locationData)}}><i class="fas fa-search"></i> {searchTR}</a>
+                          </div>
+                        </Popup>
+                      </Marker>
+        markers.push(marker)
+      } catch {
+        console.log("Error creating marker for the following location: ")
+        console.log(locationData)
+      }
+    })
+    return markers
+  }
+
   render() {
     const { classes } = this.props;
 
     const isHebrew = (this.props.activeLanguage && this.props.activeLanguage.code === "he");
 
     const map = this.props.translate("map");
-    const shulTR = this.props.translate("shul");
-    const shulsTR = this.props.translate("shuls");
-    const searchTR = this.props.translate("search");
-    const markers = [];
-    const locations = Object.keys(this.state.mapData);
-    for(let i = 0; i < locations.length; i++){
-      const key = i;
-      const currlocation = locations[i];
-      const locationData = this.state.mapData[currlocation];
-      const latLon = locationData.latLon;
-      const position = [parseFloat(latLon[0].y), parseFloat(latLon[0].x)]
-      const shulCountString = locationData.shulCount === 1 ? `1 ${shulTR}` : `${locationData.shulCount} ${shulsTR}`;
-      const locationStr = this.getFullPlaceName(locationData)
-      const marker = <Marker position={position} key={key} riseOnHover>
-                      <Popup onMouseEnter={() => {this.onMarkerPopupLinkClick()}}>
-                        <div className={classes.markerPopopContents}>
-                          <strong>{locationStr}</strong> <br/>
-                          {/* eslint-disable-next-line */}
-                          {shulCountString} | <a className="map-marker-popup-link" onClick={() => {this.searchFromMarker(locationData)}}><i class="fas fa-search"></i> {searchTR}</a>
-                        </div>
-                      </Popup>
-                    </Marker>
-      markers.push(marker)
-    }
+    const markers = this.locationsToMarkers();
+
     const mapCenter = [22.917922936146045, 8.261718750000002]; // to re-calculate: call onMoveEnd on Map and log out e.target.getCenter()
-    
+
     return (
       <div className="mapPage">
 
