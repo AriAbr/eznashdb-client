@@ -99,7 +99,7 @@ class Map extends Component {
             let city = mapData[currLocation].city;
             const region = mapData[currLocation].region;
             const country = ccs.getCountryInfoByShort(mapData[currLocation].countryCode).name;
-            if (country == "Israel") {
+            if (country === "Israel") {
               city = translateCityName(city, "he")
             }
             var parsedLocationArr = [];
