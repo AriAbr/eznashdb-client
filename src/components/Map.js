@@ -8,6 +8,7 @@ import LoadingOverlay from 'react-loading-overlay';
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import { Marker, Popup, Map as LeafletMap, TileLayer, LayersControl } from 'react-leaflet';
 import * as israelCities from '../data/israel-cities';
+import { translateCityName } from '../utils/cityUtils';
 const ccs = require('countrycitystatejson')
 const provider = new OpenStreetMapProvider();
 
@@ -95,9 +96,12 @@ class Map extends Component {
           const locationNames = Object.keys(mapData);
           for(let i = 0 ; i < locationNames.length; i++){
             var currLocation = locationNames[i]
-            const city = mapData[currLocation].city;
+            let city = mapData[currLocation].city;
             const region = mapData[currLocation].region;
             const country = ccs.getCountryInfoByShort(mapData[currLocation].countryCode).name;
+            if (country == "Israel") {
+              city = translateCityName(city, "he")
+            }
             var parsedLocationArr = [];
             if(city !== "N/A"){
               parsedLocationArr.push(city)
