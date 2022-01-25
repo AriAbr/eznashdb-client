@@ -117,6 +117,10 @@ class NavBar extends Component {
                 <Button color="inherit" className={navButtonClassName}>API</Button>
               </Link>
 
+              <Link to={`/auth`} className="navbar-link">
+                <Button color="inherit" className={navButtonClassName}>Auth</Button>
+              </Link>
+
               <Button color="inherit" className={navButtonClassName}>{logIn}</Button>
             </div>
 

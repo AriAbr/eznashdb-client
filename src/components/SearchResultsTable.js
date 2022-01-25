@@ -62,7 +62,7 @@ class SearchResultsTable extends Component {
   deleteShul(shul){
     if(shul){
       const options = {
-        url: `${process.env.REACT_APP_EZNASHDB_API}shuls/destroy`,
+        url: `${process.env.REACT_APP_NODE_API}shuls/destroy`,
         form: {
           id: shul.id,
         }

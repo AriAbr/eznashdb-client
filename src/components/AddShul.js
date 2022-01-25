@@ -401,7 +401,7 @@ class AddShul extends Component {
   checkForDuplicates(){
     this.setState({ isCheckingForDuplicates: true }, () => {
       const options = {
-        url: `${process.env.REACT_APP_EZNASHDB_API}shuls/searchByLocation`,
+        url: `${process.env.REACT_APP_NODE_API}shuls/searchByLocation`,
         form: {
           country: this.state.selCountry,
           region: this.state.selRegion,
@@ -629,7 +629,7 @@ class AddShul extends Component {
   }
 
   async submit(e){
-    var url = `${process.env.REACT_APP_EZNASHDB_API}shuls/create`
+    var url = `${process.env.REACT_APP_NODE_API}shuls/create`
 
     var rooms = [];
     for(let i = 0; i < this.state.roomNames.length; i++){

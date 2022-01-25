@@ -13,6 +13,7 @@ import APITest from './APITest';
 import AddShul from './AddShul';
 import Search from './Search';
 import Map from './Map';
+import AuthTest from './AuthTest';
 import { withLocalize } from "react-localize-redux";
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { create } from 'jss';
@@ -31,7 +32,7 @@ class LocalizedApp extends Component {
   }
 
   callAPI() {
-    fetch(process.env.REACT_APP_EZNASHDB_API + "testAPI")
+    fetch(process.env.REACT_APP_NODE_API + "testAPI")
           .then(res => res.text())
           .then(res => this.setState({ apiResponse: res }))
           .catch((e) => { this.setState({ apiResponse: "API response not recieved: " + e}) })
@@ -95,6 +96,11 @@ class LocalizedApp extends Component {
                   path="/api"
                   render={(props) => <APITest {...props}
                     apiResponse={this.state.apiResponse}
+                  />}
+                />
+                <Route
+                  path="/auth"
+                  render={(props) => <AuthTest {...props}
                   />}
                 />
               </div>
