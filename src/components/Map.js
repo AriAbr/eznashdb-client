@@ -35,7 +35,7 @@ class Map extends Component {
 
   getAllShuls(){
     this.setState({isLoadingResults: true}, () => {
-      request.get(`${process.env.REACT_APP_EZNASHDB_API}shuls/getAll`, (err, res, body) => {
+      request.get(`${process.env.REACT_APP_NODE_API}shuls/getAll`, (err, res, body) => {
         if(res && res.statusCode === 200){
           var shuls = JSON.parse(res.body)
           console.log(shuls)
@@ -58,7 +58,7 @@ class Map extends Component {
   searchFromMarker(locationData){
     this.setState({ isLoadingResults: true }, () => {
       const options = {
-        url: `${process.env.REACT_APP_EZNASHDB_API}shuls/searchByLocation`,
+        url: `${process.env.REACT_APP_NODE_API}shuls/searchByLocation`,
         form: {
           country: locationData.countryCode,
           region: locationData.region,
@@ -90,7 +90,7 @@ class Map extends Component {
     //get latLons
 
     this.setState({ isLoadingMap: true}, async () => {
-      request.get(`${process.env.REACT_APP_EZNASHDB_API}shuls/getMapData`, async (err, res, body) => {
+      request.get(`${process.env.REACT_APP_NODE_API}shuls/getMapData`, async (err, res, body) => {
         if(res && res.statusCode === 200){
           var mapData = JSON.parse(res.body)
           const locationNames = Object.keys(mapData);

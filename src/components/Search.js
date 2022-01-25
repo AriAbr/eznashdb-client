@@ -56,7 +56,7 @@ class Search extends Component {
 
   getAllShuls(){
     this.setState({isLoadingResults: true}, () => {
-      request.get(`${process.env.REACT_APP_EZNASHDB_API}shuls/getAll`, (err, res, body) => {
+      request.get(`${process.env.REACT_APP_NODE_API}shuls/getAll`, (err, res, body) => {
         if(res && res.statusCode === 200){
           var shuls = JSON.parse(res.body)
           this.setState({
@@ -78,7 +78,7 @@ class Search extends Component {
   searchByParams(){
     this.setState({isLoadingResults: true}, () => {
       const options = {
-        url: `${process.env.REACT_APP_EZNASHDB_API}shuls/searchByParams`,
+        url: `${process.env.REACT_APP_NODE_API}shuls/searchByParams`,
         form: {}
       };
 
