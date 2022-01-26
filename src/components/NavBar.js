@@ -168,6 +168,11 @@ class NavBar extends Component {
               API
             </ListItem>
           </Link>
+          <Link to={`/auth`} className={drawerLinkClassName} onClick={() => {this.onDrawerSelection()}}>
+            <ListItem button>
+              Auth
+            </ListItem>
+          </Link>
           <ListItem button className={drawerLinkClassName} onClick={() => {this.onDrawerSelection()}} style={{color: '#757575'}}>
             {logIn.toUpperCase()}
           </ListItem>
