@@ -75,8 +75,8 @@ class AuthTest extends Component {
         <GoogleLogin
           clientId={`${process.env.REACT_APP_GOOGLE_CLOUD_CLIENT_ID}`}
           buttonText="Login"
-          onSuccess={this.responseGoogle}
-          onFailure={this.responseGoogle}
+          onSuccess={(res) => {this.responseGoogle(res)}}
+          onFailure={(res) => {this.responseGoogle(res)}}
           cookiePolicy={'single_host_origin'}
         />
           <div><b>Google Access Token:</b> {this.state.googleAccessToken}</div>
