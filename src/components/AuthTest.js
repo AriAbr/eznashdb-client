@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { withLocalize } from "react-localize-redux";
-import GoogleLogin from 'react-google-login';
+import GoogleLogin,  {GoogleLogout } from 'react-google-login';
 
 class AuthTest extends Component {
   constructor(props) {
@@ -83,6 +83,13 @@ class AuthTest extends Component {
           <div><b>JWT Access Token:</b> {this.state.JWTdjangoToken.access_token}</div>
           <div><b>JWT Refresh Token:</b> {this.state.JWTdjangoToken.refresh_token}</div>
           <div><b>User Data:</b> {JSON.stringify(this.state.userData)}</div>
+
+          <GoogleLogout
+            clientId={`${process.env.REACT_APP_GOOGLE_CLOUD_CLIENT_ID}`}
+            buttonText="Logout"
+            onLogoutSuccess={(res) => {console.log(res)}}
+          >
+          </GoogleLogout>
         </div>
       </div>
     );
