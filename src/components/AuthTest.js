@@ -96,6 +96,7 @@ class AuthTest extends Component {
           onSuccess={(res) => {this.responseGoogle(res)}}
           onFailure={(res) => {this.responseGoogle(res)}}
           cookiePolicy={'single_host_origin'}
+          prompt="select_account"
         />
           <div><b>Google Access Token:</b> {this.state.googleAccessToken}</div>
           <div><b>JWT Access Token:</b> {this.state.JWTdjangoToken.access_token}</div>
