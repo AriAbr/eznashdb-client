@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { withLocalize } from "react-localize-redux";
-import GoogleLogin,  {GoogleLogout } from 'react-google-login';
+import GoogleLogin, { GoogleLogout } from 'react-google-login';
 
 class AuthTest extends Component {
   constructor(props) {
@@ -13,6 +13,7 @@ class AuthTest extends Component {
       this.responseGoogle = this.responseGoogle.bind(this);
       this.getDjangoToken = this.getDjangoToken.bind(this);
       this.postLoginPlayground = this.postLoginPlayground.bind(this);
+      this.logout = this.logout.bind(this);
   }
 
   responseGoogle(response){
@@ -68,6 +69,23 @@ class AuthTest extends Component {
     });
   }
 
+  logout(e){
+    fetch(`${process.env.REACT_APP_DJANGO_API}dj-rest-auth/logout/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.state.JWTdjangoToken.access_token}`
+      },
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Success:', data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+  }
+
   render() {
     return (
       <div>
@@ -87,7 +105,8 @@ class AuthTest extends Component {
           <GoogleLogout
             clientId={`${process.env.REACT_APP_GOOGLE_CLOUD_CLIENT_ID}`}
             buttonText="Logout"
-            onLogoutSuccess={(res) => {console.log(res)}}
+            onLogoutSuccess={(res) => {this.logout(res)}}
+            onFailure={(res) => {this.logout(res)}}
           >
           </GoogleLogout>
         </div>
